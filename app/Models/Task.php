@@ -32,6 +32,9 @@ class Task extends Model
     protected static function booted()
     {
         static::saving(function ($task) {
+            if ($task->isDirty('deadline_at')) {
+                $task->previous_deadline_at = $task->deadline_at;
+            }
             if ($task->isInProgress()) {
                 $task->markAsInProgress();
             }
