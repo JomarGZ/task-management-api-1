@@ -32,9 +32,8 @@ class Task extends Model
     protected static function booted()
     {
         static::saving(function ($task) {
-            if ($task->isDirty('deadline_at')) {
-                $task->previous_deadline_at = $task->deadline_at;
-            }
+
+            $task->updatePreviousDeadlineIfChanged();
             if ($task->isInProgress()) {
                 $task->markAsInProgress();
             }
@@ -96,6 +95,13 @@ class Task extends Model
     {
         if (is_null($this->completed_at)) {
             $this->completed_at = now();
+        }
+    }
+
+    public function updatePreviousDeadlineIfChanged()
+    {
+        if ($this->isDirty('deadline_at')) {
+            $this->previous_deadline_at = $this->getOriginal('deadline_at');
         }
     }
 }
