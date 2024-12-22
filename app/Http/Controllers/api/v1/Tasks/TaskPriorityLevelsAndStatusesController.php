@@ -6,7 +6,6 @@ use App\Enums\Enums\PriorityLevel;
 use App\Enums\Enums\Statuses;
 use App\Http\Controllers\Controller;
 use App\Utilities\ApiResponse;
-use Illuminate\Http\Request;
 
 class TaskPriorityLevelsAndStatusesController extends Controller
 {
@@ -14,8 +13,8 @@ class TaskPriorityLevelsAndStatusesController extends Controller
     {
         return ApiResponse::success(
             [
-                'statuses' => Statuses::cases(),
-                'priority_levels' => PriorityLevel::cases(),
+                'statuses'          => Statuses::cases(),
+                'priority_levels'   => PriorityLevel::cases(),
             ],
             'The statuses and priority levels retrieved successfully',
             );

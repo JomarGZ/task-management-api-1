@@ -2,10 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\Team;
 use App\Models\TeamUser;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class TeamUserPolicy
 {
@@ -46,7 +44,8 @@ class TeamUserPolicy
      */
     public function delete(User $user, TeamUser $teamUser): bool
     {
-        return $user->isAdmin() || ($user->belongsToTenant($teamUser->id) && $user->isTeamLead($teamUser->id));
+        return $user->isAdmin() 
+            || ($user->belongsToTenant($teamUser->id) && $user->isTeamLead($teamUser->id));
     }
 
    

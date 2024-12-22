@@ -23,7 +23,7 @@ class FilteringProjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'column' => ['sometimes', Rule::in(['name', 'description', 'created_at'])],
+            'column'    => ['sometimes', Rule::in(['name', 'description', 'created_at'])],
             'direction' => ['sometimes', Rule::in(['asc', 'desc'])]
         ];
     }
@@ -31,8 +31,8 @@ class FilteringProjectRequest extends FormRequest
     public function messages()
     {
         return [
-            'column.in' => 'The selected column is invalid. the valid columns are: name, description, created_at',
-            'direction.in' => 'The selected direction is invalid. the valid columns are: asc and desc',
+            'column.in'     => 'The selected column is invalid. the valid columns are: name, description, created_at',
+            'direction.in'  => 'The selected direction is invalid. the valid columns are: asc and desc',
         ];
     }
 }

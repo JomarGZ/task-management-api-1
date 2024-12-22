@@ -4,7 +4,6 @@ namespace App\Traits;
 
 use App\Models\Scopes\tenantScope;
 use App\Models\Tenant;
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Response;
 

@@ -4,7 +4,6 @@ namespace App\Http\Requests\api\v1\Tasks;
 
 use App\Enums\Enums\PriorityLevel;
 use App\Enums\Enums\Statuses;
-use App\Models\Task;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -29,14 +28,14 @@ class StoreTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string', 'max:500'],
-            'assigned_id' => ['nullable', 'exists:users,id'],
-            'priority_level' => ['nullable', Rule::in(PriorityLevel::cases())],
-            'status' => ['sometimes', Rule::in(Statuses::cases())],
-            'deadline_at' => ['nullable'],
-            'started_at' => ['nullable'],
-            'completed_at' => ['nullable'],
+            'title'             => ['required', 'string', 'max:255'],
+            'description'       => ['required', 'string', 'max:500'],
+            'assigned_id'       => ['nullable', 'exists:users,id'],
+            'priority_level'    => ['nullable', Rule::in(PriorityLevel::cases())],
+            'status'            => ['sometimes', Rule::in(Statuses::cases())],
+            'deadline_at'       => ['nullable'],
+            'started_at'        => ['nullable'],
+            'completed_at'      => ['nullable'],
         ];
     }
 
@@ -46,7 +45,7 @@ class StoreTaskRequest extends FormRequest
         $statuses = implode(',', array_column(Statuses::cases(), 'value'));
         return [
             'priority_level.in' => "The selected priority level is invalid. The valid priority level are: $priorityLevels",
-            'status.in' => "The selected statuses is invalid. The valid statuses are: $statuses"
+            'status.in'         => "The selected statuses is invalid. The valid statuses are: $statuses"
         ];
     }
 }

@@ -25,9 +25,9 @@ class StoreTeamMemberRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'member_id' => ['required', 'array'],
-            'member_id.*' => ['exists:users,id'],
-            'role' => ['required', Rule::in([Role::TEAM_LEAD->value, Role::MEMBER->value, Role::PROJECT_MANAGER])]
+            'member_id'     => ['required', 'array'],
+            'member_id.*'   => ['exists:users,id'],
+            'role'          => ['required', Rule::in([Role::TEAM_LEAD->value, Role::MEMBER->value, Role::PROJECT_MANAGER])]
         ];
     }
 
@@ -35,9 +35,9 @@ class StoreTeamMemberRequest extends FormRequest
     {
         $roles = implode(',', array_column(Role::cases(), 'value'));
         return [
-            'member_id.required' => 'Please select at least one member.',
-            'member_id.*.exists' => 'One or more selected members do not exist in the system.',
-            'role.in' => "The selected role is invalid. The valid role are: $roles"
+            'member_id.required'    => 'Please select at least one member.',
+            'member_id.*.exists'    => 'One or more selected members do not exist in the system.',
+            'role.in'               => "The selected role is invalid. The valid role are: $roles"
         ];
     }
 

@@ -3,9 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Enums\Statuses;
-use App\Observers\TaskObserver;
 use App\Traits\BelongsToTenant;
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

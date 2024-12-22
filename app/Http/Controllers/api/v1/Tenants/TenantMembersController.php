@@ -41,10 +41,10 @@ class TenantMembersController extends Controller
     public function store(AddMemberRequest $request)
     {
         $newMember = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'role' => $request->role,
-            'password' => Hash::make('password'),
+            'name'      => $request->name,
+            'email'     => $request->email,
+            'role'      => $request->role,
+            'password'  => Hash::make('password'),
         ]);
 
         return ApiResponse::success(
