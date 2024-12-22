@@ -4,6 +4,7 @@ use App\Enums\Enums\PriorityLevel;
 use App\Enums\Enums\Statuses;
 use App\Models\Project;
 use App\Models\Tenant;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,8 +18,9 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Tenant::class)->index();
-            $table->foreignIdFor(Project::class)->index();
+            $table->foreignIdFor(Tenant::class)->index()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Project::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(User::class, 'assigned_id')->nullable();
             $table->string('title');
             $table->text('description');
             $table->string('priority_level')->default(PriorityLevel::LOW->value);

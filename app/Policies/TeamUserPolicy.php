@@ -2,12 +2,12 @@
 
 namespace App\Policies;
 
-use App\Models\Project;
-use App\Models\Task;
+use App\Models\Team;
+use App\Models\TeamUser;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class TaskPolicy
+class TeamUserPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -20,33 +20,34 @@ class TaskPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Task $task): bool
+    public function view(User $user, TeamUser $teamUser): bool
     {
-        return $user->belongsToTenant($task);
+        return false;
     }
 
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user, Project $project): bool
+    public function create(User $user): bool
     {
-        return $user->isProjectManager($project->team_id);
+        return $user->isAdmin();
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Task $task): bool
+    public function update(User $user, TeamUser $teamUser): bool
     {
-        return $user->belongsToTenant($task);
+        return $user->isAdmin() && $user->belongsToTenant($teamUser);
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Task $task): bool
+    public function delete(User $user, TeamUser $teamUser): bool
     {
-        return $user->isProjectManager($task->project->team_id);
+        return $user->isAdmin() || ($user->belongsToTenant($teamUser->id) && $user->isTeamLead($teamUser->id));
     }
 
+   
 }

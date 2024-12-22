@@ -4,6 +4,7 @@ namespace App\Http\Requests\api\v1\Tasks;
 
 use App\Enums\Enums\PriorityLevel;
 use App\Enums\Enums\Statuses;
+use App\Models\Task;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -14,7 +15,10 @@ class StoreTaskRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        if (in_array(request()->method(), ['PUT','PATCH'])) {
+            return request()->user()->can('update', $this->route('task'));
+        }
+        return request()->user()->can('create', $this->route('project'));
     }
 
     /**
@@ -25,11 +29,14 @@ class StoreTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'project_id' => ['required', 'exists:projects,id'],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:500'],
-            'priority_level' => ['required', Rule::in(PriorityLevel::cases())],
-            'status' => ['required', Rule::in(Statuses::cases())],
+            'assigned_id' => ['nullable', 'exists:users,id'],
+            'priority_level' => ['nullable', Rule::in(PriorityLevel::cases())],
+            'status' => ['sometimes', Rule::in(Statuses::cases())],
+            'deadline_at' => ['nullable'],
+            'started_at' => ['nullable'],
+            'completed_at' => ['nullable'],
         ];
     }
 

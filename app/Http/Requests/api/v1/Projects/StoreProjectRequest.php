@@ -12,6 +12,9 @@ class StoreProjectRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        if (in_array(request()->method(), ['PUT', 'PATCH'])) {
+            return request()->user()->can('update', request()->route('project'));
+        }
         return request()->user()->can('create', Project::class);
     }
 
@@ -24,7 +27,15 @@ class StoreProjectRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string', 'max:500']
+            'description' => ['required', 'string', 'max:500'],
+            'team_id' => ['nullable', 'exists:teams,id']
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'team_id.exists' => 'The selected team does not exist in the organization',
         ];
     }
 }

@@ -7,7 +7,6 @@ use App\Http\Requests\api\v1\auth\RegistrationRequest;
 use App\Models\Tenant;
 use App\Models\User;
 use App\Enums\Role;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 
@@ -15,6 +14,7 @@ class RegisterController extends Controller
 {
     public function __invoke(RegistrationRequest $request)
     {
+       
         $user = User::withoutGlobalScopes()->create([
             'name' => $request->name,
             'email' => $request->email,
@@ -25,7 +25,7 @@ class RegisterController extends Controller
             'name' => "$user->name tenant"
         ]);
         $user->tenant_id = $tenant->id;
-        $user->role = Role::Admin->value;
+        $user->role = Role::ADMIN->value;
         $user->save();
 
         $device = substr($request->userAgent() ?? '', 0, 255);

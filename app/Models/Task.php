@@ -1,7 +1,11 @@
 <?php
 
 namespace App\Models;
+
+use App\Enums\Enums\Statuses;
+use App\Observers\TaskObserver;
 use App\Traits\BelongsToTenant;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,17 +19,37 @@ class Task extends Model
     protected $fillable = [
         'tenant_id',
         'project_id',
+        'assigned_id',
         'title',
         'description',
         'status',
         'deadline_at',
         'started_at',
         'completed_at',
+        'priority_level'
     ];
+
+    protected static function booted()
+    {
+        static::saving(function ($task) {
+            if ($task->isInProgress()) {
+                $task->markAsInProgress();
+            }
+            if ($task->isCompleted()) {
+                $task->markAsCompleted();
+            }
+        });
+    }
+
 
     public function project()
     {
         return $this->belongsTo(Project::class);
+    }
+
+    public function assignee()
+    {
+        return $this->belongsTo(User::class, 'assigned_id');
     }
 
     public function scopeSearch($query, $search) {
@@ -48,5 +72,27 @@ class Task extends Model
         return $query->when($priorityLevel, function (Builder $query, $priorityLevel) {
             $query->where('priority_level', $priorityLevel);
         });
+    }
+
+    public function isInProgress()
+    {
+        return $this->status === Statuses::IN_PROGRESS->value;
+    }
+    public function isCompleted()
+    {
+        return $this->status === Statuses::COMPLETED->value;
+    }
+
+    public function markAsInProgress()
+    {
+        if (is_null($this->started_at)) {
+            $this->started_at = now();
+        }
+    }
+    public function markAsCompleted()
+    {
+        if (is_null($this->completed_at)) {
+            $this->completed_at = now();
+        }
     }
 }

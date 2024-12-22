@@ -2,14 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Models\Team;
 use App\Models\Tenant;
 use Illuminate\Database\Eloquent\Factories\Factory;
-
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Project>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Team>
  */
-class ProjectFactory extends Factory
+class TeamFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -20,9 +18,7 @@ class ProjectFactory extends Factory
     {
         return [
             'tenant_id' => Tenant::factory(),
-            'team_id' => Team::factory(),
-            'name' => fake()->sentence(),
-            'description' => fake()->realText()
+            'name' => fake()->sentence()
         ];
     }
 }

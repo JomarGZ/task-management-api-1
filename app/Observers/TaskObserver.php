@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Enums\Enums\Statuses;
 use App\Models\Task;
 
 class TaskObserver
@@ -22,6 +23,13 @@ class TaskObserver
         if ($task->isDirty('deadline_at')) {
             $task->previous_deadline_at = $task->deadline_at;
         }
+        if ($task->isInProgress() && is_null($task->started_at)) {
+            $task->started_at = now();
+        }
+        if ($task->isCompleted() && is_null($task->completed_at)) {
+            $task->completed_at = now();
+        }
+
     }
 
     /**

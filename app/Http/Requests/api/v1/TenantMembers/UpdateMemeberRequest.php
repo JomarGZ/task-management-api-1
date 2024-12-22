@@ -23,9 +23,10 @@ class UpdateMemeberRequest extends FormRequest
      */
     public function rules(): array
     {
+        $tenantMember = $this->route('user');
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'unique:users,email'],
+            'email' => ['required', 'email', Rule::unique('users')->ignore($tenantMember->id)],
             'role' => ['required', Rule::in(Role::cases())],
         ];
     }

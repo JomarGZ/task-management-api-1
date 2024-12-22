@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\Response;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -54,6 +55,21 @@ class User extends Authenticatable
         ];
     }
 
+    public function teams()
+    {
+        return $this->belongsToMany(
+            Team::class,
+             'team_user',
+              'member_id',
+               'team_id')
+               ->withPivot('role')->withTimestamps();
+    }
+
+
+    public function assignedTasks()
+    {
+        return $this->hasMany(Task::class, 'assigned_id');
+    }
 
     public function scopeSearch($query, $search) {
         return $query->when($search, function (Builder $query, $search) {
@@ -73,7 +89,7 @@ class User extends Authenticatable
 
     public function isAdmin()
     {
-        return $this->role === Role::Admin->value;
+        return $this->role === Role::ADMIN->value;
     }
 
     public function belongsToTenant(Model $model)
@@ -82,6 +98,19 @@ class User extends Authenticatable
             return $this->tenant_id === $model->tenant_id;
         }
         return false;
+    }
+
+    public function isTeamLead($teamMemberPivotId)
+    {
+        return $this->teams()->where('id', $teamMemberPivotId)
+            ->wherePivot('role', Role::TEAM_LEAD->value)
+            ->exists();
+    }
+    public function isProjectManager($teamMemberPivotId)
+    {
+        return $this->teams()->where('id', $teamMemberPivotId)
+            ->wherePivot('role', Role::PROJECT_MANAGER->value)
+            ->exists();
     }
     
 }

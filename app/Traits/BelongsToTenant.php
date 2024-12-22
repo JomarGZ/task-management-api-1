@@ -18,9 +18,11 @@ trait BelongsToTenant
         static::addGlobalScope(new tenantScope);
 
         static::creating(function(Model $model){
-            if (!auth()->check()) {
-                abort(Response::HTTP_UNAUTHORIZED, 'You are not authenticate to perform this action');
+            if (self::shouldSkipTenantAssignmentIfRegisterRoute()) {
+                return;
             }
+            self::ensureUserIsAuthenticated();
+
             $model->tenant_id = auth()->user()->tenant_id;
         });
     }
@@ -28,5 +30,17 @@ trait BelongsToTenant
     public function tenant()
     {
         return $this->belongsTo(Tenant::class);
+    }
+
+    protected static function shouldSkipTenantAssignmentIfRegisterRoute()
+    {
+        return request()->routeIs('register');
+    }
+
+    protected static function ensureUserIsAuthenticated()
+    {
+        if (!auth()->check()) {
+            abort(Response::HTTP_UNAUTHORIZED, 'You are not authenticate to perform this action');
+        }
     }
 }

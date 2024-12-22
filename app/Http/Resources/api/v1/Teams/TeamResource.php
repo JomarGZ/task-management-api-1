@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Resources\api\v1\Projects;
+namespace App\Http\Resources\api\v1\Teams;
 
-use App\Http\Resources\api\v1\Teams\TeamResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProjectResource extends JsonResource
+class TeamResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,8 +17,7 @@ class ProjectResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'description' => $this->description,
-            'team_assignee' => TeamResource::make($this->whenLoaded('teamAssignee')),
+            'members' => TeamMemberResource::collection($this->whenLoaded('members')),
         ];
     }
 }

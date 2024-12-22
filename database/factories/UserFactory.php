@@ -31,7 +31,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
-            'role' => Role::Admin->value,
+            'role' => Role::ADMIN->value,
             'tenant_id' => Tenant::factory(),
         ];
     }

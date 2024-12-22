@@ -2,14 +2,15 @@
 
 namespace Database\Factories;
 
+use App\Enums\Role;
 use App\Models\Team;
 use App\Models\Tenant;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Project>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TeamUser>
  */
-class ProjectFactory extends Factory
+class TeamUserFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -20,9 +21,9 @@ class ProjectFactory extends Factory
     {
         return [
             'tenant_id' => Tenant::factory(),
+            'member_id' => User::factory(),
             'team_id' => Team::factory(),
-            'name' => fake()->sentence(),
-            'description' => fake()->realText()
+            'role' => fake()->randomElement([Role::MEMBER, Role::TEAM_LEAD])->value
         ];
     }
 }

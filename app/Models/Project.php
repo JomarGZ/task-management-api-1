@@ -14,9 +14,15 @@ class Project extends Model
 
     protected $fillable = [
         'tenant_id',
+        'team_id',
         'name',
         'description'
     ];
+
+    public function teamAssignee()
+    {
+        return $this->belongsTo(Team::class, 'team_id');
+    }
 
     public function tasks()
     {

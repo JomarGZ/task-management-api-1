@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Enums\Role;
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\Team;
+use App\Models\TeamUser;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -21,24 +23,37 @@ class DatabaseSeeder extends Seeder
 
         $tenant = Tenant::factory()
             ->create();
-        Project::factory()
-            ->recycle($tenant)
-            ->has(
-                Task::factory()
-                ->recycle($tenant)
-                ->count(5)
-            )
-            ->create();
 
         User::factory()
             ->recycle($tenant)
             ->create([
-            'role' => Role::Admin->value,
+            'role' => Role::ADMIN->value,
             'name' => 'jomar',
             'email' => 'jomar@gmail.com'
         ]);
-        User::factory(20)->recycle($tenant)->create(['role' => Role::Admin->value]);
+        $members = User::factory(9)->recycle($tenant)->create(['role' => Role::MEMBER->value]);
 
+        $team = Team::factory()->recycle($tenant)->create();
+        $members->each(function($member) use ($team, $tenant) {
+            TeamUser::factory()->recycle($team)->recycle($member)->recycle($tenant)->create([
+                'role' => Role::MEMBER->value
+            ]);
+        });
+        $teamLead = User::factory()->recycle($tenant)->create(['role' => Role::TEAM_LEAD->value]);
+
+        TeamUser::factory()->recycle($team)->recycle($tenant)->recycle($teamLead)->create();
+
+        Project::factory()
+            ->recycle($tenant)
+            ->recycle($team)
+            ->has(
+                Task::factory()
+                ->recycle($tenant)
+                ->recycle($members)
+
+                ->count(10)
+            )
+            ->create();
 
     }
 }

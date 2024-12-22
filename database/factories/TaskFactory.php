@@ -6,6 +6,7 @@ use App\Enums\Enums\PriorityLevel;
 use App\Enums\Enums\Statuses;
 use App\Models\Project;
 use App\Models\Tenant;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -26,6 +27,7 @@ class TaskFactory extends Factory
         return [
             'tenant_id' => Tenant::factory(),
             'project_id' => Project::factory(),
+            'assigned_id' => User::factory(),
             'title' => fake()->sentence(),
             'description' => fake()->realText(500),
             'priority_level' => fake()->randomElement(PriorityLevel::cases())->value,

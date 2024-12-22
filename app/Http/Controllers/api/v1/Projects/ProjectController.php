@@ -8,7 +8,6 @@ use App\Http\Requests\api\v1\Projects\StoreProjectRequest;
 use App\Http\Resources\api\v1\Projects\ProjectResource;
 use App\Models\Project;
 use App\Utilities\ApiResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 
@@ -20,7 +19,8 @@ class ProjectController extends Controller
     public function index(FilteringProjectRequest $request)
     {
         $projects = Project::query()
-            ->select(['id', 'name', 'description'])
+            ->select(['id', 'team_id', 'name', 'description'])
+            ->with('teamAssignee:id,name')
             ->search($request->query('search'))
             ->orderBy(
                 $request->query('column', 'created_at'),
@@ -53,7 +53,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        Gate::authorize('show', $project);
+        Gate::authorize('view', $project);
         return ApiResponse::success(
             ProjectResource::make($project),
             'Project retrieved successfully'
@@ -68,7 +68,7 @@ class ProjectController extends Controller
         $project->update($request->validated());
 
         return ApiResponse::success(
-            ProjectResource::make($project),
+            ProjectResource::make($project->load('teamAssignee')),
             'Project updated successfully',
         );
     }
