@@ -27,4 +27,31 @@ class RegistrationRequest extends FormRequest
             'password'  => ['required', 'string','max:255', 'confirmed'],
         ];
     }
+
+      /**
+     * Define the body parameters for the registration request.
+     * 
+     * @return array
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'name' => [
+                'description' => 'The name of the user.',
+                'example' => 'John Doe'
+            ],
+            'email' => [
+                'description' => 'The email address of the user.',
+                'example' => 'johndoe@example.com'
+            ],
+            'password' => [
+                'description' => 'The password for the user account.',
+                'example' => 'password123'
+            ],
+            'password_confirmation' => [
+                'description' => 'Confirmation of the user password.',
+                'example' => 'password123'
+            ],
+        ];
+    }
 }

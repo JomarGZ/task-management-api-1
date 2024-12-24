@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\api\v1\Tasks;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\api\v1\ApiController;
 use App\Http\Requests\api\v1\Tasks\StoreTaskRequest;
 use App\Http\Resources\api\v1\Projects\ProjectResource;
 use App\Http\Resources\api\v1\Tasks\TaskResource;
@@ -13,13 +13,46 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 
-class TaskController extends Controller
+class TaskController extends ApiController
 {
     /**
-     * Display a listing of the resource.
+     * List Tasks
+     * 
+     * Retrieve a paginated list of tasks associated with a specific project.
+     * 
+     * @group Task Management
+     * 
+     * @urlParam project int required The ID of the project whose tasks are to be retrieved. Example: 1
+     * 
+     * @queryParam search string Filter tasks by a search term in their title or description. This performs a partial match. Example: search=homepage
+     * @queryParam status string Filter tasks by their status. Example: status=completed
+     * @queryParam priority_level string Filter tasks by their priority level. Example: priority_level=high
+     * @queryParam column string The column to sort tasks by. Allowed values: `title`, `description`, `priority_level`, `status`, `deadline_at`, `started_at`, `completed_at`, `created_at`. Defaults to `created_at`. Example: column=title
+     * @queryParam direction string The direction to sort tasks by. Allowed values: `asc`, `desc`. Defaults to `desc`. Example: direction=asc
+     * @queryParam page int The page number of the paginated results. Example: page=2
+     * 
      */
     public function index(Request $request, Project $project)
     {
+        $column = $request->query('column', 'created_at');
+        $direction = $request->query('direction', 'desc');
+
+        if (!in_array($direction, ['asc', 'desc'])) {
+            $direction = 'desc';
+        }
+
+        if (!in_array($column, [
+            'title', 
+            'description',
+            'priority_levels',
+            'status',
+            'deadline_at',
+            'started_at',
+            'completed_at',
+            'deadline_at'
+            ])) {
+            $column = 'created_at';
+        }
 
         $tasks = $project->tasks()
             ->select([
@@ -36,66 +69,94 @@ class TaskController extends Controller
             ->filterByStatus($request->query('status'))
             ->filterByPriorityLevel($request->query('priority_level'))
             ->orderBy(
-                $request->query('column', 'created_at'), 
-                $request->query('direction', 'desc')
+                $column, 
+                $direction
             )
             ->paginate(5);
         
-            return ApiResponse::success([
-                'project' => (new ProjectResource($project))->resolve(),
-                'tasks' => TaskResource::collection($tasks)->response()->getData(true)
-            ], 'Tasks retrieved successfully');
-
+        return TaskResource::collection($tasks);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Create Task
+     * 
+     * Store a newly created task in storage.
+     * @group Task Management
+     * @response 201 {"data": {
+        "id": 18,
+        "title": "new taskdasdadasdsadsasdaddadasdasddas",
+        "description": "this is description",
+        "priority_level": null,
+        "status": null,
+        "deadline_at": null,
+        "started_at": null,
+        "completed_at": null,
+        "project": {
+            "id": 2,
+            "name": "update project",
+            "description": "description"
+        }
+    }}
      */
     public function store(StoreTaskRequest $request, Project $project)
     {
         $task = $project->tasks()->create($request->validated());
 
-        return ApiResponse::success(
-            TaskResource::make($task),
-            'Task created successfully',
-            Response::HTTP_CREATED
-        );
+        return new TaskResource($task->load('project'));
     }
 
     /**
-     * Display the specified resource.
+     * Retrieve Task
+     * 
+     * Display the specified task.
+     * @group Task Management
+     * 
      */
     public function show(Task $task)
     {
-        Gate::authorize('show', $task);
+        Gate::authorize('view', $task);
 
-        return ApiResponse::success(
-            TaskResource::make($task),
-            'Task retrieved successfully'  
-        );
+       return new TaskResource($task->load('project'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update Task
+     * 
+     * Update the specified task in storage.
+     * @group Task Management
+     * @response 200 {"data": {
+        "id": 15,
+        "title": "update title 1",
+        "description": "description",
+        "priority_level": "urgent",
+        "status": "completed",
+        "deadline_at": null,
+        "started_at": "2024-12-22",
+        "completed_at": "2024-12-22",
+        "project": {
+            "id": 2,
+            "name": "update project",
+            "description": "description"
+        }
+    }}
      */
     public function update(StoreTaskRequest $request, Task $task)
     {
         $task->update($request->validated());
 
-        return ApiResponse::success(
-            TaskResource::make($task),
-            'Task updated successfully',
-            Response::HTTP_ACCEPTED
-        );
+       return new TaskResource($task->load('project'));
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete Task
+     * 
+     * Remove the specified task from storage.
+     * @group Task Management
      */
     public function destroy(Task $task)
     {
         Gate::authorize('delete', $task);
         $task->delete();
-        return response()->noContent();
+        return $this->ok('');
     }
 }

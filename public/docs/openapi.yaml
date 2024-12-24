@@ -1,42 +1,107 @@
 openapi: 3.0.3
 info:
-  title: Laravel
+  title: 'Task Management system API documentation'
   description: ''
   version: 1.0.0
 servers:
   -
     url: 'http://task-management-api-1.test'
 paths:
-  /api/v1/user:
-    get:
-      summary: ''
-      operationId: getApiV1User
-      description: ''
+  /api/v1/auth/password-update:
+    put:
+      summary: 'Update password'
+      operationId: updatePassword
+      description: 'Change user password'
       parameters: []
       responses:
-        401:
+        201:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  status: 200
+                  message: 'Your password has been updated.'
                 properties:
+                  status:
+                    type: integer
+                    example: 200
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'Your password has been updated.'
       tags:
-        - Endpoints
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                current_password:
+                  type: string
+                  description: ''
+                  example: sed
+                  nullable: false
+                password:
+                  type: string
+                  description: ''
+                  example: omnis
+                  nullable: false
+              required:
+                - current_password
+                - password
+  /api/v1/auth/logout:
+    post:
+      summary: Logout
+      operationId: logout
+      description: 'Signs out the user and destroy the API token'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - Authentication
   /api/v1/auth/register:
     post:
-      summary: ''
-      operationId: postApiV1AuthRegister
-      description: ''
+      summary: Register
+      operationId: register
+      description: "Register and authenticated the user and returns the user's API token"
       parameters: []
-      responses: {  }
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: 201
+                  data:
+                    access_token: '{YOUR_AUTH_KEY}'
+                  message: 'Registered Successfully'
+                properties:
+                  status:
+                    type: integer
+                    example: 201
+                  data:
+                    type: object
+                    properties:
+                      access_token:
+                        type: string
+                        example: '{YOUR_AUTH_KEY}'
+                  message:
+                    type: string
+                    example: 'Registered Successfully'
       tags:
-        - Endpoints
+        - Authentication
       requestBody:
         required: true
         content:
@@ -46,32 +111,57 @@ paths:
               properties:
                 name:
                   type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: jodykfwexnewtplchxebruvm
+                  description: 'The name of the user. Must not be greater than 255 characters.'
+                  example: 'John Doe'
                   nullable: false
                 email:
                   type: string
-                  description: 'Must be a valid email address. Must not be greater than 255 characters.'
-                  example: hills.ottis@example.net
+                  description: 'The email address of the user. Must be a valid email address. Must not be greater than 255 characters.'
+                  example: johndoe@example.com
                   nullable: false
                 password:
                   type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: kzdjgq6Pv%g8x
+                  description: 'The password for the user account. Must not be greater than 255 characters.'
+                  example: password123
                   nullable: false
               required:
                 - name
                 - email
                 - password
+      security: []
   /api/v1/auth/login:
     post:
-      summary: ''
-      operationId: postApiV1AuthLogin
-      description: ''
+      summary: Login
+      operationId: login
+      description: "Authenticate the user and returns the user's API token"
       parameters: []
-      responses: {  }
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: 201
+                  data:
+                    access_token: '{Your_auth_token}'
+                  message: Authenticated
+                properties:
+                  status:
+                    type: integer
+                    example: 201
+                  data:
+                    type: object
+                    properties:
+                      access_token:
+                        type: string
+                        example: '{Your_auth_token}'
+                  message:
+                    type: string
+                    example: Authenticated
       tags:
-        - Endpoints
+        - Authentication
       requestBody:
         required: true
         content:
@@ -81,66 +171,1615 @@ paths:
               properties:
                 email:
                   type: string
-                  description: 'Must be a valid email address.'
-                  example: conroy.sheridan@example.com
+                  description: 'The email address of the user. Must be a valid email address.'
+                  example: johndoe@example.com
                   nullable: false
                 password:
                   type: string
-                  description: ''
-                  example: vero
+                  description: 'The password for the user account.'
+                  example: password123
                   nullable: false
               required:
                 - email
                 - password
+      security: []
+  /api/v1/projects:
+    get:
+      summary: 'List Projects'
+      operationId: listProjects
+      description: 'Display a listing of the projects.'
+      parameters:
+        -
+          in: query
+          name: column
+          description: 'The column to sort by. Allowed values: `name`, `description`, `created_at`.'
+          example: column=name
+          required: false
+          schema:
+            type: string
+            description: 'The column to sort by. Allowed values: `name`, `description`, `created_at`.'
+            example: column=name
+            nullable: false
+        -
+          in: query
+          name: direction
+          description: 'The direction to sort by. Allowed values: `asc`, `desc`.'
+          example: direction=asc
+          required: false
+          schema:
+            type: string
+            description: 'The direction to sort by. Allowed values: `asc`, `desc`.'
+            example: direction=asc
+            nullable: false
+        -
+          in: query
+          name: search
+          description: 'Filter projects by name or description. This performs a partial match.'
+          example: search=alpha
+          required: false
+          schema:
+            type: string
+            description: 'Filter projects by name or description. This performs a partial match.'
+            example: search=alpha
+            nullable: false
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data: []
+                  links:
+                    first: 'http://task-management-api-1.test/api/v1/projects?page=1'
+                    last: 'http://task-management-api-1.test/api/v1/projects?page=1'
+                    prev: null
+                    next: null
+                  meta:
+                    current_page: 1
+                    from: null
+                    last_page: 1
+                    links:
+                      -
+                        url: null
+                        label: '&laquo; Previous'
+                        active: false
+                      -
+                        url: 'http://task-management-api-1.test/api/v1/projects?page=1'
+                        label: '1'
+                        active: true
+                      -
+                        url: null
+                        label: 'Next &raquo;'
+                        active: false
+                    path: 'http://task-management-api-1.test/api/v1/projects'
+                    per_page: 5
+                    to: null
+                    total: 0
+                properties:
+                  data:
+                    type: array
+                    example: []
+                  links:
+                    type: object
+                    properties:
+                      first:
+                        type: string
+                        example: 'http://task-management-api-1.test/api/v1/projects?page=1'
+                      last:
+                        type: string
+                        example: 'http://task-management-api-1.test/api/v1/projects?page=1'
+                      prev:
+                        type: string
+                        example: null
+                      next:
+                        type: string
+                        example: null
+                  meta:
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                        example: 1
+                      from:
+                        type: string
+                        example: null
+                      last_page:
+                        type: integer
+                        example: 1
+                      links:
+                        type: array
+                        example:
+                          -
+                            url: null
+                            label: '&laquo; Previous'
+                            active: false
+                          -
+                            url: 'http://task-management-api-1.test/api/v1/projects?page=1'
+                            label: '1'
+                            active: true
+                          -
+                            url: null
+                            label: 'Next &raquo;'
+                            active: false
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                              example: null
+                            label:
+                              type: string
+                              example: '&laquo; Previous'
+                            active:
+                              type: boolean
+                              example: false
+                      path:
+                        type: string
+                        example: 'http://task-management-api-1.test/api/v1/projects'
+                      per_page:
+                        type: integer
+                        example: 5
+                      to:
+                        type: string
+                        example: null
+                      total:
+                        type: integer
+                        example: 0
+      tags:
+        - 'Project Management'
+    post:
+      summary: 'Create Project'
+      operationId: createProject
+      description: 'Store a newly created project in storage.'
+      parameters: []
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 4
+                    name: 'new project'
+                    description: description
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 4
+                      name:
+                        type: string
+                        example: 'new project'
+                      description:
+                        type: string
+                        example: description
+      tags:
+        - 'Project Management'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'The name of the project. Must not be greater than 255 characters.'
+                  example: 'Website Redesign'
+                  nullable: false
+                description:
+                  type: string
+                  description: 'A brief description of the project. Must not be greater than 500 characters.'
+                  example: 'Redesigning the company website to improve user experience.'
+                  nullable: false
+                team_id:
+                  type: string
+                  description: 'The ID of the team assigned to the project. This field is optional. The <code>id</code> of an existing record in the teams table.'
+                  example: 3
+                  nullable: true
+              required:
+                - name
+                - description
+  '/api/v1/projects/{id}':
+    get:
+      summary: 'Retrieve Project'
+      operationId: retrieveProject
+      description: 'Display the specified project.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 2
+                    name: 'update project 4324'
+                    description: description
+                    team_assignee:
+                      id: 1
+                      name: 'Enim a earum voluptate facilis cumque ex ut.'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 2
+                      name:
+                        type: string
+                        example: 'update project 4324'
+                      description:
+                        type: string
+                        example: description
+                      team_assignee:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 1
+                          name:
+                            type: string
+                            example: 'Enim a earum voluptate facilis cumque ex ut.'
+      tags:
+        - 'Project Management'
+    put:
+      summary: 'Update Project'
+      operationId: updateProject
+      description: 'Update the specified project in storage.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 2
+                    name: 'update project'
+                    description: description
+                    team_assignee:
+                      id: 1
+                      name: 'Enim a earum voluptate facilis cumque ex ut.'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 2
+                      name:
+                        type: string
+                        example: 'update project'
+                      description:
+                        type: string
+                        example: description
+                      team_assignee:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 1
+                          name:
+                            type: string
+                            example: 'Enim a earum voluptate facilis cumque ex ut.'
+      tags:
+        - 'Project Management'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'The name of the project. Must not be greater than 255 characters.'
+                  example: 'Website Redesign'
+                  nullable: false
+                description:
+                  type: string
+                  description: 'A brief description of the project. Must not be greater than 500 characters.'
+                  example: 'Redesigning the company website to improve user experience.'
+                  nullable: false
+                team_id:
+                  type: string
+                  description: 'The ID of the team assigned to the project. This field is optional. The <code>id</code> of an existing record in the teams table.'
+                  example: 3
+                  nullable: true
+              required:
+                - name
+                - description
+    delete:
+      summary: 'Delete Project'
+      operationId: deleteProject
+      description: 'Remove the specified project from storage.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - 'Project Management'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the project.'
+        example: 2
+        required: true
+        schema:
+          type: integer
+  '/api/v1/projects/{project_id}/tasks':
+    get:
+      summary: 'List Tasks'
+      operationId: listTasks
+      description: 'Retrieve a paginated list of tasks associated with a specific project.'
+      parameters:
+        -
+          in: query
+          name: search
+          description: 'Filter tasks by a search term in their title or description. This performs a partial match.'
+          example: search=homepage
+          required: false
+          schema:
+            type: string
+            description: 'Filter tasks by a search term in their title or description. This performs a partial match.'
+            example: search=homepage
+            nullable: false
+        -
+          in: query
+          name: status
+          description: 'Filter tasks by their status.'
+          example: status=completed
+          required: false
+          schema:
+            type: string
+            description: 'Filter tasks by their status.'
+            example: status=completed
+            nullable: false
+        -
+          in: query
+          name: priority_level
+          description: 'Filter tasks by their priority level.'
+          example: priority_level=high
+          required: false
+          schema:
+            type: string
+            description: 'Filter tasks by their priority level.'
+            example: priority_level=high
+            nullable: false
+        -
+          in: query
+          name: column
+          description: 'The column to sort tasks by. Allowed values: `title`, `description`, `priority_level`, `status`, `deadline_at`, `started_at`, `completed_at`, `created_at`. Defaults to `created_at`.'
+          example: column=title
+          required: false
+          schema:
+            type: string
+            description: 'The column to sort tasks by. Allowed values: `title`, `description`, `priority_level`, `status`, `deadline_at`, `started_at`, `completed_at`, `created_at`. Defaults to `created_at`.'
+            example: column=title
+            nullable: false
+        -
+          in: query
+          name: direction
+          description: 'The direction to sort tasks by. Allowed values: `asc`, `desc`. Defaults to `desc`.'
+          example: direction=asc
+          required: false
+          schema:
+            type: string
+            description: 'The direction to sort tasks by. Allowed values: `asc`, `desc`. Defaults to `desc`.'
+            example: direction=asc
+            nullable: false
+        -
+          in: query
+          name: page
+          description: 'The page number of the paginated results.'
+          example: 0
+          required: false
+          schema:
+            type: integer
+            description: 'The page number of the paginated results.'
+            example: 0
+            nullable: false
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data: []
+                  links:
+                    first: 'http://task-management-api-1.test/api/v1/projects/2/tasks?page=1'
+                    last: 'http://task-management-api-1.test/api/v1/projects/2/tasks?page=1'
+                    prev: null
+                    next: null
+                  meta:
+                    current_page: 1
+                    from: null
+                    last_page: 1
+                    links:
+                      -
+                        url: null
+                        label: '&laquo; Previous'
+                        active: false
+                      -
+                        url: 'http://task-management-api-1.test/api/v1/projects/2/tasks?page=1'
+                        label: '1'
+                        active: true
+                      -
+                        url: null
+                        label: 'Next &raquo;'
+                        active: false
+                    path: 'http://task-management-api-1.test/api/v1/projects/2/tasks'
+                    per_page: 5
+                    to: null
+                    total: 0
+                properties:
+                  data:
+                    type: array
+                    example: []
+                  links:
+                    type: object
+                    properties:
+                      first:
+                        type: string
+                        example: 'http://task-management-api-1.test/api/v1/projects/2/tasks?page=1'
+                      last:
+                        type: string
+                        example: 'http://task-management-api-1.test/api/v1/projects/2/tasks?page=1'
+                      prev:
+                        type: string
+                        example: null
+                      next:
+                        type: string
+                        example: null
+                  meta:
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                        example: 1
+                      from:
+                        type: string
+                        example: null
+                      last_page:
+                        type: integer
+                        example: 1
+                      links:
+                        type: array
+                        example:
+                          -
+                            url: null
+                            label: '&laquo; Previous'
+                            active: false
+                          -
+                            url: 'http://task-management-api-1.test/api/v1/projects/2/tasks?page=1'
+                            label: '1'
+                            active: true
+                          -
+                            url: null
+                            label: 'Next &raquo;'
+                            active: false
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                              example: null
+                            label:
+                              type: string
+                              example: '&laquo; Previous'
+                            active:
+                              type: boolean
+                              example: false
+                      path:
+                        type: string
+                        example: 'http://task-management-api-1.test/api/v1/projects/2/tasks'
+                      per_page:
+                        type: integer
+                        example: 5
+                      to:
+                        type: string
+                        example: null
+                      total:
+                        type: integer
+                        example: 0
+      tags:
+        - 'Task Management'
+    post:
+      summary: 'Create Task'
+      operationId: createTask
+      description: 'Store a newly created task in storage.'
+      parameters: []
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 18
+                    title: 'new taskdasdadasdsadsasdaddadasdasddas'
+                    description: 'this is description'
+                    priority_level: null
+                    status: null
+                    deadline_at: null
+                    started_at: null
+                    completed_at: null
+                    project:
+                      id: 2
+                      name: 'update project'
+                      description: description
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 18
+                      title:
+                        type: string
+                        example: 'new taskdasdadasdsadsasdaddadasdasddas'
+                      description:
+                        type: string
+                        example: 'this is description'
+                      priority_level:
+                        type: string
+                        example: null
+                      status:
+                        type: string
+                        example: null
+                      deadline_at:
+                        type: string
+                        example: null
+                      started_at:
+                        type: string
+                        example: null
+                      completed_at:
+                        type: string
+                        example: null
+                      project:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 2
+                          name:
+                            type: string
+                            example: 'update project'
+                          description:
+                            type: string
+                            example: description
+      tags:
+        - 'Task Management'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: 'The title of the task. Must not be greater than 255 characters.'
+                  example: 'Implement authentication'
+                  nullable: false
+                description:
+                  type: string
+                  description: 'A brief description of the task. Must not be greater than 500 characters.'
+                  example: 'Develop login and registration functionality.'
+                  nullable: false
+                assigned_id:
+                  type: string
+                  description: 'The ID of the user assigned to the task. The <code>id</code> of an existing record in the users table.'
+                  example: 5
+                  nullable: true
+                priority_level:
+                  type: string
+                  description: 'The priority level of the task.'
+                  example: High
+                  nullable: true
+                  enum:
+                    - low
+                    - medium
+                    - high
+                    - urgent
+                status:
+                  type: string
+                  description: 'The current status of the task.'
+                  example: 'In Progress'
+                  nullable: false
+                  enum:
+                    - 'not started'
+                    - 'in progress'
+                    - completed
+                    - 'on hold'
+                    - blocked
+                deadline_at:
+                  type: string
+                  description: 'The deadline for completing the task.'
+                  example: '2024-01-15'
+                  nullable: true
+                started_at:
+                  type: string
+                  description: 'The start date of the task.'
+                  example: '2024-01-01'
+                  nullable: true
+                completed_at:
+                  type: string
+                  description: 'The completion date of the task.'
+                  example: '2024-01-20'
+                  nullable: true
+              required:
+                - title
+                - description
+    parameters:
+      -
+        in: path
+        name: project_id
+        description: 'The ID of the project.'
+        example: 2
+        required: true
+        schema:
+          type: integer
+      -
+        in: path
+        name: project
+        description: 'The ID of the project whose tasks are to be retrieved.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  '/api/v1/tasks/{id}':
+    get:
+      summary: 'Retrieve Task'
+      operationId: retrieveTask
+      description: 'Display the specified task.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 12
+                    title: 'update title 1'
+                    description: description
+                    priority_level: low
+                    status: completed
+                    deadline_at: null
+                    started_at: '2024-12-22'
+                    completed_at: '2024-12-22'
+                    project:
+                      id: 2
+                      name: 'update project'
+                      description: description
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 12
+                      title:
+                        type: string
+                        example: 'update title 1'
+                      description:
+                        type: string
+                        example: description
+                      priority_level:
+                        type: string
+                        example: low
+                      status:
+                        type: string
+                        example: completed
+                      deadline_at:
+                        type: string
+                        example: null
+                      started_at:
+                        type: string
+                        example: '2024-12-22'
+                      completed_at:
+                        type: string
+                        example: '2024-12-22'
+                      project:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 2
+                          name:
+                            type: string
+                            example: 'update project'
+                          description:
+                            type: string
+                            example: description
+      tags:
+        - 'Task Management'
+    put:
+      summary: 'Update Task'
+      operationId: updateTask
+      description: 'Update the specified task in storage.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 15
+                    title: 'update title 1'
+                    description: description
+                    priority_level: urgent
+                    status: completed
+                    deadline_at: null
+                    started_at: '2024-12-22'
+                    completed_at: '2024-12-22'
+                    project:
+                      id: 2
+                      name: 'update project'
+                      description: description
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 15
+                      title:
+                        type: string
+                        example: 'update title 1'
+                      description:
+                        type: string
+                        example: description
+                      priority_level:
+                        type: string
+                        example: urgent
+                      status:
+                        type: string
+                        example: completed
+                      deadline_at:
+                        type: string
+                        example: null
+                      started_at:
+                        type: string
+                        example: '2024-12-22'
+                      completed_at:
+                        type: string
+                        example: '2024-12-22'
+                      project:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 2
+                          name:
+                            type: string
+                            example: 'update project'
+                          description:
+                            type: string
+                            example: description
+      tags:
+        - 'Task Management'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: 'The title of the task. Must not be greater than 255 characters.'
+                  example: 'Implement authentication'
+                  nullable: false
+                description:
+                  type: string
+                  description: 'A brief description of the task. Must not be greater than 500 characters.'
+                  example: 'Develop login and registration functionality.'
+                  nullable: false
+                assigned_id:
+                  type: string
+                  description: 'The ID of the user assigned to the task. The <code>id</code> of an existing record in the users table.'
+                  example: 5
+                  nullable: true
+                priority_level:
+                  type: string
+                  description: 'The priority level of the task.'
+                  example: High
+                  nullable: true
+                  enum:
+                    - low
+                    - medium
+                    - high
+                    - urgent
+                status:
+                  type: string
+                  description: 'The current status of the task.'
+                  example: 'In Progress'
+                  nullable: false
+                  enum:
+                    - 'not started'
+                    - 'in progress'
+                    - completed
+                    - 'on hold'
+                    - blocked
+                deadline_at:
+                  type: string
+                  description: 'The deadline for completing the task.'
+                  example: '2024-01-15'
+                  nullable: true
+                started_at:
+                  type: string
+                  description: 'The start date of the task.'
+                  example: '2024-01-01'
+                  nullable: true
+                completed_at:
+                  type: string
+                  description: 'The completion date of the task.'
+                  example: '2024-01-20'
+                  nullable: true
+              required:
+                - title
+                - description
+    delete:
+      summary: 'Delete Task'
+      operationId: deleteTask
+      description: 'Remove the specified task from storage.'
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Task Management'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the task.'
+        example: 12
+        required: true
+        schema:
+          type: integer
+  /api/v1/statuses-and-priority-levels:
+    get:
+      summary: 'List of statuses and priority levels'
+      operationId: listOfStatusesAndPriorityLevels
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: 200
+                  data:
+                    statuses:
+                      - 'not started'
+                      - 'in progress'
+                      - completed
+                      - 'on hold'
+                      - blocked
+                    priorityLevels:
+                      - low
+                      - medium
+                      - high
+                      - urgent
+                  message: 'Statuses and priority levels retrieved successfully'
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  data:
+                    type: object
+                    properties:
+                      statuses:
+                        type: array
+                        example:
+                          - 'not started'
+                          - 'in progress'
+                          - completed
+                          - 'on hold'
+                          - blocked
+                        items:
+                          type: string
+                      priorityLevels:
+                        type: array
+                        example:
+                          - low
+                          - medium
+                          - high
+                          - urgent
+                        items:
+                          type: string
+                  message:
+                    type: string
+                    example: 'Statuses and priority levels retrieved successfully'
+      tags:
+        - 'Task Management'
+  /api/v1/teams:
+    get:
+      summary: 'List Teams'
+      operationId: listTeams
+      description: 'Retrieve a paginated list of teams with optional search and sorting functionality.'
+      parameters:
+        -
+          in: query
+          name: search
+          description: 'Filter teams by a search term in their name. This performs a partial match.'
+          example: search=engineering
+          required: false
+          schema:
+            type: string
+            description: 'Filter teams by a search term in their name. This performs a partial match.'
+            example: search=engineering
+            nullable: false
+        -
+          in: query
+          name: column
+          description: 'The column to sort teams by. Allowed values: `title`, `description`, `priority_levels`, `status`, `deadline_at`, `started_at`, `completed_at`, `created_at`. Defaults to `created_at`.'
+          example: column=name
+          required: false
+          schema:
+            type: string
+            description: 'The column to sort teams by. Allowed values: `title`, `description`, `priority_levels`, `status`, `deadline_at`, `started_at`, `completed_at`, `created_at`. Defaults to `created_at`.'
+            example: column=name
+            nullable: false
+        -
+          in: query
+          name: direction
+          description: 'The direction to sort teams by. Allowed values: `asc`, `desc`. Defaults to `desc`.'
+          example: direction=asc
+          required: false
+          schema:
+            type: string
+            description: 'The direction to sort teams by. Allowed values: `asc`, `desc`. Defaults to `desc`.'
+            example: direction=asc
+            nullable: false
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data: []
+                  links:
+                    first: 'http://task-management-api-1.test/api/v1/teams?page=1'
+                    last: 'http://task-management-api-1.test/api/v1/teams?page=1'
+                    prev: null
+                    next: null
+                  meta:
+                    current_page: 1
+                    from: null
+                    last_page: 1
+                    links:
+                      -
+                        url: null
+                        label: '&laquo; Previous'
+                        active: false
+                      -
+                        url: 'http://task-management-api-1.test/api/v1/teams?page=1'
+                        label: '1'
+                        active: true
+                      -
+                        url: null
+                        label: 'Next &raquo;'
+                        active: false
+                    path: 'http://task-management-api-1.test/api/v1/teams'
+                    per_page: 5
+                    to: null
+                    total: 0
+                properties:
+                  data:
+                    type: array
+                    example: []
+                  links:
+                    type: object
+                    properties:
+                      first:
+                        type: string
+                        example: 'http://task-management-api-1.test/api/v1/teams?page=1'
+                      last:
+                        type: string
+                        example: 'http://task-management-api-1.test/api/v1/teams?page=1'
+                      prev:
+                        type: string
+                        example: null
+                      next:
+                        type: string
+                        example: null
+                  meta:
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                        example: 1
+                      from:
+                        type: string
+                        example: null
+                      last_page:
+                        type: integer
+                        example: 1
+                      links:
+                        type: array
+                        example:
+                          -
+                            url: null
+                            label: '&laquo; Previous'
+                            active: false
+                          -
+                            url: 'http://task-management-api-1.test/api/v1/teams?page=1'
+                            label: '1'
+                            active: true
+                          -
+                            url: null
+                            label: 'Next &raquo;'
+                            active: false
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                              example: null
+                            label:
+                              type: string
+                              example: '&laquo; Previous'
+                            active:
+                              type: boolean
+                              example: false
+                      path:
+                        type: string
+                        example: 'http://task-management-api-1.test/api/v1/teams'
+                      per_page:
+                        type: integer
+                        example: 5
+                      to:
+                        type: string
+                        example: null
+                      total:
+                        type: integer
+                        example: 0
+      tags:
+        - 'Team Management'
+    post:
+      summary: 'Create Team'
+      operationId: createTeam
+      description: 'Store a newly created team in storage.'
+      parameters: []
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 2
+                    name: 'new team'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 2
+                      name:
+                        type: string
+                        example: 'new team'
+      tags:
+        - 'Team Management'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'The name of the team. Must be a string with a maximum length of 255 characters. Must not be greater than 255 characters.'
+                  example: 'Engineering Team'
+                  nullable: false
+              required:
+                - name
+  '/api/v1/teams/{id}':
+    get:
+      summary: 'Retrieve Team'
+      operationId: retrieveTeam
+      description: 'Display the specified team.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{  \"data\": {\n\"id\": 1,\n\"name\": \"Enim a earum voluptate facilis cumque ex ut.\",\n\"members\": [\n{\n\"id\": 2,\n\"name\": \"Trey Bechtelar\"\n},\n{\n\"id\": 3,\n\"name\": \"Emerald Mertz\"\n},\n]\n}}"
+      tags:
+        - 'Team Management'
+    put:
+      summary: 'Update Team'
+      operationId: updateTeam
+      description: 'Update the specified team in storage.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 1
+                    name: 'updated team'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      name:
+                        type: string
+                        example: 'updated team'
+      tags:
+        - 'Team Management'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'The name of the team. Must be a string with a maximum length of 255 characters. Must not be greater than 255 characters.'
+                  example: 'Engineering Team'
+                  nullable: false
+              required:
+                - name
+    delete:
+      summary: 'Delete Team'
+      operationId: deleteTeam
+      description: 'Remove the specified team storage.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - 'Team Management'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the team.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  '/api/v1/teams/{team_id}/members':
+    get:
+      summary: 'List Team Members'
+      operationId: listTeamMembers
+      description: 'Display a listing of the team members.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    -
+                      id: 2
+                      name: 'Trey Bechtelar'
+                    -
+                      id: 3
+                      name: 'Emerald Mertz'
+                    -
+                      id: 4
+                      name: 'Barney Gorczany'
+                    -
+                      id: 5
+                      name: 'Cristal Cronin'
+                    -
+                      id: 6
+                      name: 'Keyshawn Hyatt'
+                    -
+                      id: 7
+                      name: 'Jermey Lesch'
+                    -
+                      id: 8
+                      name: 'Lindsey Green'
+                    -
+                      id: 9
+                      name: 'Ruben Marvin'
+                    -
+                      id: 10
+                      name: 'Tyrique Schmeler DDS'
+                    -
+                      id: 11
+                      name: 'Kacie Doyle'
+                properties:
+                  data:
+                    type: array
+                    example:
+                      -
+                        id: 2
+                        name: 'Trey Bechtelar'
+                      -
+                        id: 3
+                        name: 'Emerald Mertz'
+                      -
+                        id: 4
+                        name: 'Barney Gorczany'
+                      -
+                        id: 5
+                        name: 'Cristal Cronin'
+                      -
+                        id: 6
+                        name: 'Keyshawn Hyatt'
+                      -
+                        id: 7
+                        name: 'Jermey Lesch'
+                      -
+                        id: 8
+                        name: 'Lindsey Green'
+                      -
+                        id: 9
+                        name: 'Ruben Marvin'
+                      -
+                        id: 10
+                        name: 'Tyrique Schmeler DDS'
+                      -
+                        id: 11
+                        name: 'Kacie Doyle'
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 2
+                        name:
+                          type: string
+                          example: 'Trey Bechtelar'
+      tags:
+        - 'Team Members Management'
+    post:
+      summary: 'Create Team Member'
+      operationId: createTeamMember
+      description: 'Store a newly created team member in storage.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    -
+                      id: 2
+                      name: 'Trey Bechtelar'
+                properties:
+                  data:
+                    type: array
+                    example:
+                      -
+                        id: 2
+                        name: 'Trey Bechtelar'
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 2
+                        name:
+                          type: string
+                          example: 'Trey Bechtelar'
+      tags:
+        - 'Team Members Management'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                member_id:
+                  type: array
+                  description: 'The <code>id</code> of an existing record in the users table.'
+                  example: null
+                  items:
+                    type: string
+                role:
+                  type: string
+                  description: 'The role to assign to the team members. Valid values: `admin`, `member`, `project manager`, `team lead`.'
+                  example: member
+                  nullable: false
+                  enum:
+                    - 'team lead'
+                    - member
+                    - 'project manager'
+              required:
+                - role
+    parameters:
+      -
+        in: path
+        name: team_id
+        description: 'The ID of the team.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  '/api/v1/teams/{team_id}/members/{user_id}':
+    delete:
+      summary: 'Delete Team Member'
+      operationId: deleteTeamMember
+      description: 'Remove the specified team member from storage.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
+      tags:
+        - 'Team Members Management'
+    parameters:
+      -
+        in: path
+        name: team_id
+        description: 'The ID of the team.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+      -
+        in: path
+        name: user_id
+        description: 'The ID of the user.'
+        example: 1
+        required: true
+        schema:
+          type: integer
   /api/v1/tenant/members:
     get:
-      summary: 'Display a listing of the resource.'
-      operationId: displayAListingOfTheResource
-      description: ''
-      parameters: []
+      summary: 'List Tenant Members'
+      operationId: listTenantMembers
+      description: 'Display a listing of the tenant members. This endpoint supports sorting, searching, and filtering by role.'
+      parameters:
+        -
+          in: query
+          name: column
+          description: 'The column to sort by. Valid columns are: name, email, created_at. Default is created_at.'
+          example: column=name
+          required: false
+          schema:
+            type: string
+            description: 'The column to sort by. Valid columns are: name, email, created_at. Default is created_at.'
+            example: column=name
+            nullable: false
+        -
+          in: query
+          name: direction
+          description: "The direction to sort. Either 'asc' or 'desc'. Default is 'desc'."
+          example: direction=asc
+          required: false
+          schema:
+            type: string
+            description: "The direction to sort. Either 'asc' or 'desc'. Default is 'desc'."
+            example: direction=asc
+            nullable: false
+        -
+          in: query
+          name: search
+          description: 'A search term to filter members by name or email.'
+          example: search=johndoe
+          required: false
+          schema:
+            type: string
+            description: 'A search term to filter members by name or email.'
+            example: search=johndoe
+            nullable: false
+        -
+          in: query
+          name: role
+          description: 'Filter by role.'
+          example: role=admin
+          required: false
+          schema:
+            type: string
+            description: 'Filter by role.'
+            example: role=admin
+            nullable: false
       responses:
-        401:
+        200:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  data: []
+                  links:
+                    first: 'http://task-management-api-1.test/api/v1/tenant/members?page=1'
+                    last: 'http://task-management-api-1.test/api/v1/tenant/members?page=1'
+                    prev: null
+                    next: null
+                  meta:
+                    current_page: 1
+                    from: null
+                    last_page: 1
+                    links:
+                      -
+                        url: null
+                        label: '&laquo; Previous'
+                        active: false
+                      -
+                        url: 'http://task-management-api-1.test/api/v1/tenant/members?page=1'
+                        label: '1'
+                        active: true
+                      -
+                        url: null
+                        label: 'Next &raquo;'
+                        active: false
+                    path: 'http://task-management-api-1.test/api/v1/tenant/members'
+                    per_page: 2
+                    to: null
+                    total: 0
                 properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
+                  data:
+                    type: array
+                    example: []
+                  links:
+                    type: object
+                    properties:
+                      first:
+                        type: string
+                        example: 'http://task-management-api-1.test/api/v1/tenant/members?page=1'
+                      last:
+                        type: string
+                        example: 'http://task-management-api-1.test/api/v1/tenant/members?page=1'
+                      prev:
+                        type: string
+                        example: null
+                      next:
+                        type: string
+                        example: null
+                  meta:
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                        example: 1
+                      from:
+                        type: string
+                        example: null
+                      last_page:
+                        type: integer
+                        example: 1
+                      links:
+                        type: array
+                        example:
+                          -
+                            url: null
+                            label: '&laquo; Previous'
+                            active: false
+                          -
+                            url: 'http://task-management-api-1.test/api/v1/tenant/members?page=1'
+                            label: '1'
+                            active: true
+                          -
+                            url: null
+                            label: 'Next &raquo;'
+                            active: false
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                              example: null
+                            label:
+                              type: string
+                              example: '&laquo; Previous'
+                            active:
+                              type: boolean
+                              example: false
+                      path:
+                        type: string
+                        example: 'http://task-management-api-1.test/api/v1/tenant/members'
+                      per_page:
+                        type: integer
+                        example: 2
+                      to:
+                        type: string
+                        example: null
+                      total:
+                        type: integer
+                        example: 0
       tags:
-        - Endpoints
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                role:
-                  type: string
-                  description: ''
-                  example: member
-                  nullable: false
-                  enum:
-                    - admin
-                    - member
-                department_id:
-                  type: string
-                  description: 'The <code>id</code> of an existing record in the departments table.'
-                  example: null
-                  nullable: false
+        - 'Tenant Members Management'
     post:
-      summary: 'Store a newly created resource in storage.'
-      operationId: storeANewlyCreatedResourceInStorage
-      description: ''
+      summary: 'Create Tenant member'
+      operationId: createTenantMember
+      description: 'Store a newly created Tenant member in storage.'
       parameters: []
-      responses: {  }
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 14
+                    name: adasdsdaasdsad
+                    email: dasADda@gmail.com
+                    role: member
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 14
+                      name:
+                        type: string
+                        example: adasdsdaasdsad
+                      email:
+                        type: string
+                        example: dasADda@gmail.com
+                      role:
+                        type: string
+                        example: member
       tags:
-        - Endpoints
+        - 'Tenant Members Management'
       requestBody:
         required: true
         content:
@@ -150,61 +1789,101 @@ paths:
               properties:
                 name:
                   type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: vpv
+                  description: 'The full name of the tenant member. Must not be greater than 255 characters.'
+                  example: 'John Doe'
                   nullable: false
                 email:
                   type: string
-                  description: 'Must be a valid email address.'
-                  example: mmurazik@example.org
+                  description: 'A unique email address for the tenant member. Must be a valid email address.'
+                  example: john.doe@example.com
                   nullable: false
                 role:
                   type: string
-                  description: ''
-                  example: admin
+                  description: 'The role to assign to the tenant member. Valid values: `admin`, `member`, `project manager`, `team lead`.'
+                  example: member
                   nullable: false
                   enum:
                     - admin
                     - member
-                department_id:
-                  type: string
-                  description: 'The <code>id</code> of an existing record in the departments table.'
-                  example: odio
-                  nullable: false
+                    - 'project manager'
+                    - 'team lead'
               required:
                 - name
                 - email
                 - role
-                - department_id
   '/api/v1/tenant/members/{user_id}':
     get:
-      summary: 'Display the specified resource.'
-      operationId: displayTheSpecifiedResource
-      description: ''
+      summary: 'Retrieve Tenant Member'
+      operationId: retrieveTenantMember
+      description: 'Display the specified tenant member.'
       parameters: []
       responses:
-        401:
+        200:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  data:
+                    id: 14
+                    name: adasdsdaasdsad
+                    email: dasADda@gmail.com
+                    role: member
                 properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 14
+                      name:
+                        type: string
+                        example: adasdsdaasdsad
+                      email:
+                        type: string
+                        example: dasADda@gmail.com
+                      role:
+                        type: string
+                        example: member
       tags:
-        - Endpoints
+        - 'Tenant Members Management'
     put:
-      summary: 'Update the specified resource in storage.'
-      operationId: updateTheSpecifiedResourceInStorage
-      description: ''
+      summary: 'Update Tenant Member'
+      operationId: updateTenantMember
+      description: 'Update the specified tenant member in storage.'
       parameters: []
-      responses: {  }
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 14
+                    name: adasdsdaasdsad
+                    email: dasADda@gmail.com
+                    role: member
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 14
+                      name:
+                        type: string
+                        example: adasdsdaasdsad
+                      email:
+                        type: string
+                        example: dasADda@gmail.com
+                      role:
+                        type: string
+                        example: member
       tags:
-        - Endpoints
+        - 'Tenant Members Management'
       requestBody:
         required: true
         content:
@@ -214,40 +1893,44 @@ paths:
               properties:
                 name:
                   type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: cw
+                  description: 'The full name of the tenant member. Must not be greater than 255 characters.'
+                  example: 'John Doe'
                   nullable: false
                 email:
                   type: string
-                  description: 'Must be a valid email address.'
-                  example: johnathan42@example.com
+                  description: 'A unique email address for the tenant member. Must be a valid email address.'
+                  example: john.doe@example.com
                   nullable: false
                 role:
                   type: string
-                  description: ''
+                  description: 'The role to assign to the tenant member. Valid values: `admin`, `member`, `project manager`, `team lead`.'
                   example: member
                   nullable: false
                   enum:
                     - admin
                     - member
-                department_id:
-                  type: string
-                  description: 'The <code>id</code> of an existing record in the departments table.'
-                  example: voluptate
-                  nullable: false
+                    - 'project manager'
+                    - 'team lead'
               required:
                 - name
                 - email
                 - role
-                - department_id
     delete:
-      summary: 'Remove the specified resource from storage.'
-      operationId: removeTheSpecifiedResourceFromStorage
-      description: ''
+      summary: 'Delete Tenant Member'
+      operationId: deleteTenantMember
+      description: 'Remove the specified tenant member from storage.'
       parameters: []
-      responses: {  }
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {  }
+                properties: {  }
       tags:
-        - Endpoints
+        - 'Tenant Members Management'
     parameters:
       -
         in: path
@@ -259,7 +1942,22 @@ paths:
           type: integer
 tags:
   -
-    name: Endpoints
+    name: Authentication
+    description: ''
+  -
+    name: 'Project Management'
+    description: ''
+  -
+    name: 'Task Management'
+    description: ''
+  -
+    name: 'Team Management'
+    description: ''
+  -
+    name: 'Team Members Management'
+    description: ''
+  -
+    name: 'Tenant Members Management'
     description: ''
 components:
   securitySchemes:

@@ -40,5 +40,24 @@ class StoreTeamMemberRequest extends FormRequest
             'role.in'               => "The selected role is invalid. The valid role are: $roles"
         ];
     }
+    
+        /**
+     * Define body parameters for Scribe documentation (if applicable).
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'member_ids' => [
+                'description' => 'An array of user IDs to be added as team members.',
+                'example' => [1, 2, 3],
+            ],
+            'role' => [
+                'description' => 'The role to assign to the team members. Valid values: `' . implode('`, `', array_column(Role::cases(), 'value')) . '`.',
+                'example' => Role::MEMBER->value,
+            ],
+        ];
+    }
 
 }

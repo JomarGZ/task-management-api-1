@@ -2,16 +2,28 @@
 
 namespace App\Http\Controllers\api\v1\auth;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\api\v1\auth\RegistrationRequest;
 use App\Models\Tenant;
 use App\Models\User;
 use App\Enums\Role;
+use App\Http\Controllers\api\v1\ApiController;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 
-class RegisterController extends Controller
+class RegisterController extends ApiController
 {
+     /**
+     * Register
+     * 
+     * Register and authenticated the user and returns the user's API token
+     * @unauthenticated
+     * @group Authentication
+     * @response 201 {  "status": 201,
+    "data": {
+        "access_token": "{YOUR_AUTH_KEY}"
+    },
+    "message": "Registered Successfully"}
+     */
     public function __invoke(RegistrationRequest $request)
     {
        
@@ -30,8 +42,10 @@ class RegisterController extends Controller
 
         $device = substr($request->userAgent() ?? '', 0, 255);
 
-        return response()->json([
-            'access_token' => $user->createToken($device)->plainTextToken,
-        ], Response::HTTP_CREATED);
+        return $this->success(
+            'Registered Successfully',
+            ['access_token' => $user->createToken($device)->plainTextToken],
+            Response::HTTP_CREATED
+        );
     }
 }

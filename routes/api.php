@@ -13,9 +13,9 @@ use App\Http\Controllers\api\v1\Tenants\TenantMembersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+// Route::get('/user', function (Request $request) {
+//     return $request->user();
+// })->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->group(function() {
     Route::put('auth/password-update', PasswordUpdateController::class);

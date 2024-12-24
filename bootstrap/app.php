@@ -23,19 +23,23 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->renderable(function(NotFoundHttpException $e) {
-            if (request()->is('api/*') && $e->getPrevious() instanceof ModelNotFoundException) {
-                info('Not Found error: '. $e->getMessage());
-                return ApiResponse::error(
-                    'The requested data is not found in the database or not belong to the tenant',
-                    'Requested resource could not be found'
-                );
+            if (
+                request()->is('api/*') &&
+                request()->wantsJson() && // More robust check
+                ($e instanceof ModelNotFoundException || $e->getPrevious() instanceof ModelNotFoundException)
+            ) {
+                return response()->json([
+                    'errors' => [
+                        'title' => 'Not Found',
+                        'status' => Response::HTTP_NOT_FOUND
+                    ]
+                    ], Response::HTTP_NOT_FOUND);
             }
         });
         $exceptions->renderable(function(AccessDeniedHttpException $e) {
-           return ApiResponse::error(
-            'You are not authorized to perform this action.',
-            $e->getMessage(),
-            Response::HTTP_FORBIDDEN
-           );
+            return response()->json([
+                'title' => $e->getMessage(),
+                'status' => Response::HTTP_UNAUTHORIZED
+            ], Response::HTTP_UNAUTHORIZED);
         });
     })->create();

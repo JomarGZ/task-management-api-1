@@ -9,24 +9,669 @@
         }
     ],
     "info": {
-        "name": "Laravel",
-        "_postman_id": "ad26f625-2c58-4778-b0f1-4dffe907ba33",
+        "name": "Task Management system API documentation",
+        "_postman_id": "4dd48ecb-0c67-4f08-af84-b4cf6c10b82b",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
     "item": [
         {
-            "name": "Endpoints",
+            "name": "Authentication",
             "description": "",
             "item": [
                 {
-                    "name": "GET api\/v1\/user",
+                    "name": "Update password",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/v1\/user",
+                            "path": "api\/v1\/auth\/password-update",
                             "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/user"
+                            "raw": "{{baseUrl}}\/api\/v1\/auth\/password-update"
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"current_password\":\"sed\",\"password\":\"omnis\"}"
+                        },
+                        "description": "Change user password"
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{ \"status\": 200,\n\"message\": \"Your password has been updated.\"}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Logout",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/auth\/logout",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/auth\/logout"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Signs out the user and destroy the API token"
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Register",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/auth\/register",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/auth\/register"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"name\":\"John Doe\",\"email\":\"johndoe@example.com\",\"password\":\"password123\"}"
+                        },
+                        "description": "Register and authenticated the user and returns the user's API token",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{  \"status\": 201,\n\"data\": {\n\"access_token\": \"{YOUR_AUTH_KEY}\"\n},\n\"message\": \"Registered Successfully\"}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Login",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/auth\/login",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/auth\/login"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"email\":\"johndoe@example.com\",\"password\":\"password123\"}"
+                        },
+                        "description": "Authenticate the user and returns the user's API token",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\"status\": 201,\n\"data\": {\n\"access_token\": \"{Your_auth_token}\"\n},\n\"message\": \"Authenticated\"}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Project Management",
+            "description": "",
+            "item": [
+                {
+                    "name": "List Projects",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/projects",
+                            "query": [
+                                {
+                                    "key": "column",
+                                    "value": "column%3Dname",
+                                    "description": "The column to sort by. Allowed values: `name`, `description`, `created_at`.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "direction",
+                                    "value": "direction%3Dasc",
+                                    "description": "The direction to sort by. Allowed values: `asc`, `desc`.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "search",
+                                    "value": "search%3Dalpha",
+                                    "description": "Filter projects by name or description. This performs a partial match.",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/v1\/projects?column=column%3Dname&direction=direction%3Dasc&search=search%3Dalpha"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Display a listing of the projects."
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "vary",
+                                    "value": "Origin"
+                                }
+                            ],
+                            "code": 200,
+                            "body": "{\"data\":[],\"links\":{\"first\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/projects?page=1\",\"last\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/projects?page=1\",\"prev\":null,\"next\":null},\"meta\":{\"current_page\":1,\"from\":null,\"last_page\":1,\"links\":[{\"url\":null,\"label\":\"&laquo; Previous\",\"active\":false},{\"url\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/projects?page=1\",\"label\":\"1\",\"active\":true},{\"url\":null,\"label\":\"Next &raquo;\",\"active\":false}],\"path\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/projects\",\"per_page\":5,\"to\":null,\"total\":0}}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Create Project",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/projects",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/projects"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"name\":\"Website Redesign\",\"description\":\"Redesigning the company website to improve user experience.\",\"team_id\":3}"
+                        },
+                        "description": "Store a newly created project in storage."
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{   \"data\": {\n\"id\": 4,\n\"name\": \"new project\",\n\"description\": \"description\"\n}}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Retrieve Project",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/projects\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/projects\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "2",
+                                    "description": "The ID of the project."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Display the specified project."
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"data\": {\n\"id\": 2,\n\"name\": \"update project 4324\",\n\"description\": \"description\",\n\"team_assignee\": {\n\"id\": 1,\n\"name\": \"Enim a earum voluptate facilis cumque ex ut.\"\n}\n}}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Update Project",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/projects\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/projects\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "2",
+                                    "description": "The ID of the project."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"name\":\"Website Redesign\",\"description\":\"Redesigning the company website to improve user experience.\",\"team_id\":3}"
+                        },
+                        "description": "Update the specified project in storage."
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{ \"data\": {\n\"id\": 2,\n\"name\": \"update project\",\n\"description\": \"description\",\n\"team_assignee\": {\n\"id\": 1,\n\"name\": \"Enim a earum voluptate facilis cumque ex ut.\"\n}\n}}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Delete Project",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/projects\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/projects\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "2",
+                                    "description": "The ID of the project."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Remove the specified project from storage."
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Task Management",
+            "description": "",
+            "item": [
+                {
+                    "name": "List Tasks",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/projects\/:project_id\/tasks",
+                            "query": [
+                                {
+                                    "key": "search",
+                                    "value": "search%3Dhomepage",
+                                    "description": "Filter tasks by a search term in their title or description. This performs a partial match.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "status",
+                                    "value": "status%3Dcompleted",
+                                    "description": "Filter tasks by their status.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "priority_level",
+                                    "value": "priority_level%3Dhigh",
+                                    "description": "Filter tasks by their priority level.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "column",
+                                    "value": "column%3Dtitle",
+                                    "description": "The column to sort tasks by. Allowed values: `title`, `description`, `priority_level`, `status`, `deadline_at`, `started_at`, `completed_at`, `created_at`. Defaults to `created_at`.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "direction",
+                                    "value": "direction%3Dasc",
+                                    "description": "The direction to sort tasks by. Allowed values: `asc`, `desc`. Defaults to `desc`.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "page",
+                                    "value": "",
+                                    "description": "The page number of the paginated results.",
+                                    "disabled": true
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/v1\/projects\/:project_id\/tasks?search=search%3Dhomepage&status=status%3Dcompleted&priority_level=priority_level%3Dhigh&column=column%3Dtitle&direction=direction%3Dasc&page=",
+                            "variable": [
+                                {
+                                    "id": "project_id",
+                                    "key": "project_id",
+                                    "value": "2",
+                                    "description": "The ID of the project."
+                                },
+                                {
+                                    "id": "project",
+                                    "key": "project",
+                                    "value": "1",
+                                    "description": "The ID of the project whose tasks are to be retrieved."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Retrieve a paginated list of tasks associated with a specific project."
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "vary",
+                                    "value": "Origin"
+                                }
+                            ],
+                            "code": 200,
+                            "body": "{\"data\":[],\"links\":{\"first\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/projects\\\/2\\\/tasks?page=1\",\"last\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/projects\\\/2\\\/tasks?page=1\",\"prev\":null,\"next\":null},\"meta\":{\"current_page\":1,\"from\":null,\"last_page\":1,\"links\":[{\"url\":null,\"label\":\"&laquo; Previous\",\"active\":false},{\"url\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/projects\\\/2\\\/tasks?page=1\",\"label\":\"1\",\"active\":true},{\"url\":null,\"label\":\"Next &raquo;\",\"active\":false}],\"path\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/projects\\\/2\\\/tasks\",\"per_page\":5,\"to\":null,\"total\":0}}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Create Task",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/projects\/:project_id\/tasks",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/projects\/:project_id\/tasks",
+                            "variable": [
+                                {
+                                    "id": "project_id",
+                                    "key": "project_id",
+                                    "value": "2",
+                                    "description": "The ID of the project."
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"title\":\"Implement authentication\",\"description\":\"Develop login and registration functionality.\",\"assigned_id\":5,\"priority_level\":\"High\",\"status\":\"In Progress\",\"deadline_at\":\"2024-01-15\",\"started_at\":\"2024-01-01\",\"completed_at\":\"2024-01-20\"}"
+                        },
+                        "description": "Store a newly created task in storage."
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\"data\": {\n\"id\": 18,\n\"title\": \"new taskdasdadasdsadsasdaddadasdasddas\",\n\"description\": \"this is description\",\n\"priority_level\": null,\n\"status\": null,\n\"deadline_at\": null,\n\"started_at\": null,\n\"completed_at\": null,\n\"project\": {\n\"id\": 2,\n\"name\": \"update project\",\n\"description\": \"description\"\n}\n}}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Retrieve Task",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/tasks\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/tasks\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "12",
+                                    "description": "The ID of the task."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Display the specified task."
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "vary",
+                                    "value": "Origin"
+                                }
+                            ],
+                            "code": 200,
+                            "body": "{\"data\":{\"id\":12,\"title\":\"update title 1\",\"description\":\"description\",\"priority_level\":\"low\",\"status\":\"completed\",\"deadline_at\":null,\"started_at\":\"2024-12-22\",\"completed_at\":\"2024-12-22\",\"project\":{\"id\":2,\"name\":\"update project\",\"description\":\"description\"}}}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Update Task",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/tasks\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/tasks\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "12",
+                                    "description": "The ID of the task."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"title\":\"Implement authentication\",\"description\":\"Develop login and registration functionality.\",\"assigned_id\":5,\"priority_level\":\"High\",\"status\":\"In Progress\",\"deadline_at\":\"2024-01-15\",\"started_at\":\"2024-01-01\",\"completed_at\":\"2024-01-20\"}"
+                        },
+                        "description": "Update the specified task in storage."
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"data\": {\n\"id\": 15,\n\"title\": \"update title 1\",\n\"description\": \"description\",\n\"priority_level\": \"urgent\",\n\"status\": \"completed\",\n\"deadline_at\": null,\n\"started_at\": \"2024-12-22\",\n\"completed_at\": \"2024-12-22\",\n\"project\": {\n\"id\": 2,\n\"name\": \"update project\",\n\"description\": \"description\"\n}\n}}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Delete Task",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/tasks\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/tasks\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "12",
+                                    "description": "The ID of the task."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Remove the specified task from storage."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "List of statuses and priority levels",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/statuses-and-priority-levels",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/statuses-and-priority-levels"
                         },
                         "method": "GET",
                         "header": [
@@ -54,24 +699,94 @@
                                     "value": "application\/json"
                                 },
                                 {
-                                    "key": "access-control-allow-origin",
-                                    "value": "*"
+                                    "key": "vary",
+                                    "value": "Origin"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 200,
+                            "body": "{\"status\":200,\"data\":{\"statuses\":[\"not started\",\"in progress\",\"completed\",\"on hold\",\"blocked\"],\"priorityLevels\":[\"low\",\"medium\",\"high\",\"urgent\"]},\"message\":\"Statuses and priority levels retrieved successfully\"}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Team Management",
+            "description": "",
+            "item": [
+                {
+                    "name": "List Teams",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/teams",
+                            "query": [
+                                {
+                                    "key": "search",
+                                    "value": "search%3Dengineering",
+                                    "description": "Filter teams by a search term in their name. This performs a partial match.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "column",
+                                    "value": "column%3Dname",
+                                    "description": "The column to sort teams by. Allowed values: `title`, `description`, `priority_levels`, `status`, `deadline_at`, `started_at`, `completed_at`, `created_at`. Defaults to `created_at`.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "direction",
+                                    "value": "direction%3Dasc",
+                                    "description": "The direction to sort teams by. Allowed values: `asc`, `desc`. Defaults to `desc`.",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/v1\/teams?search=search%3Dengineering&column=column%3Dname&direction=direction%3Dasc"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Retrieve a paginated list of teams with optional search and sorting functionality."
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "vary",
+                                    "value": "Origin"
+                                }
+                            ],
+                            "code": 200,
+                            "body": "{\"data\":[],\"links\":{\"first\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/teams?page=1\",\"last\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/teams?page=1\",\"prev\":null,\"next\":null},\"meta\":{\"current_page\":1,\"from\":null,\"last_page\":1,\"links\":[{\"url\":null,\"label\":\"&laquo; Previous\",\"active\":false},{\"url\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/teams?page=1\",\"label\":\"1\",\"active\":true},{\"url\":null,\"label\":\"Next &raquo;\",\"active\":false}],\"path\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/teams\",\"per_page\":5,\"to\":null,\"total\":0}}",
                             "name": ""
                         }
                     ]
                 },
                 {
-                    "name": "POST api\/v1\/auth\/register",
+                    "name": "Create Team",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/v1\/auth\/register",
+                            "path": "api\/v1\/teams",
                             "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/auth\/register"
+                            "raw": "{{baseUrl}}\/api\/v1\/teams"
                         },
                         "method": "POST",
                         "header": [
@@ -86,50 +801,219 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"jodykfwexnewtplchxebruvm\",\"email\":\"hills.ottis@example.net\",\"password\":\"kzdjgq6Pv%g8x\"}"
+                            "raw": "{\"name\":\"Engineering Team\"}"
                         },
-                        "description": ""
+                        "description": "Store a newly created team in storage."
                     },
-                    "response": []
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{  \"data\": {\n\"id\": 2,\n\"name\": \"new team\"\n}}",
+                            "name": ""
+                        }
+                    ]
                 },
                 {
-                    "name": "POST api\/v1\/auth\/login",
+                    "name": "Retrieve Team",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
-                            "path": "api\/v1\/auth\/login",
+                            "path": "api\/v1\/teams\/:id",
                             "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/auth\/login"
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\"email\":\"conroy.sheridan@example.com\",\"password\":\"vero\"}"
-                        },
-                        "description": ""
-                    },
-                    "response": []
-                },
-                {
-                    "name": "Display a listing of the resource.",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/tenant\/members",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/tenant\/members"
+                            "raw": "{{baseUrl}}\/api\/v1\/teams\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "The ID of the team."
+                                }
+                            ]
                         },
                         "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Display the specified team."
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{  \"data\": {\n\"id\": 1,\n\"name\": \"Enim a earum voluptate facilis cumque ex ut.\",\n\"members\": [\n{\n\"id\": 2,\n\"name\": \"Trey Bechtelar\"\n},\n{\n\"id\": 3,\n\"name\": \"Emerald Mertz\"\n},\n]\n}}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Update Team",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/teams\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/teams\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "The ID of the team."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"name\":\"Engineering Team\"}"
+                        },
+                        "description": "Update the specified team in storage."
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{ \"data\": {\n\"id\": 1,\n\"name\": \"updated team\"\n}}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Delete Team",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/teams\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/teams\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "The ID of the team."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Remove the specified team storage."
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Team Members Management",
+            "description": "",
+            "item": [
+                {
+                    "name": "List Team Members",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/teams\/:team_id\/members",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/teams\/:team_id\/members",
+                            "variable": [
+                                {
+                                    "id": "team_id",
+                                    "key": "team_id",
+                                    "value": "1",
+                                    "description": "The ID of the team."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Display a listing of the team members."
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "vary",
+                                    "value": "Origin"
+                                }
+                            ],
+                            "code": 200,
+                            "body": "{\"data\":[{\"id\":2,\"name\":\"Trey Bechtelar\"},{\"id\":3,\"name\":\"Emerald Mertz\"},{\"id\":4,\"name\":\"Barney Gorczany\"},{\"id\":5,\"name\":\"Cristal Cronin\"},{\"id\":6,\"name\":\"Keyshawn Hyatt\"},{\"id\":7,\"name\":\"Jermey Lesch\"},{\"id\":8,\"name\":\"Lindsey Green\"},{\"id\":9,\"name\":\"Ruben Marvin\"},{\"id\":10,\"name\":\"Tyrique Schmeler DDS\"},{\"id\":11,\"name\":\"Kacie Doyle\"}]}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Create Team Member",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/teams\/:team_id\/members",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/teams\/:team_id\/members",
+                            "variable": [
+                                {
+                                    "id": "team_id",
+                                    "key": "team_id",
+                                    "value": "1",
+                                    "description": "The ID of the team."
+                                }
+                            ]
+                        },
+                        "method": "POST",
                         "header": [
                             {
                                 "key": "Content-Type",
@@ -144,7 +1028,116 @@
                             "mode": "raw",
                             "raw": "{\"role\":\"member\"}"
                         },
-                        "description": ""
+                        "description": "Store a newly created team member in storage."
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{  \"data\": [\n{\n\"id\": 2,\n\"name\": \"Trey Bechtelar\"\n}\n]}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Delete Team Member",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/teams\/:team_id\/members\/:user_id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/teams\/:team_id\/members\/:user_id",
+                            "variable": [
+                                {
+                                    "id": "team_id",
+                                    "key": "team_id",
+                                    "value": "1",
+                                    "description": "The ID of the team."
+                                },
+                                {
+                                    "id": "user_id",
+                                    "key": "user_id",
+                                    "value": "1",
+                                    "description": "The ID of the user."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Remove the specified team member from storage."
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Tenant Members Management",
+            "description": "",
+            "item": [
+                {
+                    "name": "List Tenant Members",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/tenant\/members",
+                            "query": [
+                                {
+                                    "key": "column",
+                                    "value": "column%3Dname",
+                                    "description": "The column to sort by. Valid columns are: name, email, created_at. Default is created_at.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "direction",
+                                    "value": "direction%3Dasc",
+                                    "description": "The direction to sort. Either 'asc' or 'desc'. Default is 'desc'.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "search",
+                                    "value": "search%3Djohndoe",
+                                    "description": "A search term to filter members by name or email.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "role",
+                                    "value": "role%3Dadmin",
+                                    "description": "Filter by role.",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/v1\/tenant\/members?column=column%3Dname&direction=direction%3Dasc&search=search%3Djohndoe&role=role%3Dadmin"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Display a listing of the tenant members. This endpoint supports sorting, searching, and filtering by role."
                     },
                     "response": [
                         {
@@ -158,18 +1151,18 @@
                                     "value": "application\/json"
                                 },
                                 {
-                                    "key": "access-control-allow-origin",
-                                    "value": "*"
+                                    "key": "vary",
+                                    "value": "Origin"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 200,
+                            "body": "{\"data\":[],\"links\":{\"first\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/tenant\\\/members?page=1\",\"last\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/tenant\\\/members?page=1\",\"prev\":null,\"next\":null},\"meta\":{\"current_page\":1,\"from\":null,\"last_page\":1,\"links\":[{\"url\":null,\"label\":\"&laquo; Previous\",\"active\":false},{\"url\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/tenant\\\/members?page=1\",\"label\":\"1\",\"active\":true},{\"url\":null,\"label\":\"Next &raquo;\",\"active\":false}],\"path\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/tenant\\\/members\",\"per_page\":2,\"to\":null,\"total\":0}}",
                             "name": ""
                         }
                     ]
                 },
                 {
-                    "name": "Store a newly created resource in storage.",
+                    "name": "Create Tenant member",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -190,14 +1183,21 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"vpv\",\"email\":\"mmurazik@example.org\",\"role\":\"admin\",\"department_id\":\"odio\"}"
+                            "raw": "{\"name\":\"John Doe\",\"email\":\"john.doe@example.com\",\"role\":\"member\"}"
                         },
-                        "description": ""
+                        "description": "Store a newly created Tenant member in storage."
                     },
-                    "response": []
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{ \"data\": {\n\"id\": 14,\n\"name\": \"adasdsdaasdsad\",\n\"email\": \"dasADda@gmail.com\",\n\"role\": \"member\"\n}}",
+                            "name": ""
+                        }
+                    ]
                 },
                 {
-                    "name": "Display the specified resource.",
+                    "name": "Retrieve Tenant Member",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -225,32 +1225,19 @@
                             }
                         ],
                         "body": null,
-                        "description": ""
+                        "description": "Display the specified tenant member."
                     },
                     "response": [
                         {
-                            "header": [
-                                {
-                                    "key": "cache-control",
-                                    "value": "no-cache, private"
-                                },
-                                {
-                                    "key": "content-type",
-                                    "value": "application\/json"
-                                },
-                                {
-                                    "key": "access-control-allow-origin",
-                                    "value": "*"
-                                }
-                            ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "header": [],
+                            "code": 200,
+                            "body": "{   \"data\": {\n\"id\": 14,\n\"name\": \"adasdsdaasdsad\",\n\"email\": \"dasADda@gmail.com\",\n\"role\": \"member\"\n}}",
                             "name": ""
                         }
                     ]
                 },
                 {
-                    "name": "Update the specified resource in storage.",
+                    "name": "Update Tenant Member",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -279,14 +1266,21 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"cw\",\"email\":\"johnathan42@example.com\",\"role\":\"member\",\"department_id\":\"voluptate\"}"
+                            "raw": "{\"name\":\"John Doe\",\"email\":\"john.doe@example.com\",\"role\":\"member\"}"
                         },
-                        "description": ""
+                        "description": "Update the specified tenant member in storage."
                     },
-                    "response": []
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{   \"data\": {\n\"id\": 14,\n\"name\": \"adasdsdaasdsad\",\n\"email\": \"dasADda@gmail.com\",\n\"role\": \"member\"\n}}",
+                            "name": ""
+                        }
+                    ]
                 },
                 {
-                    "name": "Remove the specified resource from storage.",
+                    "name": "Delete Tenant Member",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -314,9 +1308,16 @@
                             }
                         ],
                         "body": null,
-                        "description": ""
+                        "description": "Remove the specified tenant member from storage."
                     },
-                    "response": []
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{}",
+                            "name": ""
+                        }
+                    ]
                 }
             ]
         }
@@ -325,7 +1326,7 @@
         "type": "bearer",
         "bearer": [
             {
-                "key": "token",
+                "key": "Authorization",
                 "type": "string"
             }
         ]

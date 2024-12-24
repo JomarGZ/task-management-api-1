@@ -26,7 +26,7 @@ class UpdateMemeberRequest extends FormRequest
         $tenantMember = $this->route('user');
         return [
             'name'  => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', Rule::unique('users')->ignore($tenantMember->id)],
+            'email' => ['required', 'email', Rule::unique('users')->ignore($tenantMember?->id)],
             'role'  => ['required', Rule::in(Role::cases())],
         ];
     }
@@ -36,6 +36,28 @@ class UpdateMemeberRequest extends FormRequest
         $roles = implode(',', array_column(Role::cases(), 'value'));
         return [
             'role.in' => "The selected role is invalid. The valid roles are: $roles",
+        ];
+    }
+        /**
+     * Define body parameters for API documentation (if applicable).
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'name' => [
+                'description' => 'The full name of the tenant member.',
+                'example' => 'John Doe',
+            ],
+            'email' => [
+                'description' => 'A unique email address for the tenant member.',
+                'example' => 'john.doe@example.com',
+            ],
+            'role' => [
+                'description' => 'The role to assign to the tenant member. Valid values: `' . implode('`, `', array_column(Role::cases(), 'value')) . '`.',
+                'example' => Role::MEMBER->value,
+            ],
         ];
     }
 }

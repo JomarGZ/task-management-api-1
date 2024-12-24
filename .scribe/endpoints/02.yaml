@@ -1,0 +1,200 @@
+name: 'Team Members Management'
+description: ''
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/teams/{team_id}/members'
+    metadata:
+      groupName: 'Team Members Management'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'List Team Members'
+      description: 'Display a listing of the team members.'
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      team_id:
+        name: team_id
+        description: 'The ID of the team.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      team_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{"data":[{"id":2,"name":"Trey Bechtelar"},{"id":3,"name":"Emerald Mertz"},{"id":4,"name":"Barney Gorczany"},{"id":5,"name":"Cristal Cronin"},{"id":6,"name":"Keyshawn Hyatt"},{"id":7,"name":"Jermey Lesch"},{"id":8,"name":"Lindsey Green"},{"id":9,"name":"Ruben Marvin"},{"id":10,"name":"Tyrique Schmeler DDS"},{"id":11,"name":"Kacie Doyle"}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 12|gLFSM1rR1Jt3oik6nfFAhm4kjwhNHFSsrE4TTyz1749f108d'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/teams/{team_id}/members'
+    metadata:
+      groupName: 'Team Members Management'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Create Team Member'
+      description: 'Store a newly created team member in storage.'
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      team_id:
+        name: team_id
+        description: 'The ID of the team.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      team_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      member_id:
+        name: member_id
+        description: 'The <code>id</code> of an existing record in the users table.'
+        required: false
+        example: null
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      role:
+        name: role
+        description: 'The role to assign to the team members. Valid values: `admin`, `member`, `project manager`, `team lead`.'
+        required: true
+        example: member
+        type: string
+        enumValues:
+          - 'team lead'
+          - member
+          - 'project manager'
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      role: member
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {  "data": [
+          {
+          "id": 2,
+          "name": "Trey Bechtelar"
+          }
+          ]}
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 12|gLFSM1rR1Jt3oik6nfFAhm4kjwhNHFSsrE4TTyz1749f108d'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/teams/{team_id}/members/{user_id}'
+    metadata:
+      groupName: 'Team Members Management'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Delete Team Member'
+      description: 'Remove the specified team member from storage.'
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      team_id:
+        name: team_id
+        description: 'The ID of the team.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      user_id:
+        name: user_id
+        description: 'The ID of the user.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      team_id: 1
+      user_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '{}'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 12|gLFSM1rR1Jt3oik6nfFAhm4kjwhNHFSsrE4TTyz1749f108d'
+    controller: null
+    method: null
+    route: null
+    custom: []

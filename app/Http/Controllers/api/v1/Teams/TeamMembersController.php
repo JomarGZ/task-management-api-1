@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\api\v1\Teams;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\api\v1\ApiController;
 use App\Http\Requests\api\v1\Teams\StoreTeamMemberRequest;
+use App\Http\Resources\api\v1\Teams\TeamMemberResource;
 use App\Http\Resources\api\v1\Teams\TeamResource;
 use App\Models\Team;
 use App\Models\User;
@@ -11,24 +12,33 @@ use App\Utilities\ApiResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 
-class TeamMembersController extends Controller
+class TeamMembersController extends ApiController
 {
     /**
-     * Display a listing of the resource.
+     * List Team Members
+     * 
+     * Display a listing of the team members.
+     * @group Team Members Management
      */
     public function index(Team $team)
     {
         $team->load('members');
-        return ApiResponse::success(
-            [
-                'team' => TeamResource::make($team)
-            ],
-            'Team members retrieved successfully'
-        );
+        
+        return TeamMemberResource::collection($team->members);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Create Team Member
+     * 
+     * Store a newly created team member in storage.
+     * @group Team Members Management
+     * @response 200 {  "data": [
+        {
+            "id": 2,
+            "name": "Trey Bechtelar"
+        }
+    ]}
+     * 
      */
     public function store(StoreTeamMemberRequest $request, Team $team)
     {
@@ -36,18 +46,20 @@ class TeamMembersController extends Controller
             ->mapWithKeys(fn ($id) => [
                 $id => ['tenant_id' => $request->user()->tenant_id]
             ])->all();
-
+    
         $team->members()->syncWithoutDetaching($memberData);
-
-        return ApiResponse::success(
-            TeamResource::make($team->load('members')),
-            'Member(s) added to the team succssfully',
-            Response::HTTP_OK
-        );
+    
+        $addedMembers = $team->members()->whereIn('users.id', $request->member_id)->get();
+    
+        return TeamMemberResource::collection($addedMembers);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete Team Member
+     * 
+     * Remove the specified team member from storage.
+     * @group Team Members Management
+     * @response 200 {}
     */
     public function destroy(Team $team, User $user)
     {

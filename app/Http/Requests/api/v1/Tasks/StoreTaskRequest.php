@@ -48,4 +48,47 @@ class StoreTaskRequest extends FormRequest
             'status.in'         => "The selected statuses is invalid. The valid statuses are: $statuses"
         ];
     }
+
+        /**
+     * Define body parameters for API documentation (if applicable).
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'title' => [
+                'description' => 'The title of the task.',
+                'example' => 'Implement authentication',
+            ],
+            'description' => [
+                'description' => 'A brief description of the task.',
+                'example' => 'Develop login and registration functionality.',
+            ],
+            'assigned_id' => [
+                'description' => 'The ID of the user assigned to the task.',
+                'example' => 5,
+            ],
+            'priority_level' => [
+                'description' => 'The priority level of the task.',
+                'example' => 'High',
+            ],
+            'status' => [
+                'description' => 'The current status of the task.',
+                'example' => 'In Progress',
+            ],
+            'deadline_at' => [
+                'description' => 'The deadline for completing the task.',
+                'example' => '2024-01-15',
+            ],
+            'started_at' => [
+                'description' => 'The start date of the task.',
+                'example' => '2024-01-01',
+            ],
+            'completed_at' => [
+                'description' => 'The completion date of the task.',
+                'example' => '2024-01-20',
+            ],
+        ];
+    }
 }

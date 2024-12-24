@@ -29,4 +29,19 @@ class StoreTeamRequest extends FormRequest
             'name' => ['required', 'string', 'max:255']
         ];
     }
+    
+      /**
+     * Get custom body parameters for Scribe documentation.
+     *
+     * @return array
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'name' => [
+                'description' => 'The name of the team. Must be a string with a maximum length of 255 characters.',
+                'example' => 'Engineering Team'
+            ],
+        ];
+    }
 }

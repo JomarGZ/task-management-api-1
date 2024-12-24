@@ -2,41 +2,70 @@
 
 namespace App\Http\Controllers\api\v1\Tenants;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\api\v1\ApiController;
 use App\Http\Requests\api\v1\TenantMembers\AddMemberRequest;
 use App\Http\Requests\api\v1\TenantMembers\FilterTenantMemberRequest;
 use App\Http\Requests\api\v1\TenantMembers\UpdateMemeberRequest;
 use App\Http\Resources\api\v1\tenants\TenantMemberResource;
 use App\Models\User;
 use App\Utilities\ApiResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 
-class TenantMembersController extends Controller
+class TenantMembersController extends ApiController
 {
     /**
-     * Display a listing of the resource.
+     * List Tenant Members
+     * 
+     * Display a listing of the tenant members. This endpoint supports sorting, searching, and filtering by role.
+     * 
+     * @group Tenant Members Management
+     * 
+     * @queryParam column string The column to sort by. Valid columns are: name, email, created_at. Default is created_at. Example: column=name
+     * @queryParam direction string The direction to sort. Either 'asc' or 'desc'. Default is 'desc'. Example: direction=asc
+     * @queryParam search string A search term to filter members by name or email. Example: search=johndoe
+     * @queryParam role string Filter by role. Example: role=admin
+     * 
      */
-    public function index(FilterTenantMemberRequest $request)
+    public function index(Request $request)
     {
+        $column = $request->query('column', 'created_at');  
+        $direction = $request->query('direction', 'desc'); 
+    
+        if (!in_array($direction, ['asc', 'desc'])) {
+            $direction = 'asc'; 
+        }
+    
+        $validColumns = ['name', 'email', 'created_at'];
+        if (!in_array($column, $validColumns)) {
+            $column = 'created_at';
+        }
+    
         $members = User::query()
             ->select(['id', 'name', 'role', 'email'])
             ->search($request->query('search')) 
             ->filterByRole($request->query('role'))
             ->orderBy(
-                $request->query('column', 'created_at'),
-                $request->query('direction', 'desc'))
+                $column,
+                $direction)
             ->paginate(2);
 
-        return ApiResponse::success( 
-            TenantMemberResource::collection($members)->response()->getData(true),
-            'Successfully retrieved the members data'
-        );
+        return TenantMemberResource::collection($members);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Create Tenant member
+     * 
+     * Store a newly created Tenant member in storage.
+     * @group Tenant Members Management
+     * @response 201 { "data": {
+        "id": 14,
+        "name": "adasdsdaasdsad",
+        "email": "dasADda@gmail.com",
+        "role": "member"
+    }}
      */
     public function store(AddMemberRequest $request)
     {
@@ -47,39 +76,51 @@ class TenantMembersController extends Controller
             'password'  => Hash::make('password'),
         ]);
 
-        return ApiResponse::success(
-            $newMember,
-        'New member added successfully',
-        Response::HTTP_CREATED
-        );
+       return new TenantMemberResource($newMember);
     }
 
     /**
-     * Display the specified resource.
+     * Retrieve Tenant Member
+     * 
+     * Display the specified tenant member.
+     * @group Tenant Members Management
+     * @response 200 {   "data": {
+        "id": 14,
+        "name": "adasdsdaasdsad",
+        "email": "dasADda@gmail.com",
+        "role": "member"
+    }}
      */
     public function show(User $user)
     {
-        return ApiResponse::success(
-            TenantMemberResource::make($user),
-            'Member retrieved successfully'
-        );
+       return new TenantMemberResource($user);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update Tenant Member
+     * 
+     * Update the specified tenant member in storage.
+     * @group Tenant Members Management
+     * @response 200 {   "data": {
+        "id": 14,
+        "name": "adasdsdaasdsad",
+        "email": "dasADda@gmail.com",
+        "role": "member"
+    }}
+     * 
      */
     public function update(UpdateMemeberRequest $request, User $user)
     {
         $user->update($request->validated());
-
-        return ApiResponse::success(
-            TenantMemberResource::make($user),
-            'Member updated successfully'
-        );
+        return new TenantMemberResource($user);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete Tenant Member
+     * 
+     * Remove the specified tenant member from storage.
+     * @group Tenant Members Management
+     * @response 200 {}
      */
     public function destroy(User $user)
     {

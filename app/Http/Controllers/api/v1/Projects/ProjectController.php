@@ -2,84 +2,124 @@
 
 namespace App\Http\Controllers\api\v1\Projects;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\api\v1\Projects\FilteringProjectRequest;
+use App\Http\Controllers\api\v1\ApiController;
 use App\Http\Requests\api\v1\Projects\StoreProjectRequest;
 use App\Http\Resources\api\v1\Projects\ProjectResource;
 use App\Models\Project;
-use App\Utilities\ApiResponse;
-use Illuminate\Http\Response;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
-class ProjectController extends Controller
+class ProjectController extends ApiController
 {
     /**
-     * Display a listing of the resource.
+     * List Projects
+     *
+     * Display a listing of the projects.
+     *
+     * @group Project Management
+     * 
+     * @queryParam column string The column to sort by. Allowed values: `name`, `description`, `created_at`. Example: column=name
+     * @queryParam direction string The direction to sort by. Allowed values: `asc`, `desc`. Example: direction=asc
+     * @queryParam search string Filter projects by name or description. This performs a partial match. Example: search=alpha
      */
-    public function index(FilteringProjectRequest $request)
+    public function index(Request $request)
     {
+        $column = $request->query('column', 'created_at');  
+        $direction = $request->query('direction', 'desc'); 
+    
+        if (!in_array($direction, ['asc', 'desc'])) {
+            $direction = 'asc'; 
+        }
+    
+        $validColumns = ['name', 'description', 'created_at'];
+        if (!in_array($column, $validColumns)) {
+            $column = 'created_at';
+        }
+    
         $projects = Project::query()
             ->select(['id', 'team_id', 'name', 'description'])
             ->with('teamAssignee:id,name')
             ->search($request->query('search'))
-            ->orderBy(
-                $request->query('column', 'created_at'),
-                $request->query('direction', 'desc')
-            )
+            ->orderBy($column, $direction)
             ->paginate(5);
-        
-        return ApiResponse::success(
-            ProjectResource::collection($projects)->response()->getData(true),
-            'Projects retrieved successfully'
-        );
+
+        return ProjectResource::collection($projects);
     }
 
-
     /**
-     * Store a newly created resource in storage.
+     * Create Project
+     * 
+     * Store a newly created project in storage.
+     * @group Project Management
+     * @response 201 {   "data": {
+        "id": 4,
+        "name": "new project",
+        "description": "description"
+    }}
      */
     public function store(StoreProjectRequest $request)
     {
         $project = Project::create($request->validated());
-        return ApiResponse::success(
-            ProjectResource::make($project),
-            'Project created successfully',
-            Response::HTTP_CREATED
-        );
+
+        return new ProjectResource($project); 
     }
 
     /**
-     * Display the specified resource.
+     * Retrieve Project
+     * 
+     * Display the specified project.
+     * @group Project Management
+     * @response 200 {"data": {
+        "id": 2,
+        "name": "update project 4324",
+        "description": "description",
+        "team_assignee": {
+            "id": 1,
+            "name": "Enim a earum voluptate facilis cumque ex ut."
+        }
+    }}
      */
     public function show(Project $project)
     {
         Gate::authorize('view', $project);
-        return ApiResponse::success(
-            ProjectResource::make($project),
-            'Project retrieved successfully'
-        );
+     
+        return new ProjectResource($project->load('teamAssignee'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update Project
+     * 
+     * Update the specified project in storage.
+     * @group Project Management
+     * @response 200 { "data": {
+        "id": 2,
+        "name": "update project",
+        "description": "description",
+        "team_assignee": {
+            "id": 1,
+            "name": "Enim a earum voluptate facilis cumque ex ut."
+        }
+    }}
      */
     public function update(StoreProjectRequest $request, Project $project)
     {
         $project->update($request->validated());
 
-        return ApiResponse::success(
-            ProjectResource::make($project->load('teamAssignee')),
-            'Project updated successfully',
-        );
+        return new ProjectResource($project->load('teamAssignee'));
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete Project
+     * 
+     * Remove the specified project from storage.
+     * @group Project Management
+     * @response 200 {}
      */
     public function destroy(Project $project)
     {
         Gate::authorize('delete', $project);
         $project->delete();
-        return response()->noContent();
+
+        return $this->ok('');
     }
 }

@@ -38,4 +38,27 @@ class StoreProjectRequest extends FormRequest
             'team_id.exists' => 'The selected team does not exist in the organization',
         ];
     }
+
+       /**
+     * Define body parameters for API documentation (if applicable).
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'name' => [
+                'description' => 'The name of the project.',
+                'example' => 'Website Redesign',
+            ],
+            'description' => [
+                'description' => 'A brief description of the project.',
+                'example' => 'Redesigning the company website to improve user experience.',
+            ],
+            'team_id' => [
+                'description' => 'The ID of the team assigned to the project. This field is optional.',
+                'example' => 3,
+            ],
+        ];
+    }
 }

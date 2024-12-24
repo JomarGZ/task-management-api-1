@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\api\v1\Tasks;
 
+use App\Http\Resources\api\v1\Projects\ProjectResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -23,6 +24,7 @@ class TaskResource extends JsonResource
             'deadline_at'       => $this->deadline_at,
             'started_at'        => $this->started_at,
             'completed_at'      => $this->completed_at,
+            'project' => ProjectResource::make($this->whenLoaded('project'))
         ];
     }
 }

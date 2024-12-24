@@ -26,4 +26,23 @@ class LoginRequest extends FormRequest
             'password'  => ['required']
         ];
     }
+
+      /**
+     * Define the body parameters for the login request.
+     * 
+     * @return array
+     */
+    public function bodyParameters(): array
+    {
+        return [
+            'email' => [
+                'description' => 'The email address of the user.',
+                'example'     => 'johndoe@example.com',
+            ],
+            'password' => [
+                'description' => 'The password for the user account.',
+                'example'     => 'password123',
+            ],
+        ];
+    }
 }
