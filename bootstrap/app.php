@@ -19,7 +19,11 @@ return Application::configure(basePath: dirname(__DIR__))
         apiPrefix:'api/v1'
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->prependToGroup('api', AlwaysAcceptJson::class);
+        $middleware
+            ->statefulApi()
+            ->throttleApi()
+            ->prependToGroup('api', AlwaysAcceptJson::class);
+
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->renderable(function(NotFoundHttpException $e) {
