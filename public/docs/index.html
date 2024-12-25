@@ -201,7 +201,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: December 24, 2024</li>
+        <li>Last updated: December 25, 2024</li>
     </ul>
 </div>
 
@@ -244,8 +244,8 @@ You can switch the language used with the tabs at the top right (or from the nav
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"current_password\": \"sed\",
-    \"password\": \"omnis\"
+    \"current_password\": \"ut\",
+    \"password\": \"reiciendis\"
 }"
 </code></pre></div>
 
@@ -262,8 +262,8 @@ const headers = {
 };
 
 let body = {
-    "current_password": "sed",
-    "password": "omnis"
+    "current_password": "ut",
+    "password": "reiciendis"
 };
 
 fetch(url, {
@@ -276,7 +276,7 @@ fetch(url, {
 
 <span id="example-responses-PUTapi-v1-auth-password-update">
             <blockquote>
-            <p>Example response (201):</p>
+            <p>Example response (200):</p>
         </blockquote>
                 <pre>
 
@@ -373,10 +373,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="current_password"                data-endpoint="PUTapi-v1-auth-password-update"
-               value="sed"
+               value="ut"
                data-component="body">
     <br>
-<p>Example: <code>sed</code></p>
+<p>Example: <code>ut</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>password</code></b>&nbsp;&nbsp;
@@ -384,10 +384,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="password"                data-endpoint="PUTapi-v1-auth-password-update"
-               value="omnis"
+               value="reiciendis"
                data-component="body">
     <br>
-<p>Example: <code>omnis</code></p>
+<p>Example: <code>reiciendis</code></p>
         </div>
         </form>
 
@@ -435,7 +435,10 @@ fetch(url, {
         </blockquote>
                 <pre>
 
-<code class="language-json" style="max-height: 300px;">{}</code>
+<code class="language-json" style="max-height: 300px;">{
+    &quot;status&quot;: 200,
+    &quot;message&quot;: &quot;Successfully logged out.&quot;
+}</code>
  </pre>
     </span>
 <span id="execution-results-POSTapi-v1-auth-logout" hidden>
@@ -577,7 +580,12 @@ fetch(url, {
 <code class="language-json" style="max-height: 300px;">{
     &quot;status&quot;: 201,
     &quot;data&quot;: {
-        &quot;access_token&quot;: &quot;{YOUR_AUTH_KEY}&quot;
+        &quot;user&quot;: {
+            &quot;id&quot;: 16,
+            &quot;name&quot;: &quot;jomar godinez&quot;,
+            &quot;email&quot;: &quot;jomar23@gmail.com&quot;
+        },
+        &quot;access_token&quot;: &quot;13|UDbQwZ8VdvhF635bikuBhejmBYO5LzdBXDYufIK6e8f5b1bf&quot;
     },
     &quot;message&quot;: &quot;Registered Successfully&quot;
 }</code>
@@ -736,16 +744,21 @@ fetch(url, {
 
 <span id="example-responses-POSTapi-v1-auth-login">
             <blockquote>
-            <p>Example response (201):</p>
+            <p>Example response (200):</p>
         </blockquote>
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;status&quot;: 201,
+    &quot;status&quot;: 200,
     &quot;data&quot;: {
-        &quot;access_token&quot;: &quot;{Your_auth_token}&quot;
+        &quot;access_token&quot;: &quot;14|75JIc0wUjVULaI7t7Lnh5JC3SV5xjvkSB6CQ1zUF1913f9e1&quot;,
+        &quot;user&quot;: {
+            &quot;id&quot;: 16,
+            &quot;name&quot;: &quot;jomar godinez&quot;,
+            &quot;email&quot;: &quot;jomar23@gmail.com&quot;
+        }
     },
-    &quot;message&quot;: &quot;Authenticated&quot;
+    &quot;message&quot;: &quot;Authenticated successfully.&quot;
 }</code>
  </pre>
     </span>
@@ -2323,7 +2336,7 @@ fetch(url, {
 
 <span id="example-responses-GETapi-v1-tasks--id-">
             <blockquote>
-            <p>Example response (200):</p>
+            <p>Example response (401):</p>
         </blockquote>
                 <details class="annotation">
             <summary style="cursor: pointer;">
@@ -2335,21 +2348,8 @@ vary: Origin
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;data&quot;: {
-        &quot;id&quot;: 12,
-        &quot;title&quot;: &quot;update title 1&quot;,
-        &quot;description&quot;: &quot;description&quot;,
-        &quot;priority_level&quot;: &quot;low&quot;,
-        &quot;status&quot;: &quot;completed&quot;,
-        &quot;deadline_at&quot;: null,
-        &quot;started_at&quot;: &quot;2024-12-22&quot;,
-        &quot;completed_at&quot;: &quot;2024-12-22&quot;,
-        &quot;project&quot;: {
-            &quot;id&quot;: 2,
-            &quot;name&quot;: &quot;update project&quot;,
-            &quot;description&quot;: &quot;description&quot;
-        }
-    }
+    &quot;title&quot;: &quot;This action is unauthorized.&quot;,
+    &quot;status&quot;: 401
 }</code>
  </pre>
     </span>

@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Task Management system API documentation",
-        "_postman_id": "4dd48ecb-0c67-4f08-af84-b4cf6c10b82b",
+        "_postman_id": "8d5fa2e1-d866-43fc-9dfd-1daac3c77a08",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -41,14 +41,14 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"current_password\":\"sed\",\"password\":\"omnis\"}"
+                            "raw": "{\"current_password\":\"ut\",\"password\":\"reiciendis\"}"
                         },
                         "description": "Change user password"
                     },
                     "response": [
                         {
                             "header": [],
-                            "code": 201,
+                            "code": 200,
                             "body": "{ \"status\": 200,\n\"message\": \"Your password has been updated.\"}",
                             "name": ""
                         }
@@ -81,7 +81,7 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{}",
+                            "body": "{  \"status\": 200,\n\"message\": \"Successfully logged out.\"}",
                             "name": ""
                         }
                     ]
@@ -119,7 +119,7 @@
                         {
                             "header": [],
                             "code": 201,
-                            "body": "{  \"status\": 201,\n\"data\": {\n\"access_token\": \"{YOUR_AUTH_KEY}\"\n},\n\"message\": \"Registered Successfully\"}",
+                            "body": "{ \"status\": 201,\n\"data\": {\n\"user\": {\n\"id\": 16,\n\"name\": \"jomar godinez\",\n\"email\": \"jomar23@gmail.com\"\n},\n\"access_token\": \"13|UDbQwZ8VdvhF635bikuBhejmBYO5LzdBXDYufIK6e8f5b1bf\"\n},\n\"message\": \"Registered Successfully\"}",
                             "name": ""
                         }
                     ]
@@ -156,8 +156,8 @@
                     "response": [
                         {
                             "header": [],
-                            "code": 201,
-                            "body": "{\"status\": 201,\n\"data\": {\n\"access_token\": \"{Your_auth_token}\"\n},\n\"message\": \"Authenticated\"}",
+                            "code": 200,
+                            "body": "{\"status\": 200,\n\"data\": {\n\"access_token\": \"14|75JIc0wUjVULaI7t7Lnh5JC3SV5xjvkSB6CQ1zUF1913f9e1\",\n\"user\": {\n\"id\": 16,\n\"name\": \"jomar godinez\",\n\"email\": \"jomar23@gmail.com\"\n}\n},\n\"message\": \"Authenticated successfully.\"}",
                             "name": ""
                         }
                     ]
@@ -582,8 +582,8 @@
                                     "value": "Origin"
                                 }
                             ],
-                            "code": 200,
-                            "body": "{\"data\":{\"id\":12,\"title\":\"update title 1\",\"description\":\"description\",\"priority_level\":\"low\",\"status\":\"completed\",\"deadline_at\":null,\"started_at\":\"2024-12-22\",\"completed_at\":\"2024-12-22\",\"project\":{\"id\":2,\"name\":\"update project\",\"description\":\"description\"}}}",
+                            "code": 401,
+                            "body": "{\"title\":\"This action is unauthorized.\",\"status\":401}",
                             "name": ""
                         }
                     ]

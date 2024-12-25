@@ -16,7 +16,7 @@ class PasswordUpdateController extends ApiController
      *  Change user password
      * 
      * @group Authentication
-     * @response 201 { "status": 200,
+     * @response 200 { "status": 200,
     "message": "Your password has been updated."}
      */
     public function __invoke(Request $request)
@@ -29,7 +29,7 @@ class PasswordUpdateController extends ApiController
         $request->user()->update([
             'password' => Hash::make($request->password)
         ]);
-
+        $request->user()->tokens()->where('id', '!=', $request->user()->currentAccessToken()->id)->delete();
         return $this->ok('Your password has been updated.');
     }
 }

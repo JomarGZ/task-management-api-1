@@ -14,7 +14,7 @@ paths:
       description: 'Change user password'
       parameters: []
       responses:
-        201:
+        200:
           description: ''
           content:
             application/json:
@@ -42,12 +42,12 @@ paths:
                 current_password:
                   type: string
                   description: ''
-                  example: sed
+                  example: ut
                   nullable: false
                 password:
                   type: string
                   description: ''
-                  example: omnis
+                  example: reiciendis
                   nullable: false
               required:
                 - current_password
@@ -65,8 +65,16 @@ paths:
             application/json:
               schema:
                 type: object
-                example: {  }
-                properties: {  }
+                example:
+                  status: 200
+                  message: 'Successfully logged out.'
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: 'Successfully logged out.'
       tags:
         - Authentication
   /api/v1/auth/register:
@@ -85,7 +93,11 @@ paths:
                 example:
                   status: 201
                   data:
-                    access_token: '{YOUR_AUTH_KEY}'
+                    user:
+                      id: 16
+                      name: 'jomar godinez'
+                      email: jomar23@gmail.com
+                    access_token: 13|UDbQwZ8VdvhF635bikuBhejmBYO5LzdBXDYufIK6e8f5b1bf
                   message: 'Registered Successfully'
                 properties:
                   status:
@@ -94,9 +106,21 @@ paths:
                   data:
                     type: object
                     properties:
+                      user:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 16
+                          name:
+                            type: string
+                            example: 'jomar godinez'
+                          email:
+                            type: string
+                            example: jomar23@gmail.com
                       access_token:
                         type: string
-                        example: '{YOUR_AUTH_KEY}'
+                        example: 13|UDbQwZ8VdvhF635bikuBhejmBYO5LzdBXDYufIK6e8f5b1bf
                   message:
                     type: string
                     example: 'Registered Successfully'
@@ -136,30 +160,46 @@ paths:
       description: "Authenticate the user and returns the user's API token"
       parameters: []
       responses:
-        201:
+        200:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  status: 201
+                  status: 200
                   data:
-                    access_token: '{Your_auth_token}'
-                  message: Authenticated
+                    access_token: 14|75JIc0wUjVULaI7t7Lnh5JC3SV5xjvkSB6CQ1zUF1913f9e1
+                    user:
+                      id: 16
+                      name: 'jomar godinez'
+                      email: jomar23@gmail.com
+                  message: 'Authenticated successfully.'
                 properties:
                   status:
                     type: integer
-                    example: 201
+                    example: 200
                   data:
                     type: object
                     properties:
                       access_token:
                         type: string
-                        example: '{Your_auth_token}'
+                        example: 14|75JIc0wUjVULaI7t7Lnh5JC3SV5xjvkSB6CQ1zUF1913f9e1
+                      user:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 16
+                          name:
+                            type: string
+                            example: 'jomar godinez'
+                          email:
+                            type: string
+                            example: jomar23@gmail.com
                   message:
                     type: string
-                    example: Authenticated
+                    example: 'Authenticated successfully.'
       tags:
         - Authentication
       requestBody:
@@ -857,66 +897,22 @@ paths:
       description: 'Display the specified task.'
       parameters: []
       responses:
-        200:
+        401:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  data:
-                    id: 12
-                    title: 'update title 1'
-                    description: description
-                    priority_level: low
-                    status: completed
-                    deadline_at: null
-                    started_at: '2024-12-22'
-                    completed_at: '2024-12-22'
-                    project:
-                      id: 2
-                      name: 'update project'
-                      description: description
+                  title: 'This action is unauthorized.'
+                  status: 401
                 properties:
-                  data:
-                    type: object
-                    properties:
-                      id:
-                        type: integer
-                        example: 12
-                      title:
-                        type: string
-                        example: 'update title 1'
-                      description:
-                        type: string
-                        example: description
-                      priority_level:
-                        type: string
-                        example: low
-                      status:
-                        type: string
-                        example: completed
-                      deadline_at:
-                        type: string
-                        example: null
-                      started_at:
-                        type: string
-                        example: '2024-12-22'
-                      completed_at:
-                        type: string
-                        example: '2024-12-22'
-                      project:
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                            example: 2
-                          name:
-                            type: string
-                            example: 'update project'
-                          description:
-                            type: string
-                            example: description
+                  title:
+                    type: string
+                    example: 'This action is unauthorized.'
+                  status:
+                    type: integer
+                    example: 401
       tags:
         - 'Task Management'
     put:
