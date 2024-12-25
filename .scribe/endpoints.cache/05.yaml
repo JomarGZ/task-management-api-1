@@ -129,7 +129,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 12|gLFSM1rR1Jt3oik6nfFAhm4kjwhNHFSsrE4TTyz1749f108d'
+      - 'Bearer 15|jvKE5AyWJ2hEgRaMj2bw1LqDc0JGhPlbVYuvvzxg2d72e93d'
     controller: null
     method: null
     route: null
@@ -292,7 +292,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 12|gLFSM1rR1Jt3oik6nfFAhm4kjwhNHFSsrE4TTyz1749f108d'
+      - 'Bearer 15|jvKE5AyWJ2hEgRaMj2bw1LqDc0JGhPlbVYuvvzxg2d72e93d'
     controller: null
     method: null
     route: null
@@ -334,8 +334,8 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 200
-        content: '{"data":{"id":12,"title":"update title 1","description":"description","priority_level":"low","status":"completed","deadline_at":null,"started_at":"2024-12-22","completed_at":"2024-12-22","project":{"id":2,"name":"update project","description":"description"}}}'
+        status: 401
+        content: '{"title":"This action is unauthorized.","status":401}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -346,7 +346,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 12|gLFSM1rR1Jt3oik6nfFAhm4kjwhNHFSsrE4TTyz1749f108d'
+      - 'Bearer 15|jvKE5AyWJ2hEgRaMj2bw1LqDc0JGhPlbVYuvvzxg2d72e93d'
     controller: null
     method: null
     route: null
@@ -510,7 +510,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 12|gLFSM1rR1Jt3oik6nfFAhm4kjwhNHFSsrE4TTyz1749f108d'
+      - 'Bearer 15|jvKE5AyWJ2hEgRaMj2bw1LqDc0JGhPlbVYuvvzxg2d72e93d'
     controller: null
     method: null
     route: null
@@ -555,7 +555,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 12|gLFSM1rR1Jt3oik6nfFAhm4kjwhNHFSsrE4TTyz1749f108d'
+      - 'Bearer 15|jvKE5AyWJ2hEgRaMj2bw1LqDc0JGhPlbVYuvvzxg2d72e93d'
     controller: null
     method: null
     route: null
@@ -598,7 +598,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 12|gLFSM1rR1Jt3oik6nfFAhm4kjwhNHFSsrE4TTyz1749f108d'
+      - 'Bearer 15|jvKE5AyWJ2hEgRaMj2bw1LqDc0JGhPlbVYuvvzxg2d72e93d'
     controller: null
     method: null
     route: null

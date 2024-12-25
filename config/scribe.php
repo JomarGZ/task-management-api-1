@@ -111,7 +111,7 @@ return [
 
         // The value of the parameter to be used by Scribe to authenticate response calls.
         // This will NOT be included in the generated documentation. If empty, Scribe will use a random value.
-        'use_value' => '12|gLFSM1rR1Jt3oik6nfFAhm4kjwhNHFSsrE4TTyz1749f108d',
+        'use_value' => '15|jvKE5AyWJ2hEgRaMj2bw1LqDc0JGhPlbVYuvvzxg2d72e93d',
 
         // Placeholder your users will see for the auth parameter in the example requests.
         // Set this to null if you want Scribe to use a random value as placeholder instead.
