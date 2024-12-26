@@ -17,9 +17,6 @@ trait BelongsToTenant
         static::addGlobalScope(new tenantScope);
       
         static::creating(function(Model $model){
-            // if (app()->runningInConsole() || app()->environment('testing')) {
-            //     return;
-            // }
             if (self::shouldSkipTenantAssignmentIfRegisterRoute()) {
                 return;
             }
