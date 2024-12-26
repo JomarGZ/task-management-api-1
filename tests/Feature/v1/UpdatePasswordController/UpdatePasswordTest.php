@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\v1\UpdatePasswordController;
 use App\Models\User;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UpdatePasswordTest extends TestCase
 {
-    use RefreshDatabase;
+    use LazilyRefreshDatabase;
 
     private User $user;
     private string $currentPassword = 'current-password';
@@ -101,6 +102,6 @@ class UpdatePasswordTest extends TestCase
             'password_confirmation' => 'new-password123'
         ]);
 
-        $response->assertUnauthorized();
+        $response->assertStatus(401);
     }
 }

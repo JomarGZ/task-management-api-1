@@ -37,7 +37,7 @@ class ProjectController extends ApiController
         }
     
         $projects = Project::query()
-            ->select(['id', 'team_id', 'name', 'description'])
+            ->select(['id', 'team_id', 'name', 'description', 'created_at'])
             ->with('teamAssignee:id,name')
             ->search($request->query('search'))
             ->orderBy($column, $direction)

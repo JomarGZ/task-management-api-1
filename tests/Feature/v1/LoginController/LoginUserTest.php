@@ -3,13 +3,14 @@
 namespace Tests\Feature\v1\LoginController;
 
 use App\Models\User;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class LoginUserTest extends TestCase
 {
-    use RefreshDatabase;
+    use LazilyRefreshDatabase;
     /**
      * A basic feature test example.
      */
