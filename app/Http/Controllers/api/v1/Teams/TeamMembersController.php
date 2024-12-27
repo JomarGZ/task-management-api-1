@@ -5,10 +5,8 @@ namespace App\Http\Controllers\api\v1\Teams;
 use App\Http\Controllers\api\v1\ApiController;
 use App\Http\Requests\api\v1\Teams\StoreTeamMemberRequest;
 use App\Http\Resources\api\v1\Teams\TeamMemberResource;
-use App\Http\Resources\api\v1\Teams\TeamResource;
 use App\Models\Team;
 use App\Models\User;
-use App\Utilities\ApiResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 

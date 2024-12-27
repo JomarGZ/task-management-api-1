@@ -43,7 +43,6 @@ class TeamController extends ApiController
             ->paginate(5);
 
        return TeamResource::collection($teams);
-
     }
 
     /**

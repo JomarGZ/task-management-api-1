@@ -32,7 +32,7 @@ class Team extends Model
     public function scopeSearch($query, $search)
     {
         return $query->when($search, function(Builder $query, $search) {
-            $query->where('name', "%{$search}%");
+            $query->where('name', 'like', "%{$search}%");
         });
     }
 }
