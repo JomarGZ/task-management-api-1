@@ -37,7 +37,7 @@ class UpdateTest extends TestCase
     {
         $this->refreshApplication();        
         $project = Project::factory()->create();
-        $response = $this->putJson("api/v1/projects/$project", [
+        $response = $this->putJson("api/v1/projects/{$project->id}", [
             'name' => 'updated project',
             'description' => 'description'
         ]);
