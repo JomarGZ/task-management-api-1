@@ -7,6 +7,7 @@ use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class StoreTest extends TestCase
@@ -24,7 +25,7 @@ class StoreTest extends TestCase
         $this->user = User::factory()->recycle($this->tenant)->create(['role' => 'admin']);
         
         User::factory()->recycle($this->tenant)->count(5)->create();
-        $this->actingAs($this->user);
+        Sanctum::actingAs($this->user);
         
         // Create test data
     }
