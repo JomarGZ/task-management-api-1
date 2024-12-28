@@ -25,8 +25,7 @@ class StoreTeamMemberRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'member_id'     => ['required', 'array'],
-            'member_id.*'   => ['exists:users,id'],
+            'member_id'     => ['required', 'exists:users,id', 'unique:team_user,member_id'],
             'role'          => ['required', Rule::in([Role::TEAM_LEAD->value, Role::MEMBER->value, Role::PROJECT_MANAGER])]
         ];
     }

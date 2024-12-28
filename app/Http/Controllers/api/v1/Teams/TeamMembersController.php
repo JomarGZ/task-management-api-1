@@ -8,6 +8,7 @@ use App\Http\Resources\api\v1\Teams\TeamMemberResource;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class TeamMembersController extends ApiController
@@ -34,22 +35,16 @@ class TeamMembersController extends ApiController
         {
             "id": 2,
             "name": "Trey Bechtelar"
+            "role": "member"
         }
     ]}
      * 
      */
     public function store(StoreTeamMemberRequest $request, Team $team)
     {
-        $memberData = collect($request->member_id)
-            ->mapWithKeys(fn ($id) => [
-                $id => ['tenant_id' => $request->user()->tenant_id]
-            ])->all();
-    
-        $team->members()->syncWithoutDetaching($memberData);
-    
-        $addedMembers = $team->members()->whereIn('users.id', $request->member_id)->get();
-    
-        return TeamMemberResource::collection($addedMembers);
+        $team->members()->attach($request->member_id, ['role' => $request->role, 'tenant_id' => auth()->user()->tenant_id]);
+        $addedMembers = $team->members()->where('users.id', $request->member_id)->first();
+        return TeamMemberResource::make($addedMembers);
     }
 
     /**
