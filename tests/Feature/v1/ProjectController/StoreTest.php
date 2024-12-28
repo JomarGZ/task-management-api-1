@@ -35,7 +35,7 @@ class StoreTest extends TestCase
         Sanctum::actingAs($this->user);
     }
 
-    public function test_it_requires_authentication()
+    public function test_it_requires_authentication_to_create_a_project()
     {
         $this->refreshApplication();
         
