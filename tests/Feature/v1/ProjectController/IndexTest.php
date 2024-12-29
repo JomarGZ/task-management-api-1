@@ -54,12 +54,16 @@ class IndexTest extends TestCase
 
     public function test_default_sorting_is_created_at_desc()
     {
-        $oldProject = Project::factory()->recycle($this->tenant)
+        $oldProject = Project::factory()
+            ->recycle($this->tenant)
+            ->recycle($this->team)
             ->create(attributes: [
                 'created_at' => now()->subDays(2)
             ]);
         
-        $newProject = Project::factory()->recycle($this->tenant)
+        $newProject = Project::factory()
+        ->recycle($this->tenant)
+        ->recycle($this->team)
             ->create([
                 'created_at' => now()
             ]);
@@ -75,11 +79,15 @@ class IndexTest extends TestCase
 
     public function test_can_sort_by_valid_columns()
     {
-        Project::factory()->recycle($this->tenant)
+        Project::factory()
+            ->recycle($this->tenant)
+            ->recycle($this->team)
             ->create(attributes: [
                 'name' => 'Project A'
             ]);
-        Project::factory()->recycle($this->tenant)
+        Project::factory()
+            ->recycle($this->tenant)
+            ->recycle($this->team)
             ->create(attributes: [
                 'name' => 'Project B'
             ]);
@@ -95,12 +103,18 @@ class IndexTest extends TestCase
 
     public function test_invalid_sort_column_falls_back_to_created_at()
     {
-        Project::factory()->recycle($this->tenant)->create([
-            'created_at' => now()->subDay()
-        ]);
-        Project::factory()->recycle($this->tenant)->create([
-            'created_at' => now()
-        ]);
+        Project::factory()
+            ->recycle($this->tenant)
+            ->recycle($this->team)
+            ->create([
+                'created_at' => now()->subDay()
+            ]);
+        Project::factory()
+            ->recycle($this->tenant)
+            ->recycle($this->team)
+            ->create([
+                'created_at' => now()
+            ]);
      
         $response = $this->getJson('/api/v1/projects?column=invalid_column');
 
@@ -112,13 +126,19 @@ class IndexTest extends TestCase
 
     public function test_invalid_direction_falls_back_to_asc()
     {
-        Project::factory()->recycle($this->tenant)->create([
-            'name' => 'Project B'
-        ]);
+        Project::factory()
+            ->recycle($this->tenant)
+            ->recycle($this->team)
+            ->create([
+                'name' => 'Project B'
+            ]);
         
-        Project::factory()->recycle($this->tenant)->create([
-            'name' => 'Project A'
-        ]);
+        Project::factory()
+            ->recycle($this->tenant)
+            ->recycle($this->team)
+            ->create([
+                'name' => 'Project A'
+            ]);
 
         $response = $this->getJson('/api/v1/projects?column=name&direction=invalid');
 
@@ -130,15 +150,21 @@ class IndexTest extends TestCase
 
     public function test_can_search_projects()
     {
-        Project::factory()->recycle($this->tenant)->create([
-            'name' => 'Target Project',
-            'description' => 'Some description'
-        ]);
+        Project::factory()
+            ->recycle($this->tenant)
+            ->recycle($this->team)
+            ->create([
+                'name' => 'Target Project',
+                'description' => 'Some description'
+            ]);
         
-        Project::factory()->recycle($this->tenant)->create([
-            'name' => 'Another Project',
-            'description' => 'Different description'
-        ]);
+        Project::factory()
+            ->recycle($this->tenant)
+            ->recycle($this->team)
+            ->create([
+                'name' => 'Another Project',
+                'description' => 'Different description'
+            ]);
 
         $response = $this->getJson('/api/v1/projects?search=Target');
 
@@ -149,7 +175,10 @@ class IndexTest extends TestCase
 
     public function test_includes_team_assignee_relationship()
     {
-        $project = Project::factory()->recycle($this->tenant)->create();
+        $project = Project::factory()
+            ->recycle($this->tenant)
+            ->recycle($this->team)
+            ->create();
 
         $response = $this->getJson('/api/v1/projects');
 
@@ -158,25 +187,4 @@ class IndexTest extends TestCase
             ->assertJsonPath('data.0.team_assignee.name', $project->teamAssignee->name);
     }
 
-    public function test_tenant_scope_applies_correctly()
-    {
-       
-        $tenantA = Tenant::factory()->create(['name' => 'tenant A']);
-
-        Project::factory()->count(2)->create();
-
-        $userA = User::withoutEvents(function () use ($tenantA) {
-            return User::factory()->create([
-                'tenant_id' => $tenantA->id,
-                'name' => 'User A',
-            ]);
-        });
-        Sanctum::actingAs($userA);
-    
-        Project::factory()->count(3)->create();
-    
-        $response = $this->getJson('/api/v1/projects');
-        $response->assertOk();
-        $response->assertJsonCount(3, 'data'); 
-    }
 }

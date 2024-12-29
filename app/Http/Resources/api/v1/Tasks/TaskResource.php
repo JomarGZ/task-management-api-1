@@ -24,7 +24,8 @@ class TaskResource extends JsonResource
             'deadline_at'       => $this->deadline_at,
             'started_at'        => $this->started_at,
             'completed_at'      => $this->completed_at,
-            'project' => ProjectResource::make($this->whenLoaded('project'))
+            'created_at'        => $this->created_at,
+            'project'           => ProjectResource::make($this->whenLoaded('project'))
         ];
     }
 }
