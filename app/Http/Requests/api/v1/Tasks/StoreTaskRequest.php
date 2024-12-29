@@ -4,6 +4,7 @@ namespace App\Http\Requests\api\v1\Tasks;
 
 use App\Enums\Enums\PriorityLevel;
 use App\Enums\Enums\Statuses;
+use App\Models\Task;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -14,10 +15,8 @@ class StoreTaskRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if (in_array(request()->method(), ['PUT','PATCH'])) {
-            return request()->user()->can('update', $this->route('task'));
-        }
-        return request()->user()->can('create', $this->route('project'));
+       $project = $this->route('project');
+        return request()->user()->can('create', [Task::class, $project]);
     }
 
     /**
