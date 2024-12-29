@@ -39,4 +39,47 @@ class UpdateTest extends TestCase
         $this->task = Task::factory()->recycle($this->tenant)->recycle($this->project)->recycle($this->member)->create(['title' => 'old task', 'description' => 'description']);
     }
 
+    public function test_rquires_authentication_for_updating_task()
+    {
+        $response = $this->putJson("api/v1/tasks/{$this->task->id}", [
+            'title' => 'title test',
+            'description' => 'description test',
+        ]);
+
+        $response->assertUnauthorized();
+    }
+
+    public function test_it_can_update_task()
+    {
+        Sanctum::actingAs($this->manager);
+        $response = $this->putJson("api/v1/tasks/{$this->task->id}", [
+            'title' => 'update task',
+            'description' => 'description test',
+        ]);
+        $response->assertOk();
+
+        $response->assertJsonStructure([
+            'data' => [
+                'id',
+                'title',
+                'description',
+                'priority_level',
+                'status',
+                'deadline_at',
+                'started_at',
+                'completed_at',
+                'project' => [
+                    'id',
+                    'name',
+                    'description'
+                ]
+            ]
+        ]);
+
+        $this->assertDatabaseHas('tasks', [
+            'id' => $this->task->id,
+            'title' => 'update task'
+        ]);
+    }
+
 }
