@@ -16,6 +16,9 @@ class StoreTaskRequest extends FormRequest
     public function authorize(): bool
     {
        $project = $this->route('project');
+       if($this->routeIs('tasks.update')) {
+            return request()->user()->can('update', [Task::class, $this->route('task')]);
+       }
         return request()->user()->can('create', [Task::class, $project]);
     }
 

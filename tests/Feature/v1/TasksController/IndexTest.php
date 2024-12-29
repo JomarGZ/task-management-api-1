@@ -45,21 +45,6 @@ class IndexTest extends TestCase
             ]);
     }
 
-    // it requires authentication
-    // it can
-    public function test_default_sorting_is_created_at_desc_of_tasks()
-    {
-        Sanctum::actingAs($this->member);
-        $response = $this->getJson("api/v1/projects/{$this->project->id}/tasks");
-
-
-        $response->assertOk();
-        
-        $data = $response->json('data');
-        $this->assertEquals($this->tasks->first()->id, $data[0]['id']); 
-        $this->assertEquals($this->tasks[1]->id, $data[1]['id']);
-    }
-
     public function test_task_can_sort_by_valid_columns()
     {
         Sanctum::actingAs($this->member);

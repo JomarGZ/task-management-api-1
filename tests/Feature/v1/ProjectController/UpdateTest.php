@@ -31,13 +31,11 @@ class UpdateTest extends TestCase
         $this->team = Team::factory()->recycle($this->tenant)->create();
         $this->project = Project::factory()->recycle($this->tenant)->create();
 
-        Sanctum::actingAs($this->user);
     }
     public function test_it_require_authentication()
     {
-        $this->refreshApplication();        
-        $project = Project::factory()->create();
-        $response = $this->putJson("api/v1/projects/{$project->id}", [
+
+        $response = $this->putJson("api/v1/projects/{$this->project->id}", [
             'name' => 'updated project',
             'description' => 'description'
         ]);
@@ -45,6 +43,8 @@ class UpdateTest extends TestCase
     }
     public function test_only_admin_of_tenant_can_update_an_existing_project()
     {
+        Sanctum::actingAs($this->user);
+
         $tenant = $this->tenant;
         $member = User::withoutEvents(function() use ($tenant) {
             return User::factory()->recycle($tenant)->create(['role' => Role::MEMBER->value]);
@@ -64,8 +64,9 @@ class UpdateTest extends TestCase
     {
         
         $otherTenantProject = Project::factory()->create();
+        Sanctum::actingAs($this->user);
 
-        $response = $this->putJson("api/v1/projects/" . $otherTenantProject, [
+        $response = $this->putJson("api/v1/projects/{$otherTenantProject->id}", [
             'name' => 'update project',
             'description' => 'description'
         ]);
@@ -75,6 +76,8 @@ class UpdateTest extends TestCase
 
     public function test_can_allow_valid_update()
     {
+        Sanctum::actingAs($this->user);
+
         $response = $this->putJson("api/v1/projects/" . $this->project->id, [
             'name' => 'update project',
             'description' => 'description'
@@ -95,6 +98,8 @@ class UpdateTest extends TestCase
     #[DataProvider('validationDataProvider')]
     public function test_project_validation_rules(array $data, array $expectedErrors): void
     {
+        Sanctum::actingAs($this->user);
+
         if (isset($data['team_id']) && $data['team_id'] === 1) {
             $data['team_id'] = $this->team->id;
         }

@@ -22,7 +22,6 @@ class StoreTest extends TestCase
 
     private Team $team;
     private Project $project;
-    private $tasks;
 
     protected function setUp(): void
     {
