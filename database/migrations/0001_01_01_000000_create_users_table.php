@@ -21,7 +21,11 @@ return new class extends Migration
             $table->string('role')->nullable();
             $table->rememberToken();
             $table->timestamps();
-            $table->foreignIdFor(Tenant::class)->nullable()->index();
+            $table->foreignIdFor(Tenant::class)->nullable();
+
+            $table->index(['tenant_id', 'created_at']);
+            $table->index(['tenant_id', 'role', 'created_at']);
+            $table->index(['tenant_id', 'role', 'name']);
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
