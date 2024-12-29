@@ -63,7 +63,8 @@ class TaskController extends ApiController
                 'status',
                 'deadline_at',
                 'started_at',
-                'completed_at'
+                'completed_at',
+                'created_at'
             ])
             ->search($request->query('search'))
             ->filterByStatus($request->query('status'))

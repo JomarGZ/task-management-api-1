@@ -50,7 +50,7 @@ class TenantMembersController extends ApiController
             ->orderBy(
                 $column,
                 $direction)
-            ->paginate(2);
+            ->paginate(10);
 
         return TenantMemberResource::collection($members);
     }

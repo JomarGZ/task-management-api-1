@@ -5,11 +5,10 @@ namespace App\Http\Controllers\api\v1\Teams;
 use App\Http\Controllers\api\v1\ApiController;
 use App\Http\Requests\api\v1\Teams\StoreTeamMemberRequest;
 use App\Http\Resources\api\v1\Teams\TeamMemberResource;
-use App\Http\Resources\api\v1\Teams\TeamResource;
 use App\Models\Team;
 use App\Models\User;
-use App\Utilities\ApiResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class TeamMembersController extends ApiController
@@ -36,22 +35,16 @@ class TeamMembersController extends ApiController
         {
             "id": 2,
             "name": "Trey Bechtelar"
+            "role": "member"
         }
     ]}
      * 
      */
     public function store(StoreTeamMemberRequest $request, Team $team)
     {
-        $memberData = collect($request->member_id)
-            ->mapWithKeys(fn ($id) => [
-                $id => ['tenant_id' => $request->user()->tenant_id]
-            ])->all();
-    
-        $team->members()->syncWithoutDetaching($memberData);
-    
-        $addedMembers = $team->members()->whereIn('users.id', $request->member_id)->get();
-    
-        return TeamMemberResource::collection($addedMembers);
+        $team->members()->attach($request->member_id, ['role' => $request->role, 'tenant_id' => auth()->user()->tenant_id]);
+        $addedMembers = $team->members()->where('users.id', $request->member_id)->first();
+        return TeamMemberResource::make($addedMembers);
     }
 
     /**

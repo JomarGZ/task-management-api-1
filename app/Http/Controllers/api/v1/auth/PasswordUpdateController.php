@@ -29,7 +29,9 @@ class PasswordUpdateController extends ApiController
         $request->user()->update([
             'password' => Hash::make($request->password)
         ]);
-        $request->user()->tokens()->where('id', '!=', $request->user()->currentAccessToken()->id)->delete();
+        if ($request->user()->currentAccessToken()) {
+            $request->user()->tokens()->where('id', '!=', $request->user()->currentAccessToken()->id)->delete();
+        }
         return $this->ok('Your password has been updated.');
     }
 }
