@@ -111,7 +111,7 @@ class TaskController extends ApiController
     {
         Gate::authorize('view', $task);
 
-       return new TaskResource($task->load(['project:id,name,description', 'assigned_id:id,name']));
+       return new TaskResource($task->load(['project:id,name,description', 'assignee:id,name']));
     }
 
     /**
