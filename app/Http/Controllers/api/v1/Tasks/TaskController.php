@@ -4,17 +4,22 @@ namespace App\Http\Controllers\api\v1\Tasks;
 
 use App\Http\Controllers\api\v1\ApiController;
 use App\Http\Requests\api\v1\Tasks\StoreTaskRequest;
-use App\Http\Resources\api\v1\Projects\ProjectResource;
 use App\Http\Resources\api\v1\Tasks\TaskResource;
 use App\Models\Project;
 use App\Models\Task;
-use App\Utilities\ApiResponse;
+use App\Services\V1\TaskService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 
 class TaskController extends ApiController
 {
+    protected $taskService;
+
+    public function __construct(TaskService $taskService)
+    {
+        $this->taskService = $taskService;
+    }
     /**
      * List Tasks
      * 
@@ -34,25 +39,14 @@ class TaskController extends ApiController
      */
     public function index(Request $request, Project $project)
     {
-        $column = $request->query('column', 'created_at');
-        $direction = $request->query('direction', 'desc');
-
-        if (!in_array($direction, ['asc', 'desc'])) {
-            $direction = 'desc';
-        }
-
-        if (!in_array($column, [
-            'title', 
-            'description',
-            'priority_levels',
-            'status',
-            'deadline_at',
-            'started_at',
-            'completed_at',
-            'deadline_at'
-            ])) {
-            $column = 'created_at';
-        }
+        $column = $this->taskService
+            ->getValidSortColumn(
+                $request->query('column', 'created_at')
+            );
+        $direction = $this->taskService
+            ->getValidSortDirection(
+                $request->query('direction', 'desc')
+            );
 
         $tasks = $project->tasks()
             ->select([
@@ -117,7 +111,7 @@ class TaskController extends ApiController
     {
         Gate::authorize('view', $task);
 
-       return new TaskResource($task->load('project'));
+       return new TaskResource($task->load(['project:id,name,description', 'assignee:id,name']));
     }
 
     /**
