@@ -67,6 +67,7 @@ class Task extends Model
             $query->where('status', $status);
         });
     }
+
     public function scopeFilterByPriorityLevel($query, $priorityLevel)
     {
         return $query->when($priorityLevel, function (Builder $query, $priorityLevel) {

@@ -87,7 +87,7 @@ class ProjectController extends ApiController
     {
         Gate::authorize('view', $project);
      
-        return new ProjectResource($project->load('teamAssignee'));
+        return new ProjectResource($project->load('teamAssignee:id,name'));
     }
 
     /**
@@ -109,7 +109,7 @@ class ProjectController extends ApiController
     {
         $project->update($request->validated());
 
-        return new ProjectResource($project->load('teamAssignee'));
+        return new ProjectResource($project->load('teamAssignee:id,name'));
     }
 
     /**

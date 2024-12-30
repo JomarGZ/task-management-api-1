@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignIdFor(Tenant::class)->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->timestamps();
+
+            $table->index(['Tenant_id', 'created_at']);
         });
     }
 

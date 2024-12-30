@@ -4,12 +4,10 @@ namespace App\Http\Controllers\api\v1\Tasks;
 
 use App\Http\Controllers\api\v1\ApiController;
 use App\Http\Requests\api\v1\Tasks\StoreTaskRequest;
-use App\Http\Resources\api\v1\Projects\ProjectResource;
 use App\Http\Resources\api\v1\Tasks\TaskResource;
 use App\Models\Project;
 use App\Models\Task;
 use App\Services\V1\TaskService;
-use App\Utilities\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
@@ -113,7 +111,7 @@ class TaskController extends ApiController
     {
         Gate::authorize('view', $task);
 
-       return new TaskResource($task->load('project'));
+       return new TaskResource($task->load(['project:id,name,description', 'assigned_id:id,name']));
     }
 
     /**

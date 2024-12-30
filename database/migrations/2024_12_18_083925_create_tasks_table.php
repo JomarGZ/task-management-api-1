@@ -18,7 +18,7 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Tenant::class)->index()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Tenant::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Project::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(User::class, 'assigned_id')->nullable();
             $table->string('title');
@@ -30,6 +30,13 @@ return new class extends Migration
             $table->date('started_at')->nullable();
             $table->date('completed_at')->nullable();
             $table->timestamps();
+
+            $table->index(['tenant_id', 'project_id', 'created_at']);
+            $table->index(['project_id', 'priority_level','tenant_id', 'created_at']);
+            $table->index(['project_id', 'status', 'tenant_id', 'created_at']);
+            $table->index(['tenant_id', 'project_id', 'assigned_id']);
+            $table->index(['tenant_id', 'project_id', 'status']);
+
         });
     }
 
