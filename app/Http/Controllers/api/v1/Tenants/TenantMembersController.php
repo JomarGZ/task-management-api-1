@@ -8,6 +8,7 @@ use App\Http\Requests\api\v1\TenantMembers\FilterTenantMemberRequest;
 use App\Http\Requests\api\v1\TenantMembers\UpdateMemeberRequest;
 use App\Http\Resources\api\v1\tenants\TenantMemberResource;
 use App\Models\User;
+use App\Services\V1\TenantMemberService;
 use App\Utilities\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -16,6 +17,12 @@ use Illuminate\Support\Facades\Hash;
 
 class TenantMembersController extends ApiController
 {
+    protected $tenantMemberService;
+
+    public function __construct(TenantMemberService $tenantMemberService)
+    {
+        $this->tenantMemberService = $tenantMemberService;
+    }
     /**
      * List Tenant Members
      * 
@@ -31,26 +38,23 @@ class TenantMembersController extends ApiController
      */
     public function index(Request $request)
     {
-        $column = $request->query('column', 'created_at');  
-        $direction = $request->query('direction', 'desc'); 
-    
-        if (!in_array($direction, ['asc', 'desc'])) {
-            $direction = 'asc'; 
-        }
-    
-        $validColumns = ['name', 'email', 'created_at'];
-        if (!in_array($column, $validColumns)) {
-            $column = 'created_at';
-        }
-    
+        $direction = $this->tenantMemberService
+            ->getValidSortDirection(
+                $request->query('direction', 'desc')
+            );
+        $column = $this->tenantMemberService
+            ->getValidSortColumn(
+                $request->query('column', 'created_at')
+            );
+        
         $members = User::query()
-            ->select(['id', 'name', 'role', 'email'])
-            ->search($request->query('search')) 
-            ->filterByRole($request->query('role'))
-            ->orderBy(
-                $column,
-                $direction)
-            ->paginate(10);
+        ->select(['id', 'name', 'role', 'email'])
+        ->search($request->query('search')) 
+        ->filterByRole($request->query('role'))
+        ->orderBy(
+            $column,
+            $direction)
+        ->paginate(10);
 
         return TenantMemberResource::collection($members);
     }
