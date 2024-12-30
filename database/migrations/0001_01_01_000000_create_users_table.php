@@ -24,8 +24,8 @@ return new class extends Migration
             $table->foreignIdFor(Tenant::class)->nullable();
 
             $table->index(['tenant_id', 'created_at']);
+
             $table->index(['tenant_id', 'role', 'created_at']);
-            $table->index(['tenant_id', 'role', 'name']);
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
