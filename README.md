@@ -22,7 +22,7 @@ Apparel Avenue Store is a personal project dedicated to honing my web developmen
 Clone the project
 
 ```bash
-  git clone https://github.com/CodeJ2000/Apparel-Avenue-Store.git
+  git clone https://github.com/JomarGZ/task-management-api-1.git
 ```
 
 Go to the project directory
