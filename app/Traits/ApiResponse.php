@@ -16,11 +16,11 @@ trait ApiResponse
 
     public function success($message, $data = null, $statusCode = Response::HTTP_OK)
     {
-        return response()->json([
-            'status' => $statusCode,
-            'data' => $data,
-            'message' => $message
-        ], $statusCode);
+       return response()->json([
+           'status' => $statusCode,
+           'data' => $data,
+           'message' => $message
+       ], $statusCode);
     }
    
     public function error($message, $error = null, $statusCode = Response::HTTP_NOT_FOUND)
@@ -31,4 +31,6 @@ trait ApiResponse
             'message' => $message
         ], $statusCode);
     }
+
+    
 }

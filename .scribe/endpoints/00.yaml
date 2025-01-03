@@ -27,7 +27,7 @@ endpoints:
         name: current_password
         description: ''
         required: true
-        example: ut
+        example: maxime
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -37,15 +37,15 @@ endpoints:
         name: password
         description: ''
         required: true
-        example: reiciendis
+        example: autem
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
     cleanBodyParameters:
-      current_password: ut
-      password: reiciendis
+      current_password: maxime
+      password: autem
     fileParameters: []
     responses:
       -
@@ -60,7 +60,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 15|jvKE5AyWJ2hEgRaMj2bw1LqDc0JGhPlbVYuvvzxg2d72e93d'
+      - 'Bearer 1|lgqxcMuZhmBmxwnneuRUljoHRip5zYa3WWUVD71C480a6482'
     controller: null
     method: null
     route: null
@@ -102,7 +102,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 15|jvKE5AyWJ2hEgRaMj2bw1LqDc0JGhPlbVYuvvzxg2d72e93d'
+      - 'Bearer 1|lgqxcMuZhmBmxwnneuRUljoHRip5zYa3WWUVD71C480a6482'
     controller: null
     method: null
     route: null

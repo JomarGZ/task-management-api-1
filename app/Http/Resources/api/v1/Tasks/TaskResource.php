@@ -3,6 +3,8 @@
 namespace App\Http\Resources\api\v1\Tasks;
 
 use App\Http\Resources\api\v1\Projects\ProjectResource;
+use App\Http\Resources\api\v1\TaskComment\TaskCommentResource;
+use App\Http\Resources\api\v1\Teams\TeamMemberResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -25,7 +27,9 @@ class TaskResource extends JsonResource
             'started_at'        => $this->started_at,
             'completed_at'      => $this->completed_at,
             'created_at'        => $this->created_at,
-            'project'           => ProjectResource::make($this->whenLoaded('project'))
+            'project'           => ProjectResource::make($this->whenLoaded('project')),
+            'assigned_member'   => TeamMemberResource::make($this->whenLoaded('assignee')),
+            'comments'          => TaskCommentResource::collection($this->whenLoaded('comments'))
         ];
     }
 }

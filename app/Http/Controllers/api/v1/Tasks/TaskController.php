@@ -111,7 +111,12 @@ class TaskController extends ApiController
     {
         Gate::authorize('view', $task);
 
-       return new TaskResource($task->load(['project:id,name,description', 'assignee:id,name']));
+       return new TaskResource($task->load([
+            'project:id,name,description,created_at',
+            'assignee', 
+            'comments:id,commentable_id,commentable_type,author_id,content,created_at,updated_at',
+            'comments.author:id,name,email,role'
+        ]));
     }
 
     /**

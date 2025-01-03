@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\Enums\Statuses;
 use App\Traits\BelongsToTenant;
+use App\Traits\HasComment;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,7 +13,7 @@ class Task extends Model
 {
     /** @use HasFactory<\Database\Factories\TaskFactory> */
     use HasFactory;
-    use BelongsToTenant;
+    use BelongsToTenant, HasComment;
 
     protected $fillable = [
         'tenant_id',

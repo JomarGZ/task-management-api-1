@@ -61,7 +61,8 @@ class User extends Authenticatable
              'team_user',
               'member_id',
                'team_id')
-               ->withPivot('role')->withTimestamps();
+               ->withPivot('role')
+               ->withTimestamps();
     }
 
 
@@ -110,6 +111,11 @@ class User extends Authenticatable
         return $this->teams()->where('id', $teamMemberPivotId)
             ->wherePivot('role', Role::PROJECT_MANAGER->value)
             ->exists();
+    }
+
+    public function isOwnerOfComment($comment)
+    {
+        return $this->id === $comment->author_id;
     }
     
 }
