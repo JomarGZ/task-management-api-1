@@ -23,7 +23,7 @@ endpoints:
         name: project_id
         description: 'The ID of the project.'
         required: true
-        example: 2
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -40,7 +40,7 @@ endpoints:
         nullable: false
         custom: []
     cleanUrlParameters:
-      project_id: 2
+      project_id: 1
       project: 1
     queryParameters:
       search:
@@ -116,7 +116,7 @@ endpoints:
     responses:
       -
         status: 200
-        content: '{"data":[],"links":{"first":"http:\/\/task-management-api-1.test\/api\/v1\/projects\/2\/tasks?page=1","last":"http:\/\/task-management-api-1.test\/api\/v1\/projects\/2\/tasks?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":null,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"http:\/\/task-management-api-1.test\/api\/v1\/projects\/2\/tasks?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"http:\/\/task-management-api-1.test\/api\/v1\/projects\/2\/tasks","per_page":5,"to":null,"total":0}}'
+        content: '{"data":[],"links":{"first":"http:\/\/task-management-api-1.test\/api\/v1\/projects\/1\/tasks?page=1","last":"http:\/\/task-management-api-1.test\/api\/v1\/projects\/1\/tasks?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":null,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"http:\/\/task-management-api-1.test\/api\/v1\/projects\/1\/tasks?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"http:\/\/task-management-api-1.test\/api\/v1\/projects\/1\/tasks","per_page":5,"to":null,"total":0}}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -127,7 +127,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 15|jvKE5AyWJ2hEgRaMj2bw1LqDc0JGhPlbVYuvvzxg2d72e93d'
+      - 'Bearer 1|lgqxcMuZhmBmxwnneuRUljoHRip5zYa3WWUVD71C480a6482'
     controller: null
     method: null
     route: null
@@ -154,14 +154,14 @@ endpoints:
         name: project_id
         description: 'The ID of the project.'
         required: true
-        example: 2
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
     cleanUrlParameters:
-      project_id: 2
+      project_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -290,7 +290,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 15|jvKE5AyWJ2hEgRaMj2bw1LqDc0JGhPlbVYuvvzxg2d72e93d'
+      - 'Bearer 1|lgqxcMuZhmBmxwnneuRUljoHRip5zYa3WWUVD71C480a6482'
     controller: null
     method: null
     route: null
@@ -317,14 +317,14 @@ endpoints:
         name: id
         description: 'The ID of the task.'
         required: true
-        example: 12
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
     cleanUrlParameters:
-      id: 12
+      id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -332,8 +332,8 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"title":"This action is unauthorized.","status":401}'
+        status: 200
+        content: '{"data":{"id":1,"title":"Culpa quia dolorem et consequatur.","description":"How brave they''ll all think me for a great hurry; ''and their names were Elsie, Lacie, and Tillie; and they walked off together, Alice heard it say to itself ''The Duchess! The Duchess! Oh my fur and whiskers! She''ll get me executed, as sure as ferrets are ferrets! Where CAN I have to whisper a hint to Time, and round goes the clock in a loud, indignant voice, but she did not notice this question, but hurriedly went on, ''you see, a dog growls when it''s pleased. Now I growl when I''m angry.","priority_level":"urgent","status":"blocked","deadline_at":"2025-01-06","started_at":"2025-01-02","completed_at":"2025-01-04","created_at":"2025-01-02T11:10:03.000000Z","project":{"id":1,"name":"Accusamus exercitationem quae aut voluptatem inventore odit.","description":"There was certainly English. ''I don''t think they play at all know whether it would not give all else for two reasons. First, because I''m on the spot.'' This did not like the name: however, it only.","created_at":"2025-01-02T11:10:02.000000Z"},"assigned_member":{"id":7,"name":"Perry Huel","team_role":"member"},"comments":[{"id":1,"content":"Yet you turned a back-somersault in at the Gryphon whispered in reply, ''for fear they should forget them before the end of half those long words, and, what''s more, I don''t keep the same thing as a.","created_at":"2025-01-02T11:14:32.000000Z","updated_at":"2025-01-02T11:14:32.000000Z","author":{"id":12,"name":"Mikayla Jaskolski","email":"franco.larkin@example.com","role":"admin"}}]}}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -344,7 +344,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 15|jvKE5AyWJ2hEgRaMj2bw1LqDc0JGhPlbVYuvvzxg2d72e93d'
+      - 'Bearer 1|lgqxcMuZhmBmxwnneuRUljoHRip5zYa3WWUVD71C480a6482'
     controller: null
     method: null
     route: null
@@ -372,14 +372,14 @@ endpoints:
         name: id
         description: 'The ID of the task.'
         required: true
-        example: 12
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
     cleanUrlParameters:
-      id: 12
+      id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -508,7 +508,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 15|jvKE5AyWJ2hEgRaMj2bw1LqDc0JGhPlbVYuvvzxg2d72e93d'
+      - 'Bearer 1|lgqxcMuZhmBmxwnneuRUljoHRip5zYa3WWUVD71C480a6482'
     controller: null
     method: null
     route: null
@@ -535,14 +535,14 @@ endpoints:
         name: id
         description: 'The ID of the task.'
         required: true
-        example: 12
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
     cleanUrlParameters:
-      id: 12
+      id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -553,7 +553,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 15|jvKE5AyWJ2hEgRaMj2bw1LqDc0JGhPlbVYuvvzxg2d72e93d'
+      - 'Bearer 1|lgqxcMuZhmBmxwnneuRUljoHRip5zYa3WWUVD71C480a6482'
     controller: null
     method: null
     route: null
@@ -596,7 +596,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 15|jvKE5AyWJ2hEgRaMj2bw1LqDc0JGhPlbVYuvvzxg2d72e93d'
+      - 'Bearer 1|lgqxcMuZhmBmxwnneuRUljoHRip5zYa3WWUVD71C480a6482'
     controller: null
     method: null
     route: null

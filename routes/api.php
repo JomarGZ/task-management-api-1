@@ -5,6 +5,7 @@ use App\Http\Controllers\api\v1\auth\LogoutController;
 use App\Http\Controllers\api\v1\auth\PasswordUpdateController;
 use App\Http\Controllers\api\v1\auth\RegisterController;
 use App\Http\Controllers\api\v1\Projects\ProjectController;
+use App\Http\Controllers\api\v1\TaskComments\TaskCommentController;
 use App\Http\Controllers\api\v1\Tasks\TaskController;
 use App\Http\Controllers\api\v1\Tasks\TaskPriorityLevelsAndStatusesController;
 use App\Http\Controllers\api\v1\Teams\TeamController;
@@ -29,6 +30,7 @@ Route::middleware('auth:sanctum')->group(function() {
         ->parameters(['members' => 'user']);
     Route::apiResource('projects', ProjectController::class);
     Route::apiResource('projects.tasks', TaskController::class)->shallow();
+    Route::apiResource('tasks.comments', TaskCommentController::class)->shallow()->except('index');
     Route::get('statuses-and-priority-levels', TaskPriorityLevelsAndStatusesController::class);
 });
 

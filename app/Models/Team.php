@@ -21,7 +21,8 @@ class Team extends Model
              'team_user', 
              'team_id', 
              'member_id')
-             ->withPivot('role')->withTimestamps();
+             ->withPivot('role')
+             ->withTimestamps();
     }
 
     public function projects()

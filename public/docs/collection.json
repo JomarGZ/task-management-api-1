@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Task Management system API documentation",
-        "_postman_id": "8d5fa2e1-d866-43fc-9dfd-1daac3c77a08",
+        "_postman_id": "643550e4-1277-4bc7-aeb9-be71d82c4f12",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -41,7 +41,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"current_password\":\"ut\",\"password\":\"reiciendis\"}"
+                            "raw": "{\"current_password\":\"maxime\",\"password\":\"autem\"}"
                         },
                         "description": "Change user password"
                     },
@@ -279,7 +279,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "2",
+                                    "value": "1",
                                     "description": "The ID of the project."
                                 }
                             ]
@@ -319,7 +319,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "2",
+                                    "value": "1",
                                     "description": "The ID of the project."
                                 }
                             ]
@@ -362,7 +362,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "2",
+                                    "value": "1",
                                     "description": "The ID of the project."
                                 }
                             ]
@@ -386,6 +386,202 @@
                             "header": [],
                             "code": 200,
                             "body": "{}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Task Comments Management",
+            "description": "",
+            "item": [
+                {
+                    "name": "Create task comment",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/tasks\/:task_id\/comments",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/tasks\/:task_id\/comments",
+                            "variable": [
+                                {
+                                    "id": "task_id",
+                                    "key": "task_id",
+                                    "value": "1",
+                                    "description": "The ID of the task."
+                                },
+                                {
+                                    "id": "task",
+                                    "key": "task",
+                                    "value": "1",
+                                    "description": "The ID of the task whose comment is to be created."
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"content\":\"This is a new comment\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{  \"data\": {\n\"id\": 7,\n\"content\": \"new comment\",\n\"created_at\": \"2025-01-03T05:27:32.000000Z\",\n\"updated_at\": \"2025-01-03T05:27:32.000000Z\"\n}}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Retrieve Task Comments",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/comments\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/comments\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "The ID of the comment."
+                                },
+                                {
+                                    "id": "comment",
+                                    "key": "comment",
+                                    "value": "1",
+                                    "description": "The ID of the comment to be retrieved."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{  \"data\": {\n\"id\": 7,\n\"content\": \"new comment\",\n\"created_at\": \"2025-01-03T05:27:32.000000Z\",\n\"updated_at\": \"2025-01-03T05:27:32.000000Z\"",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Update Task Comment",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/comments\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/comments\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "The ID of the comment."
+                                },
+                                {
+                                    "id": "comment",
+                                    "key": "comment",
+                                    "value": "1",
+                                    "description": "The ID of the comment to be updated."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"content\":\"This is a new comment\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{  \"data\": {\n\"id\": 7,\n\"content\": \"update comment\",\n\"created_at\": \"2025-01-03T05:27:32.000000Z\",\n\"updated_at\": \"2025-01-03T05:27:32.000000Z\"",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Delete Task Comment",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/comments\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/comments\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "The ID of the comment."
+                                },
+                                {
+                                    "id": "comment",
+                                    "key": "comment",
+                                    "value": "1",
+                                    "description": "The ID of the comment to be deleted."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{  \"message\": \"Success\" }",
                             "name": ""
                         }
                     ]
@@ -445,7 +641,7 @@
                                 {
                                     "id": "project_id",
                                     "key": "project_id",
-                                    "value": "2",
+                                    "value": "1",
                                     "description": "The ID of the project."
                                 },
                                 {
@@ -487,7 +683,7 @@
                                 }
                             ],
                             "code": 200,
-                            "body": "{\"data\":[],\"links\":{\"first\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/projects\\\/2\\\/tasks?page=1\",\"last\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/projects\\\/2\\\/tasks?page=1\",\"prev\":null,\"next\":null},\"meta\":{\"current_page\":1,\"from\":null,\"last_page\":1,\"links\":[{\"url\":null,\"label\":\"&laquo; Previous\",\"active\":false},{\"url\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/projects\\\/2\\\/tasks?page=1\",\"label\":\"1\",\"active\":true},{\"url\":null,\"label\":\"Next &raquo;\",\"active\":false}],\"path\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/projects\\\/2\\\/tasks\",\"per_page\":5,\"to\":null,\"total\":0}}",
+                            "body": "{\"data\":[],\"links\":{\"first\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/projects\\\/1\\\/tasks?page=1\",\"last\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/projects\\\/1\\\/tasks?page=1\",\"prev\":null,\"next\":null},\"meta\":{\"current_page\":1,\"from\":null,\"last_page\":1,\"links\":[{\"url\":null,\"label\":\"&laquo; Previous\",\"active\":false},{\"url\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/projects\\\/1\\\/tasks?page=1\",\"label\":\"1\",\"active\":true},{\"url\":null,\"label\":\"Next &raquo;\",\"active\":false}],\"path\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/projects\\\/1\\\/tasks\",\"per_page\":5,\"to\":null,\"total\":0}}",
                             "name": ""
                         }
                     ]
@@ -504,7 +700,7 @@
                                 {
                                     "id": "project_id",
                                     "key": "project_id",
-                                    "value": "2",
+                                    "value": "1",
                                     "description": "The ID of the project."
                                 }
                             ]
@@ -547,7 +743,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "12",
+                                    "value": "1",
                                     "description": "The ID of the task."
                                 }
                             ]
@@ -582,8 +778,8 @@
                                     "value": "Origin"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"title\":\"This action is unauthorized.\",\"status\":401}",
+                            "code": 200,
+                            "body": "{\"data\":{\"id\":1,\"title\":\"Culpa quia dolorem et consequatur.\",\"description\":\"How brave they'll all think me for a great hurry; 'and their names were Elsie, Lacie, and Tillie; and they walked off together, Alice heard it say to itself 'The Duchess! The Duchess! Oh my fur and whiskers! She'll get me executed, as sure as ferrets are ferrets! Where CAN I have to whisper a hint to Time, and round goes the clock in a loud, indignant voice, but she did not notice this question, but hurriedly went on, 'you see, a dog growls when it's pleased. Now I growl when I'm angry.\",\"priority_level\":\"urgent\",\"status\":\"blocked\",\"deadline_at\":\"2025-01-06\",\"started_at\":\"2025-01-02\",\"completed_at\":\"2025-01-04\",\"created_at\":\"2025-01-02T11:10:03.000000Z\",\"project\":{\"id\":1,\"name\":\"Accusamus exercitationem quae aut voluptatem inventore odit.\",\"description\":\"There was certainly English. 'I don't think they play at all know whether it would not give all else for two reasons. First, because I'm on the spot.' This did not like the name: however, it only.\",\"created_at\":\"2025-01-02T11:10:02.000000Z\"},\"assigned_member\":{\"id\":7,\"name\":\"Perry Huel\",\"team_role\":\"member\"},\"comments\":[{\"id\":1,\"content\":\"Yet you turned a back-somersault in at the Gryphon whispered in reply, 'for fear they should forget them before the end of half those long words, and, what's more, I don't keep the same thing as a.\",\"created_at\":\"2025-01-02T11:14:32.000000Z\",\"updated_at\":\"2025-01-02T11:14:32.000000Z\",\"author\":{\"id\":12,\"name\":\"Mikayla Jaskolski\",\"email\":\"franco.larkin@example.com\",\"role\":\"admin\"}}]}}",
                             "name": ""
                         }
                     ]
@@ -600,7 +796,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "12",
+                                    "value": "1",
                                     "description": "The ID of the task."
                                 }
                             ]
@@ -643,7 +839,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "12",
+                                    "value": "1",
                                     "description": "The ID of the task."
                                 }
                             ]
@@ -991,7 +1187,7 @@
                                 }
                             ],
                             "code": 200,
-                            "body": "{\"data\":[{\"id\":2,\"name\":\"Trey Bechtelar\"},{\"id\":3,\"name\":\"Emerald Mertz\"},{\"id\":4,\"name\":\"Barney Gorczany\"},{\"id\":5,\"name\":\"Cristal Cronin\"},{\"id\":6,\"name\":\"Keyshawn Hyatt\"},{\"id\":7,\"name\":\"Jermey Lesch\"},{\"id\":8,\"name\":\"Lindsey Green\"},{\"id\":9,\"name\":\"Ruben Marvin\"},{\"id\":10,\"name\":\"Tyrique Schmeler DDS\"},{\"id\":11,\"name\":\"Kacie Doyle\"}]}",
+                            "body": "{\"data\":[{\"id\":2,\"name\":\"Prof. Kiera Corwin DVM\",\"team_role\":\"member\"},{\"id\":3,\"name\":\"Eileen Thompson\",\"team_role\":\"member\"},{\"id\":4,\"name\":\"Baylee Dicki\",\"team_role\":\"member\"},{\"id\":5,\"name\":\"Kory Bailey\",\"team_role\":\"member\"},{\"id\":6,\"name\":\"Okey Greenholt\",\"team_role\":\"member\"},{\"id\":7,\"name\":\"Perry Huel\",\"team_role\":\"member\"},{\"id\":8,\"name\":\"Herman Jenkins\",\"team_role\":\"member\"},{\"id\":9,\"name\":\"Elyse Block\",\"team_role\":\"member\"},{\"id\":10,\"name\":\"Hilma Fritsch\",\"team_role\":\"member\"},{\"id\":11,\"name\":\"Piper Lemke\",\"team_role\":\"team lead\"}]}",
                             "name": ""
                         }
                     ]
@@ -1026,7 +1222,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"role\":\"member\"}"
+                            "raw": "{\"member_id\":\"sequi\",\"role\":\"member\"}"
                         },
                         "description": "Store a newly created team member in storage."
                     },
@@ -1034,7 +1230,7 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{  \"data\": [\n{\n\"id\": 2,\n\"name\": \"Trey Bechtelar\"\n}\n]}",
+                            "body": "{  \"data\": [\n{\n\"id\": 2,\n\"name\": \"Trey Bechtelar\"\n\"role\": \"member\"\n}\n]}",
                             "name": ""
                         }
                     ]
@@ -1156,7 +1352,7 @@
                                 }
                             ],
                             "code": 200,
-                            "body": "{\"data\":[],\"links\":{\"first\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/tenant\\\/members?page=1\",\"last\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/tenant\\\/members?page=1\",\"prev\":null,\"next\":null},\"meta\":{\"current_page\":1,\"from\":null,\"last_page\":1,\"links\":[{\"url\":null,\"label\":\"&laquo; Previous\",\"active\":false},{\"url\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/tenant\\\/members?page=1\",\"label\":\"1\",\"active\":true},{\"url\":null,\"label\":\"Next &raquo;\",\"active\":false}],\"path\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/tenant\\\/members\",\"per_page\":2,\"to\":null,\"total\":0}}",
+                            "body": "{\"data\":[],\"links\":{\"first\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/tenant\\\/members?page=1\",\"last\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/tenant\\\/members?page=1\",\"prev\":null,\"next\":null},\"meta\":{\"current_page\":1,\"from\":null,\"last_page\":1,\"links\":[{\"url\":null,\"label\":\"&laquo; Previous\",\"active\":false},{\"url\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/tenant\\\/members?page=1\",\"label\":\"1\",\"active\":true},{\"url\":null,\"label\":\"Next &raquo;\",\"active\":false}],\"path\":\"http:\\\/\\\/task-management-api-1.test\\\/api\\\/v1\\\/tenant\\\/members\",\"per_page\":10,\"to\":null,\"total\":0}}",
                             "name": ""
                         }
                     ]
