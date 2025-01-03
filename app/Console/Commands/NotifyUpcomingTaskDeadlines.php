@@ -31,7 +31,7 @@ class NotifyUpcomingTaskDeadlines extends Command
             ->with('assignee')
             ->chunk(500, function ($tasks) {
                 foreach($tasks as $task) {
-                    $task->user->notify((new UpcomingTaskDeadlineNotification($task))->delay(now()->addMinute()));
+                    $task->assignee->notify((new UpcomingTaskDeadlineNotification($task))->delay(now()->addMinute()));
                 }
                 info('Task deadline notifications is on queue and will be send');
             });
