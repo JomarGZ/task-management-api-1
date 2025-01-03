@@ -28,21 +28,6 @@ class Task extends Model
         'priority_level'
     ];
 
-    protected static function booted()
-    {
-        static::saving(function ($task) {
-
-            $task->updatePreviousDeadlineIfChanged();
-            if ($task->isInProgress()) {
-                $task->markAsInProgress();
-            }
-            if ($task->isCompleted()) {
-                $task->markAsCompleted();
-            }
-        });
-    }
-
-
     public function project()
     {
         return $this->belongsTo(Project::class);
@@ -102,6 +87,16 @@ class Task extends Model
     {
         if ($this->isDirty('deadline_at')) {
             $this->previous_deadline_at = $this->getOriginal('deadline_at');
+        }
+    }
+
+    public function updateTimeStampsBaseOnStatus()
+    {
+        if ($this->isInProgress()) {
+            $this->markAsInProgress();
+        }
+        if ($this->isCompleted()) {
+            $this->markAsCompleted();
         }
     }
 }
