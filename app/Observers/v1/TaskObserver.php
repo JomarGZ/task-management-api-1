@@ -8,17 +8,15 @@ use App\Notifications\TaskAssignedNotification;
 class TaskObserver
 {
 
-    /**
-     * Handle the Task "updated" event.
-     */
-    public function updating(Task $task): void
+
+    public function updated(Task $task): void
     {
         $task->updatePreviousDeadlineIfChanged();
         $task->updateTimeStampsBaseOnStatus();
-
-        if ($task->wasChanged('assignee_id')) {
+        if ($task->wasChanged('assigned_id')) {
             $task->assignee->notify(new TaskAssignedNotification($task));
         }
     }
+    
 
 }

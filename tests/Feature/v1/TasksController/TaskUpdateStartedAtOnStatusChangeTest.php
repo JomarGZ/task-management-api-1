@@ -24,6 +24,9 @@ class TaskUpdateStartedAtOnStatusChangeTest extends TestCase
     {
         parent::setUp();
 
+        // Increase memory limit
+        ini_set('memory_limit', '256M');
+
         $this->tenant = Tenant::factory()->create();
         $this->member = User::factory()->for($this->tenant)->create();
         $this->project = Project::factory()->for($this->tenant)->create();

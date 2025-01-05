@@ -73,13 +73,13 @@ class Task extends Model
     public function markAsInProgress()
     {
         if (is_null($this->started_at)) {
-            $this->started_at = now();
+            $this->update(['started_at' => now()]);
         }
     }
     public function markAsCompleted()
     {
         if (is_null($this->completed_at)) {
-            $this->completed_at = now();
+            $this->update(['completed_at' => now()]);
         }
     }
 

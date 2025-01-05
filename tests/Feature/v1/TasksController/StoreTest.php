@@ -27,6 +27,7 @@ class StoreTest extends TestCase
     {
         parent::setUp();
 
+        ini_set('memory_limit', '256M');
         $this->tenant = Tenant::factory()->create();
         $this->manager = User::factory()->recycle($this->tenant)->create(['role' => Role::MEMBER->value]);
         $this->member = User::factory()->recycle($this->tenant)->create(['role' => Role::MEMBER->value]);
