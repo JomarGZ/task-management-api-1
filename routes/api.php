@@ -6,11 +6,13 @@ use App\Http\Controllers\api\v1\auth\PasswordUpdateController;
 use App\Http\Controllers\api\v1\auth\RegisterController;
 use App\Http\Controllers\api\v1\Projects\ProjectController;
 use App\Http\Controllers\api\v1\TaskComments\TaskCommentController;
+use App\Http\Controllers\api\v1\Tasks\ProjectTaskAssignmentController;
 use App\Http\Controllers\api\v1\Tasks\TaskController;
 use App\Http\Controllers\api\v1\Tasks\TaskPriorityLevelsAndStatusesController;
 use App\Http\Controllers\api\v1\Teams\TeamController;
 use App\Http\Controllers\api\v1\Teams\TeamMembersController;
 use App\Http\Controllers\api\v1\Tenants\TenantMembersController;
+use App\Http\Controllers\api\v1\Tasks\TaskStatusController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/user', function (Request $request) {
@@ -32,6 +34,10 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('projects.tasks', TaskController::class)->shallow();
     Route::apiResource('tasks.comments', TaskCommentController::class)->shallow()->except('index');
     Route::get('statuses-and-priority-levels', TaskPriorityLevelsAndStatusesController::class);
+
+    // Custom route for updating task status
+    Route::patch('tasks/{task}/status', [TaskStatusController::class, 'update']);
+    Route::patch('tasks/{task}/assign', ProjectTaskAssignmentController::class);
 });
 
 Route::post('auth/register', RegisterController::class)->name('register');

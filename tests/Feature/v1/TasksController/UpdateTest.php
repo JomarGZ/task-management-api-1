@@ -52,10 +52,13 @@ class UpdateTest extends TestCase
     public function test_it_can_update_task()
     {
         Sanctum::actingAs($this->manager);
-        $response = $this->putJson("api/v1/tasks/{$this->task->id}", [
+        
+        $payload = [
             'title' => 'update task',
             'description' => 'description test',
-        ]);
+        ];
+
+        $response = $this->putJson("api/v1/tasks/{$this->task->id}", $payload);
         $response->assertOk();
 
         $response->assertJsonStructure([
@@ -78,8 +81,9 @@ class UpdateTest extends TestCase
 
         $this->assertDatabaseHas('tasks', [
             'id' => $this->task->id,
-            'title' => 'update task'
+            'title' => $payload['title']
         ]);
     }
+
 
 }
