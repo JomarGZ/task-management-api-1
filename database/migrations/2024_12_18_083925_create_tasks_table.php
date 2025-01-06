@@ -20,7 +20,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Tenant::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Project::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(User::class, 'assigned_id')->nullable();
+            $table->foreignIdFor(User::class, 'assigned_dev_id')->nullable();
             $table->string('title');
             $table->text('description');
             $table->string('priority_level')->default(PriorityLevel::LOW->value);
@@ -34,7 +34,7 @@ return new class extends Migration
             $table->index(['tenant_id', 'project_id', 'created_at']);
             $table->index(['project_id', 'priority_level','tenant_id', 'created_at']);
             $table->index(['project_id', 'status', 'tenant_id', 'created_at']);
-            $table->index(['tenant_id', 'project_id', 'assigned_id']);
+            $table->index(['tenant_id', 'project_id', 'assigned_dev_id']);
             $table->index(['tenant_id', 'project_id', 'status']);
 
         });

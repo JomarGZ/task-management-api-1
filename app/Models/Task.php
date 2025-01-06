@@ -18,7 +18,7 @@ class Task extends Model
     protected $fillable = [
         'tenant_id',
         'project_id',
-        'assigned_id',
+        'assigned_dev_id',
         'title',
         'description',
         'status',
@@ -33,9 +33,9 @@ class Task extends Model
         return $this->belongsTo(Project::class);
     }
 
-    public function assignee()
+    public function assignedDev()
     {
-        return $this->belongsTo(User::class, 'assigned_id');
+        return $this->belongsTo(User::class, 'assigned_dev_id');
     }
 
     public function scopeSearch($query, $search) {

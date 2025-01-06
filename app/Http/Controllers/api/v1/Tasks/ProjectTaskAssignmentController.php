@@ -12,7 +12,7 @@ class ProjectTaskAssignmentController extends ApiController
 {
     public function __invoke(UpdateTaskAssignmentRequest $request, Task $task)
     {
-        $task->update(['assigned_id' => $request->assigned_id]);
+        $task->update(['assigned_dev_id' => $request->assigned_dev_id]);
 
         return new TaskResource($task->load('project'));
     }

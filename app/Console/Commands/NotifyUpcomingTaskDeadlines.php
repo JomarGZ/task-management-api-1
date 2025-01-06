@@ -28,10 +28,10 @@ class NotifyUpcomingTaskDeadlines extends Command
     public function handle()
     {
         Task::withoutGlobalScopes()->whereDate('deadline_at', now()->addDay()->toDateString())
-            ->with('assignee')
+            ->with('assignedDev')
             ->chunk(500, function ($tasks) {
                 foreach($tasks as $task) {
-                    $task->assignee->notify((new UpcomingTaskDeadlineNotification($task))->delay(now()->addMinute()));
+                    $task->assignedDev->notify((new UpcomingTaskDeadlineNotification($task))->delay(now()->addMinute()));
                 }
                 info('Task deadline notifications is on queue and will be send');
             });
