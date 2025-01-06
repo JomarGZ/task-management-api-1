@@ -13,8 +13,8 @@ class TaskObserver
     {
         $task->updatePreviousDeadlineIfChanged();
         $task->updateTimeStampsBaseOnStatus();
-        if ($task->wasChanged('assigned_id')) {
-            $task->assignee->notify(new TaskAssignedNotification($task));
+        if ($task->wasChanged('assigned_dev_id')) {
+            $task->assignedDev->notify(new TaskAssignedNotification($task));
         }
     }
     

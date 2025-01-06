@@ -28,7 +28,7 @@ class TaskResource extends JsonResource
             'completed_at'      => $this->completed_at,
             'created_at'        => $this->created_at,
             'project'           => ProjectResource::make($this->whenLoaded('project')),
-            'assigned_member'   => TeamMemberResource::make($this->whenLoaded('assignee')),
+            'assigned_member'   => TeamMemberResource::make($this->whenLoaded('assignedDev')),
             'comments'          => TaskCommentResource::collection($this->whenLoaded('comments'))
         ];
     }

@@ -68,7 +68,7 @@ class User extends Authenticatable
 
     public function assignedTasks()
     {
-        return $this->hasMany(Task::class, 'assigned_id');
+        return $this->hasMany(Task::class, 'assigned_dev_id');
     }
 
     public function scopeSearch($query, $search) {

@@ -36,7 +36,7 @@ class TaskAssignOrReassignMemberTest extends TestCase
     public function test_it_requires_authentication_for_task_assignment()
     {
         $response = $this->patchJson("api/v1/tasks/{$this->task->id}/assign", [
-            'assigned_id' => $this->member->id,
+            'assigned_dev_id' => $this->member->id,
         ]);
 
         $response->assertUnauthorized();
@@ -46,22 +46,22 @@ class TaskAssignOrReassignMemberTest extends TestCase
     {
         Sanctum::actingAs($this->member);
         $response = $this->patchJson("api/v1/tasks/{$this->task->id}/assign", [
-            'assigned_id' => $this->member->id,
+            'assigned_dev_id' => $this->member->id,
         ]);
 
         $response->assertOk();
-        $this->assertEquals($this->member->id, $this->task->refresh()->assigned_id);
+        $this->assertEquals($this->member->id, $this->task->refresh()->assigned_dev_id);
     }
 
     public function test_validates_assigned_id()
     {
         Sanctum::actingAs($this->member);
         $response = $this->patchJson("api/v1/tasks/{$this->task->id}/assign", [
-            'assigned_id' => 'invalid_id',
+            'assigned_dev_id' => 'invalid_id',
         ]);
 
         $response->assertStatus(422);
-        $response->assertJsonValidationErrors('assigned_id');
+        $response->assertJsonValidationErrors('assigned_dev_id');
     }
 
    public function test_ensure_not_leaking_task_assignment_from_other_tenant()
@@ -73,7 +73,7 @@ class TaskAssignOrReassignMemberTest extends TestCase
 
         Sanctum::actingAs($this->member);
         $response = $this->patchJson("api/v1/tasks/{$task->id}/assign", [
-            'assigned_id' => $member->id,
+            'assigned_dev_id' => $member->id,
         ]);
 
         $response->assertNotFound();
@@ -85,7 +85,7 @@ class TaskAssignOrReassignMemberTest extends TestCase
         Notification::fake();
 
         $response = $this->patchJson("api/v1/tasks/{$this->task->id}/assign", [
-            'assigned_id' => $this->member->id,
+            'assigned_dev_id' => $this->member->id,
         ]);
 
         $response->assertOk();
@@ -101,7 +101,7 @@ class TaskAssignOrReassignMemberTest extends TestCase
         Notification::fake();
 
         $response = $this->patchJson("api/v1/tasks/{$this->task->id}/assign", [
-            'assigned_id' => $this->member->id,
+            'assigned_dev_id' => $this->member->id,
         ]);
 
         $response->assertOk();

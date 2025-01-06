@@ -32,7 +32,7 @@ class StoreTaskRequest extends FormRequest
         return [
             'title'             => ['required', 'string', 'max:255'],
             'description'       => ['required', 'string', 'max:500'],
-            'assigned_id'       => ['nullable', 'exists:users,id'],
+            'assigned_dev_id'   => ['nullable', 'exists:users,id'],
             'priority_level'    => ['nullable', Rule::in(PriorityLevel::cases())],
             'status'            => ['sometimes', Rule::in(Statuses::cases())],
             'deadline_at'       => ['nullable'],
@@ -67,7 +67,7 @@ class StoreTaskRequest extends FormRequest
                 'description' => 'A brief description of the task.',
                 'example' => 'Develop login and registration functionality.',
             ],
-            'assigned_id' => [
+            'assigned_dev_id' => [
                 'description' => 'The ID of the user assigned to the task.',
                 'example' => 5,
             ],
