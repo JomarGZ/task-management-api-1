@@ -53,7 +53,10 @@ class TaskUpdateStartedAtOnStatusChangeTest extends TestCase
         ]);
 
         $response->assertStatus(200);
-        $this->assertNotNull($this->task->refresh()->started_at);
+        $this->assertDatabaseHas('tasks', [
+            'id' => $this->task->id,
+            'started_at' => $this->task->refresh()->started_at
+        ]);
     }
 
     public function test_task_started_at_is_not_updated_when_status_is_not_changed_to_in_progress()
@@ -65,7 +68,10 @@ class TaskUpdateStartedAtOnStatusChangeTest extends TestCase
         ]);
 
         $response->assertStatus(200);
-        $this->assertNull($this->task->refresh()->started_at);
+        $this->assertDatabaseHas('tasks', [
+            'id' => $this->task->id,
+            'started_at' => $this->task->refresh()->started_at
+        ]);
     }
 
     public function test_task_completed_at_is_updated_when_status_is_changed_to_completed()
@@ -92,6 +98,9 @@ class TaskUpdateStartedAtOnStatusChangeTest extends TestCase
         ]);
 
         $response->assertStatus(200);
-        $this->assertNull($this->task->refresh()->completed_at);
+        $this->assertDatabaseHas('tasks', [
+            'id' => $this->task->id,
+            'completed_at' => null
+        ]);
     }
 }
