@@ -16,7 +16,7 @@ class ProjectTaskAssignmentController extends ApiController
      * @param \App\Http\Requests\api\v1\Tasks\UpdateTaskAssignmentRequest $request
      * @queryParams assigned_dev_id int The ID of the developer to assign the task to. Example: 1
      * @queryParams assigned_qa_id int The ID of the QA to assign the task to. Example: 2 
-     * @response 201 {"data": {
+     * @response 200 {"data": {
         "id": 18,
         "title": "new taskdasdadasdsadsasdaddadasdasddas",
         "description": "this is description",
