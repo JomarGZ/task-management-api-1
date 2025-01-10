@@ -31,13 +31,12 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('tenant/members', TenantMembersController::class)
         ->parameters(['members' => 'user']);
     Route::apiResource('projects', ProjectController::class);
+
+    Route::patch('tasks/{task}/status', [TaskStatusController::class, 'update']);
+    Route::patch('tasks/{task}/assign', [ProjectTaskAssignmentController::class, 'update']);
     Route::apiResource('projects.tasks', TaskController::class)->shallow();
     Route::apiResource('tasks.comments', TaskCommentController::class)->shallow()->except('index');
     Route::get('statuses-and-priority-levels', TaskPriorityLevelsAndStatusesController::class);
-
-    // Custom route for updating task status
-    Route::patch('tasks/{task}/status', [TaskStatusController::class, 'update']);
-    Route::patch('tasks/{task}/assign', ProjectTaskAssignmentController::class);
 });
 
 Route::post('auth/register', RegisterController::class)->name('register');

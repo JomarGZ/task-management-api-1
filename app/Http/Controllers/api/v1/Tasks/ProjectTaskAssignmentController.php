@@ -10,9 +10,15 @@ use Illuminate\Http\Request;
 
 class ProjectTaskAssignmentController extends ApiController
 {
-    public function __invoke(UpdateTaskAssignmentRequest $request, Task $task)
+    public function update(UpdateTaskAssignmentRequest $request, Task $task)
     {
-        $task->update(['assigned_dev_id' => $request->assigned_dev_id]);
+        if ($request->has('assigned_dev_id') || $request->assigned_dev_id === null) {
+            $task->assigned_dev_id = $request->assigned_dev_id;
+        }
+        if ($request->has('assigned_qa_id') || $request->assigned_qa_id === null) {
+            $task->assigned_qa_id = $request->assigned_qa_id;
+        }
+        $task->save();
 
         return new TaskResource($task->load('project'));
     }

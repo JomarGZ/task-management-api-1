@@ -22,7 +22,8 @@ class UpdateTaskAssignmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'assigned_dev_id' => ['required', 'exists:users,id'],
+            'assigned_dev_id' => 'sometimes|nullable|exists:users,id',
+            'assigned_qa_id' => 'sometimes|nullable|exists:users,id',
         ];
     }
 }
