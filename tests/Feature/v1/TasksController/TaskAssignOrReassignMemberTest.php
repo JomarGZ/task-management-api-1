@@ -75,29 +75,6 @@ class TaskAssignOrReassignMemberTest extends TestCase
         $response->assertJsonValidationErrors(['assigned_dev_id', 'assigned_qa_id']);
     }
 
-    public function test_it_can_assign_qa_to_task()
-    {
-        Sanctum::actingAs($this->member);
-        $response = $this->patchJson("api/v1/tasks/{$this->task->id}/assign", [
-            'assigned_qa_id' => $this->member->id,
-        ]);
-
-        $response->assertOk();
-        $this->assertEquals($this->member->id, actual: $this->task->refresh()->assigned_qa_id);
-    }
-    public function test_it_can_unassign_qa_to_task()
-    {
-        Sanctum::actingAs($this->member);
-        $response = $this->patchJson("api/v1/tasks/{$this->task->id}/assign", [
-            'assigned_qa_id' => null,
-        ]);
-
-        $response->assertOk();
-        $this->assertDatabaseHas('tasks', [
-            'id' => $this->task->id,
-            'assigned_qa_id' => null
-        ]);
-    }
 
    public function test_ensure_not_leaking_task_assignment_from_other_tenant()
     {
@@ -121,21 +98,6 @@ class TaskAssignOrReassignMemberTest extends TestCase
 
         $response = $this->patchJson("api/v1/tasks/{$this->task->id}/assign", [
             'assigned_dev_id' => $this->member->id,
-        ]);
-
-        $response->assertOk();
-        Notification::assertSentTo(
-            [$this->member],
-            TaskAssignedNotification::class
-        );
-    }
-    public function test_send_email_notification_when_task_assigned_to_QA()
-    {
-        Sanctum::actingAs($this->member);
-        Notification::fake();
-
-        $response = $this->patchJson("api/v1/tasks/{$this->task->id}/assign", [
-            'assigned_qa_id' => $this->member->id,
         ]);
 
         $response->assertOk();

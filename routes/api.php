@@ -7,6 +7,7 @@ use App\Http\Controllers\api\v1\auth\RegisterController;
 use App\Http\Controllers\api\v1\Projects\ProjectController;
 use App\Http\Controllers\api\v1\TaskComments\TaskCommentController;
 use App\Http\Controllers\api\v1\Tasks\ProjectTaskAssignmentController;
+use App\Http\Controllers\api\v1\Tasks\ProjectTaskDevAssignmentController;
 use App\Http\Controllers\api\v1\Tasks\TaskController;
 use App\Http\Controllers\api\v1\Tasks\TaskPriorityLevelsAndStatusesController;
 use App\Http\Controllers\api\v1\Teams\TeamController;
@@ -33,7 +34,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('projects', ProjectController::class);
 
     Route::patch('tasks/{task}/status', [TaskStatusController::class, 'update']);
-    Route::patch('tasks/{task}/assign', [ProjectTaskAssignmentController::class, 'update']);
+    Route::patch('tasks/{task}/assign', [ProjectTaskDevAssignmentController::class, 'store']);
+    Route::patch('tasks/{task}/unassign', [ProjectTaskDevAssignmentController::class, 'destroy']);
     Route::apiResource('projects.tasks', TaskController::class)->shallow();
     Route::apiResource('tasks.comments', TaskCommentController::class)->shallow()->except('index');
     Route::get('statuses-and-priority-levels', TaskPriorityLevelsAndStatusesController::class);

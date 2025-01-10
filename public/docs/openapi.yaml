@@ -42,12 +42,12 @@ paths:
                 current_password:
                   type: string
                   description: ''
-                  example: maxime
+                  example: molestiae
                   nullable: false
                 password:
                   type: string
                   description: ''
-                  example: autem
+                  example: provident
                   nullable: false
               required:
                 - current_password
@@ -715,6 +715,139 @@ paths:
         required: true
         schema:
           type: string
+  '/api/v1/tasks/{task_id}/status':
+    patch:
+      summary: 'Update Task Status'
+      operationId: updateTaskStatus
+      description: 'Update the status of the specified task.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 15
+                    title: 'update title 1'
+                    description: description
+                    priority_level: urgent
+                    status: completed
+                    deadline_at: null
+                    started_at: '2024-12-22'
+                    completed_at: '2024-12-22'
+                    project:
+                      id: 2
+                      name: 'update project'
+                      description: description
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 15
+                      title:
+                        type: string
+                        example: 'update title 1'
+                      description:
+                        type: string
+                        example: description
+                      priority_level:
+                        type: string
+                        example: urgent
+                      status:
+                        type: string
+                        example: completed
+                      deadline_at:
+                        type: string
+                        example: null
+                      started_at:
+                        type: string
+                        example: '2024-12-22'
+                      completed_at:
+                        type: string
+                        example: '2024-12-22'
+                      project:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 2
+                          name:
+                            type: string
+                            example: 'update project'
+                          description:
+                            type: string
+                            example: description
+      tags:
+        - 'Task Management'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  description: ''
+                  example: 'on hold'
+                  nullable: false
+                  enum:
+                    - 'not started'
+                    - 'in progress'
+                    - completed
+                    - 'on hold'
+                    - blocked
+              required:
+                - status
+    parameters:
+      -
+        in: path
+        name: task_id
+        description: 'The ID of the task.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  '/api/v1/tasks/{task_id}/assign':
+    patch:
+      summary: 'Update the assigned developer and QA for the task.'
+      operationId: updateTheAssignedDeveloperAndQAForTheTask
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Task Management'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                assigned_dev_id:
+                  type: string
+                  description: 'The <code>id</code> of an existing record in the users table.'
+                  example: null
+                  nullable: true
+                assigned_qa_id:
+                  type: string
+                  description: 'The <code>id</code> of an existing record in the users table.'
+                  example: null
+                  nullable: true
+    parameters:
+      -
+        in: path
+        name: task_id
+        description: 'The ID of the task.'
+        example: 1
+        required: true
+        schema:
+          type: integer
   '/api/v1/projects/{project_id}/tasks':
     get:
       summary: 'List Tasks'
@@ -979,7 +1112,7 @@ paths:
                   description: 'A brief description of the task. Must not be greater than 500 characters.'
                   example: 'Develop login and registration functionality.'
                   nullable: false
-                assigned_id:
+                assigned_dev_id:
                   type: string
                   description: 'The ID of the user assigned to the task. The <code>id</code> of an existing record in the users table.'
                   example: 5
@@ -1060,7 +1193,7 @@ paths:
                     description: "How brave they'll all think me for a great hurry; 'and their names were Elsie, Lacie, and Tillie; and they walked off together, Alice heard it say to itself 'The Duchess! The Duchess! Oh my fur and whiskers! She'll get me executed, as sure as ferrets are ferrets! Where CAN I have to whisper a hint to Time, and round goes the clock in a loud, indignant voice, but she did not notice this question, but hurriedly went on, 'you see, a dog growls when it's pleased. Now I growl when I'm angry."
                     priority_level: urgent
                     status: blocked
-                    deadline_at: '2025-01-06'
+                    deadline_at: '2025-01-04'
                     started_at: '2025-01-02'
                     completed_at: '2025-01-04'
                     created_at: '2025-01-02T11:10:03.000000Z'
@@ -1069,10 +1202,8 @@ paths:
                       name: 'Accusamus exercitationem quae aut voluptatem inventore odit.'
                       description: "There was certainly English. 'I don't think they play at all know whether it would not give all else for two reasons. First, because I'm on the spot.' This did not like the name: however, it only."
                       created_at: '2025-01-02T11:10:02.000000Z'
-                    assigned_member:
-                      id: 7
-                      name: 'Perry Huel'
-                      team_role: member
+                    assigned_dev: null
+                    assigned_qa: null
                     comments:
                       -
                         id: 1
@@ -1105,7 +1236,7 @@ paths:
                         example: blocked
                       deadline_at:
                         type: string
-                        example: '2025-01-06'
+                        example: '2025-01-04'
                       started_at:
                         type: string
                         example: '2025-01-02'
@@ -1130,18 +1261,12 @@ paths:
                           created_at:
                             type: string
                             example: '2025-01-02T11:10:02.000000Z'
-                      assigned_member:
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                            example: 7
-                          name:
-                            type: string
-                            example: 'Perry Huel'
-                          team_role:
-                            type: string
-                            example: member
+                      assigned_dev:
+                        type: string
+                        example: null
+                      assigned_qa:
+                        type: string
+                        example: null
                       comments:
                         type: array
                         example:
@@ -1272,7 +1397,7 @@ paths:
                   description: 'A brief description of the task. Must not be greater than 500 characters.'
                   example: 'Develop login and registration functionality.'
                   nullable: false
-                assigned_id:
+                assigned_dev_id:
                   type: string
                   description: 'The ID of the user assigned to the task. The <code>id</code> of an existing record in the users table.'
                   example: 5
@@ -1801,7 +1926,7 @@ paths:
                 member_id:
                   type: string
                   description: 'The <code>id</code> of an existing record in the users table.'
-                  example: sequi
+                  example: cum
                   nullable: false
                 role:
                   type: string

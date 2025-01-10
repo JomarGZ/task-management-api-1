@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Task Management system API documentation",
-        "_postman_id": "643550e4-1277-4bc7-aeb9-be71d82c4f12",
+        "_postman_id": "5e84d869-9209-40e0-b5fc-b8a3e12fe863",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -41,7 +41,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"current_password\":\"maxime\",\"password\":\"autem\"}"
+                            "raw": "{\"current_password\":\"molestiae\",\"password\":\"provident\"}"
                         },
                         "description": "Change user password"
                     },
@@ -593,6 +593,85 @@
             "description": "",
             "item": [
                 {
+                    "name": "Update Task Status",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/tasks\/:task_id\/status",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/tasks\/:task_id\/status",
+                            "variable": [
+                                {
+                                    "id": "task_id",
+                                    "key": "task_id",
+                                    "value": "1",
+                                    "description": "The ID of the task."
+                                }
+                            ]
+                        },
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"status\":\"on hold\"}"
+                        },
+                        "description": "Update the status of the specified task."
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"data\": {\n\"id\": 15,\n\"title\": \"update title 1\",\n\"description\": \"description\",\n\"priority_level\": \"urgent\",\n\"status\": \"completed\",\n\"deadline_at\": null,\n\"started_at\": \"2024-12-22\",\n\"completed_at\": \"2024-12-22\",\n\"project\": {\n\"id\": 2,\n\"name\": \"update project\",\n\"description\": \"description\"\n}\n}}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Update the assigned developer and QA for the task.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/tasks\/:task_id\/assign",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/tasks\/:task_id\/assign",
+                            "variable": [
+                                {
+                                    "id": "task_id",
+                                    "key": "task_id",
+                                    "value": "1",
+                                    "description": "The ID of the task."
+                                }
+                            ]
+                        },
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": ""
+                    },
+                    "response": []
+                },
+                {
                     "name": "List Tasks",
                     "request": {
                         "url": {
@@ -718,7 +797,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"title\":\"Implement authentication\",\"description\":\"Develop login and registration functionality.\",\"assigned_id\":5,\"priority_level\":\"High\",\"status\":\"In Progress\",\"deadline_at\":\"2024-01-15\",\"started_at\":\"2024-01-01\",\"completed_at\":\"2024-01-20\"}"
+                            "raw": "{\"title\":\"Implement authentication\",\"description\":\"Develop login and registration functionality.\",\"assigned_dev_id\":5,\"priority_level\":\"High\",\"status\":\"In Progress\",\"deadline_at\":\"2024-01-15\",\"started_at\":\"2024-01-01\",\"completed_at\":\"2024-01-20\"}"
                         },
                         "description": "Store a newly created task in storage."
                     },
@@ -779,7 +858,7 @@
                                 }
                             ],
                             "code": 200,
-                            "body": "{\"data\":{\"id\":1,\"title\":\"Culpa quia dolorem et consequatur.\",\"description\":\"How brave they'll all think me for a great hurry; 'and their names were Elsie, Lacie, and Tillie; and they walked off together, Alice heard it say to itself 'The Duchess! The Duchess! Oh my fur and whiskers! She'll get me executed, as sure as ferrets are ferrets! Where CAN I have to whisper a hint to Time, and round goes the clock in a loud, indignant voice, but she did not notice this question, but hurriedly went on, 'you see, a dog growls when it's pleased. Now I growl when I'm angry.\",\"priority_level\":\"urgent\",\"status\":\"blocked\",\"deadline_at\":\"2025-01-06\",\"started_at\":\"2025-01-02\",\"completed_at\":\"2025-01-04\",\"created_at\":\"2025-01-02T11:10:03.000000Z\",\"project\":{\"id\":1,\"name\":\"Accusamus exercitationem quae aut voluptatem inventore odit.\",\"description\":\"There was certainly English. 'I don't think they play at all know whether it would not give all else for two reasons. First, because I'm on the spot.' This did not like the name: however, it only.\",\"created_at\":\"2025-01-02T11:10:02.000000Z\"},\"assigned_member\":{\"id\":7,\"name\":\"Perry Huel\",\"team_role\":\"member\"},\"comments\":[{\"id\":1,\"content\":\"Yet you turned a back-somersault in at the Gryphon whispered in reply, 'for fear they should forget them before the end of half those long words, and, what's more, I don't keep the same thing as a.\",\"created_at\":\"2025-01-02T11:14:32.000000Z\",\"updated_at\":\"2025-01-02T11:14:32.000000Z\",\"author\":{\"id\":12,\"name\":\"Mikayla Jaskolski\",\"email\":\"franco.larkin@example.com\",\"role\":\"admin\"}}]}}",
+                            "body": "{\"data\":{\"id\":1,\"title\":\"Culpa quia dolorem et consequatur.\",\"description\":\"How brave they'll all think me for a great hurry; 'and their names were Elsie, Lacie, and Tillie; and they walked off together, Alice heard it say to itself 'The Duchess! The Duchess! Oh my fur and whiskers! She'll get me executed, as sure as ferrets are ferrets! Where CAN I have to whisper a hint to Time, and round goes the clock in a loud, indignant voice, but she did not notice this question, but hurriedly went on, 'you see, a dog growls when it's pleased. Now I growl when I'm angry.\",\"priority_level\":\"urgent\",\"status\":\"blocked\",\"deadline_at\":\"2025-01-04\",\"started_at\":\"2025-01-02\",\"completed_at\":\"2025-01-04\",\"created_at\":\"2025-01-02T11:10:03.000000Z\",\"project\":{\"id\":1,\"name\":\"Accusamus exercitationem quae aut voluptatem inventore odit.\",\"description\":\"There was certainly English. 'I don't think they play at all know whether it would not give all else for two reasons. First, because I'm on the spot.' This did not like the name: however, it only.\",\"created_at\":\"2025-01-02T11:10:02.000000Z\"},\"assigned_dev\":null,\"assigned_qa\":null,\"comments\":[{\"id\":1,\"content\":\"Yet you turned a back-somersault in at the Gryphon whispered in reply, 'for fear they should forget them before the end of half those long words, and, what's more, I don't keep the same thing as a.\",\"created_at\":\"2025-01-02T11:14:32.000000Z\",\"updated_at\":\"2025-01-02T11:14:32.000000Z\",\"author\":{\"id\":12,\"name\":\"Mikayla Jaskolski\",\"email\":\"franco.larkin@example.com\",\"role\":\"admin\"}}]}}",
                             "name": ""
                         }
                     ]
@@ -814,7 +893,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"title\":\"Implement authentication\",\"description\":\"Develop login and registration functionality.\",\"assigned_id\":5,\"priority_level\":\"High\",\"status\":\"In Progress\",\"deadline_at\":\"2024-01-15\",\"started_at\":\"2024-01-01\",\"completed_at\":\"2024-01-20\"}"
+                            "raw": "{\"title\":\"Implement authentication\",\"description\":\"Develop login and registration functionality.\",\"assigned_dev_id\":5,\"priority_level\":\"High\",\"status\":\"In Progress\",\"deadline_at\":\"2024-01-15\",\"started_at\":\"2024-01-01\",\"completed_at\":\"2024-01-20\"}"
                         },
                         "description": "Update the specified task in storage."
                     },
@@ -1222,7 +1301,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"member_id\":\"sequi\",\"role\":\"member\"}"
+                            "raw": "{\"member_id\":\"cum\",\"role\":\"member\"}"
                         },
                         "description": "Store a newly created team member in storage."
                     },
