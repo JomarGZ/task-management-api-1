@@ -131,7 +131,13 @@
                     <a href="#task-management">Task Management</a>
                 </li>
                                     <ul id="tocify-subheader-task-management" class="tocify-subheader">
-                                                    <li class="tocify-item level-2" data-unique="task-management-GETapi-v1-projects--project_id--tasks">
+                                                    <li class="tocify-item level-2" data-unique="task-management-PATCHapi-v1-tasks--task_id--status">
+                                <a href="#task-management-PATCHapi-v1-tasks--task_id--status">Update Task Status</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="task-management-PATCHapi-v1-tasks--task_id--assign">
+                                <a href="#task-management-PATCHapi-v1-tasks--task_id--assign">Update the assigned developer and QA for the task.</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="task-management-GETapi-v1-projects--project_id--tasks">
                                 <a href="#task-management-GETapi-v1-projects--project_id--tasks">List Tasks</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="task-management-POSTapi-v1-projects--project_id--tasks">
@@ -220,7 +226,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: January 3, 2025</li>
+        <li>Last updated: January 10, 2025</li>
     </ul>
 </div>
 
@@ -263,8 +269,8 @@ You can switch the language used with the tabs at the top right (or from the nav
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"current_password\": \"maxime\",
-    \"password\": \"autem\"
+    \"current_password\": \"molestiae\",
+    \"password\": \"provident\"
 }"
 </code></pre></div>
 
@@ -281,8 +287,8 @@ const headers = {
 };
 
 let body = {
-    "current_password": "maxime",
-    "password": "autem"
+    "current_password": "molestiae",
+    "password": "provident"
 };
 
 fetch(url, {
@@ -392,10 +398,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="current_password"                data-endpoint="PUTapi-v1-auth-password-update"
-               value="maxime"
+               value="molestiae"
                data-component="body">
     <br>
-<p>Example: <code>maxime</code></p>
+<p>Example: <code>molestiae</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>password</code></b>&nbsp;&nbsp;
@@ -403,10 +409,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="password"                data-endpoint="PUTapi-v1-auth-password-update"
-               value="autem"
+               value="provident"
                data-component="body">
     <br>
-<p>Example: <code>autem</code></p>
+<p>Example: <code>provident</code></p>
         </div>
         </form>
 
@@ -2446,7 +2452,345 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
     
 
-                                <h2 id="task-management-GETapi-v1-projects--project_id--tasks">List Tasks</h2>
+                                <h2 id="task-management-PATCHapi-v1-tasks--task_id--status">Update Task Status</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>Update the status of the specified task.</p>
+
+<span id="example-requests-PATCHapi-v1-tasks--task_id--status">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request PATCH \
+    "http://task-management-api-1.test/api/v1/tasks/1/status" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"status\": \"on hold\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://task-management-api-1.test/api/v1/tasks/1/status"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "status": "on hold"
+};
+
+fetch(url, {
+    method: "PATCH",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-PATCHapi-v1-tasks--task_id--status">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: {
+        &quot;id&quot;: 15,
+        &quot;title&quot;: &quot;update title 1&quot;,
+        &quot;description&quot;: &quot;description&quot;,
+        &quot;priority_level&quot;: &quot;urgent&quot;,
+        &quot;status&quot;: &quot;completed&quot;,
+        &quot;deadline_at&quot;: null,
+        &quot;started_at&quot;: &quot;2024-12-22&quot;,
+        &quot;completed_at&quot;: &quot;2024-12-22&quot;,
+        &quot;project&quot;: {
+            &quot;id&quot;: 2,
+            &quot;name&quot;: &quot;update project&quot;,
+            &quot;description&quot;: &quot;description&quot;
+        }
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-PATCHapi-v1-tasks--task_id--status" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-PATCHapi-v1-tasks--task_id--status"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-PATCHapi-v1-tasks--task_id--status"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-PATCHapi-v1-tasks--task_id--status" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-PATCHapi-v1-tasks--task_id--status">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-PATCHapi-v1-tasks--task_id--status" data-method="PATCH"
+      data-path="api/v1/tasks/{task_id}/status"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('PATCHapi-v1-tasks--task_id--status', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-PATCHapi-v1-tasks--task_id--status"
+                    onclick="tryItOut('PATCHapi-v1-tasks--task_id--status');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-PATCHapi-v1-tasks--task_id--status"
+                    onclick="cancelTryOut('PATCHapi-v1-tasks--task_id--status');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-PATCHapi-v1-tasks--task_id--status"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-purple">PATCH</small>
+            <b><code>api/v1/tasks/{task_id}/status</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="PATCHapi-v1-tasks--task_id--status"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="PATCHapi-v1-tasks--task_id--status"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="PATCHapi-v1-tasks--task_id--status"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>task_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="task_id"                data-endpoint="PATCHapi-v1-tasks--task_id--status"
+               value="1"
+               data-component="url">
+    <br>
+<p>The ID of the task. Example: <code>1</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>status</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="status"                data-endpoint="PATCHapi-v1-tasks--task_id--status"
+               value="on hold"
+               data-component="body">
+    <br>
+<p>Example: <code>on hold</code></p>
+Must be one of:
+<ul style="list-style-type: square;"><li><code>not started</code></li> <li><code>in progress</code></li> <li><code>completed</code></li> <li><code>on hold</code></li> <li><code>blocked</code></li></ul>
+        </div>
+        </form>
+
+                    <h2 id="task-management-PATCHapi-v1-tasks--task_id--assign">Update the assigned developer and QA for the task.</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-PATCHapi-v1-tasks--task_id--assign">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request PATCH \
+    "http://task-management-api-1.test/api/v1/tasks/1/assign" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://task-management-api-1.test/api/v1/tasks/1/assign"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "PATCH",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-PATCHapi-v1-tasks--task_id--assign">
+</span>
+<span id="execution-results-PATCHapi-v1-tasks--task_id--assign" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-PATCHapi-v1-tasks--task_id--assign"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-PATCHapi-v1-tasks--task_id--assign"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-PATCHapi-v1-tasks--task_id--assign" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-PATCHapi-v1-tasks--task_id--assign">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-PATCHapi-v1-tasks--task_id--assign" data-method="PATCH"
+      data-path="api/v1/tasks/{task_id}/assign"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('PATCHapi-v1-tasks--task_id--assign', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-PATCHapi-v1-tasks--task_id--assign"
+                    onclick="tryItOut('PATCHapi-v1-tasks--task_id--assign');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-PATCHapi-v1-tasks--task_id--assign"
+                    onclick="cancelTryOut('PATCHapi-v1-tasks--task_id--assign');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-PATCHapi-v1-tasks--task_id--assign"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-purple">PATCH</small>
+            <b><code>api/v1/tasks/{task_id}/assign</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="PATCHapi-v1-tasks--task_id--assign"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="PATCHapi-v1-tasks--task_id--assign"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="PATCHapi-v1-tasks--task_id--assign"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>task_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="task_id"                data-endpoint="PATCHapi-v1-tasks--task_id--assign"
+               value="1"
+               data-component="url">
+    <br>
+<p>The ID of the task. Example: <code>1</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>assigned_dev_id</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="assigned_dev_id"                data-endpoint="PATCHapi-v1-tasks--task_id--assign"
+               value=""
+               data-component="body">
+    <br>
+<p>The <code>id</code> of an existing record in the users table.</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>assigned_qa_id</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="assigned_qa_id"                data-endpoint="PATCHapi-v1-tasks--task_id--assign"
+               value=""
+               data-component="body">
+    <br>
+<p>The <code>id</code> of an existing record in the users table.</p>
+        </div>
+        </form>
+
+                    <h2 id="task-management-GETapi-v1-projects--project_id--tasks">List Tasks</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -2738,7 +3082,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --data "{
     \"title\": \"Implement authentication\",
     \"description\": \"Develop login and registration functionality.\",
-    \"assigned_id\": 5,
+    \"assigned_dev_id\": 5,
     \"priority_level\": \"High\",
     \"status\": \"In Progress\",
     \"deadline_at\": \"2024-01-15\",
@@ -2762,7 +3106,7 @@ const headers = {
 let body = {
     "title": "Implement authentication",
     "description": "Develop login and registration functionality.",
-    "assigned_id": 5,
+    "assigned_dev_id": 5,
     "priority_level": "High",
     "status": "In Progress",
     "deadline_at": "2024-01-15",
@@ -2919,11 +3263,11 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>A brief description of the task. Must not be greater than 500 characters. Example: <code>Develop login and registration functionality.</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>assigned_id</code></b>&nbsp;&nbsp;
+            <b style="line-height: 2;"><code>assigned_dev_id</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="assigned_id"                data-endpoint="POSTapi-v1-projects--project_id--tasks"
+                              name="assigned_dev_id"                data-endpoint="POSTapi-v1-projects--project_id--tasks"
                value="5"
                data-component="body">
     <br>
@@ -3048,7 +3392,7 @@ vary: Origin
         &quot;description&quot;: &quot;How brave they&#039;ll all think me for a great hurry; &#039;and their names were Elsie, Lacie, and Tillie; and they walked off together, Alice heard it say to itself &#039;The Duchess! The Duchess! Oh my fur and whiskers! She&#039;ll get me executed, as sure as ferrets are ferrets! Where CAN I have to whisper a hint to Time, and round goes the clock in a loud, indignant voice, but she did not notice this question, but hurriedly went on, &#039;you see, a dog growls when it&#039;s pleased. Now I growl when I&#039;m angry.&quot;,
         &quot;priority_level&quot;: &quot;urgent&quot;,
         &quot;status&quot;: &quot;blocked&quot;,
-        &quot;deadline_at&quot;: &quot;2025-01-06&quot;,
+        &quot;deadline_at&quot;: &quot;2025-01-04&quot;,
         &quot;started_at&quot;: &quot;2025-01-02&quot;,
         &quot;completed_at&quot;: &quot;2025-01-04&quot;,
         &quot;created_at&quot;: &quot;2025-01-02T11:10:03.000000Z&quot;,
@@ -3058,11 +3402,8 @@ vary: Origin
             &quot;description&quot;: &quot;There was certainly English. &#039;I don&#039;t think they play at all know whether it would not give all else for two reasons. First, because I&#039;m on the spot.&#039; This did not like the name: however, it only.&quot;,
             &quot;created_at&quot;: &quot;2025-01-02T11:10:02.000000Z&quot;
         },
-        &quot;assigned_member&quot;: {
-            &quot;id&quot;: 7,
-            &quot;name&quot;: &quot;Perry Huel&quot;,
-            &quot;team_role&quot;: &quot;member&quot;
-        },
+        &quot;assigned_dev&quot;: null,
+        &quot;assigned_qa&quot;: null,
         &quot;comments&quot;: [
             {
                 &quot;id&quot;: 1,
@@ -3196,7 +3537,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --data "{
     \"title\": \"Implement authentication\",
     \"description\": \"Develop login and registration functionality.\",
-    \"assigned_id\": 5,
+    \"assigned_dev_id\": 5,
     \"priority_level\": \"High\",
     \"status\": \"In Progress\",
     \"deadline_at\": \"2024-01-15\",
@@ -3220,7 +3561,7 @@ const headers = {
 let body = {
     "title": "Implement authentication",
     "description": "Develop login and registration functionality.",
-    "assigned_id": 5,
+    "assigned_dev_id": 5,
     "priority_level": "High",
     "status": "In Progress",
     "deadline_at": "2024-01-15",
@@ -3381,11 +3722,11 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>A brief description of the task. Must not be greater than 500 characters. Example: <code>Develop login and registration functionality.</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>assigned_id</code></b>&nbsp;&nbsp;
+            <b style="line-height: 2;"><code>assigned_dev_id</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
-                              name="assigned_id"                data-endpoint="PUTapi-v1-tasks--id-"
+                              name="assigned_dev_id"                data-endpoint="PUTapi-v1-tasks--id-"
                value="5"
                data-component="body">
     <br>
@@ -4801,7 +5142,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"member_id\": \"sequi\",
+    \"member_id\": \"cum\",
     \"role\": \"member\"
 }"
 </code></pre></div>
@@ -4819,7 +5160,7 @@ const headers = {
 };
 
 let body = {
-    "member_id": "sequi",
+    "member_id": "cum",
     "role": "member"
 };
 
@@ -4945,10 +5286,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="member_id"                data-endpoint="POSTapi-v1-teams--team_id--members"
-               value="sequi"
+               value="cum"
                data-component="body">
     <br>
-<p>The <code>id</code> of an existing record in the users table. Example: <code>sequi</code></p>
+<p>The <code>id</code> of an existing record in the users table. Example: <code>cum</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>role</code></b>&nbsp;&nbsp;

@@ -19,6 +19,7 @@ class Task extends Model
         'tenant_id',
         'project_id',
         'assigned_dev_id',
+        'assigned_qa_id',
         'title',
         'description',
         'status',
@@ -36,6 +37,10 @@ class Task extends Model
     public function assignedDev()
     {
         return $this->belongsTo(User::class, 'assigned_dev_id');
+    }
+    public function assignedQA()
+    {
+        return $this->belongsTo(User::class, 'assigned_qa_id');
     }
 
     public function scopeSearch($query, $search) {

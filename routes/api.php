@@ -6,7 +6,8 @@ use App\Http\Controllers\api\v1\auth\PasswordUpdateController;
 use App\Http\Controllers\api\v1\auth\RegisterController;
 use App\Http\Controllers\api\v1\Projects\ProjectController;
 use App\Http\Controllers\api\v1\TaskComments\TaskCommentController;
-use App\Http\Controllers\api\v1\Tasks\ProjectTaskAssignmentController;
+use App\Http\Controllers\api\v1\Tasks\ProjectTaskDevAssignmentController;
+use App\Http\Controllers\api\v1\Tasks\ProjectTaskQAAssignmentController;
 use App\Http\Controllers\api\v1\Tasks\TaskController;
 use App\Http\Controllers\api\v1\Tasks\TaskPriorityLevelsAndStatusesController;
 use App\Http\Controllers\api\v1\Teams\TeamController;
@@ -31,13 +32,15 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('tenant/members', TenantMembersController::class)
         ->parameters(['members' => 'user']);
     Route::apiResource('projects', ProjectController::class);
+
+    Route::patch('tasks/{task}/status', [TaskStatusController::class, 'update']);
+    Route::patch('tasks/{task}/assign-developer', [ProjectTaskDevAssignmentController::class, 'store']);
+    Route::delete('tasks/{task}/unassign-developer', [ProjectTaskDevAssignmentController::class, 'destroy']);
+    Route::patch('tasks/{task}/assign-qa', [ProjectTaskQAAssignmentController::class, 'store']);
+    Route::delete('tasks/{task}/unassign-qa', [ProjectTaskQAAssignmentController::class, 'destroy']);
     Route::apiResource('projects.tasks', TaskController::class)->shallow();
     Route::apiResource('tasks.comments', TaskCommentController::class)->shallow()->except('index');
     Route::get('statuses-and-priority-levels', TaskPriorityLevelsAndStatusesController::class);
-
-    // Custom route for updating task status
-    Route::patch('tasks/{task}/status', [TaskStatusController::class, 'update']);
-    Route::patch('tasks/{task}/assign', ProjectTaskAssignmentController::class);
 });
 
 Route::post('auth/register', RegisterController::class)->name('register');

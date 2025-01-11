@@ -3,6 +3,153 @@ description: ''
 endpoints:
   -
     httpMethods:
+      - PATCH
+    uri: 'api/v1/tasks/{task_id}/status'
+    metadata:
+      groupName: 'Task Management'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update Task Status'
+      description: 'Update the status of the specified task.'
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      task_id:
+        name: task_id
+        description: 'The ID of the task.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      task_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      status:
+        name: status
+        description: ''
+        required: true
+        example: 'on hold'
+        type: string
+        enumValues:
+          - 'not started'
+          - 'in progress'
+          - completed
+          - 'on hold'
+          - blocked
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      status: 'on hold'
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {"data": {
+          "id": 15,
+          "title": "update title 1",
+          "description": "description",
+          "priority_level": "urgent",
+          "status": "completed",
+          "deadline_at": null,
+          "started_at": "2024-12-22",
+          "completed_at": "2024-12-22",
+          "project": {
+          "id": 2,
+          "name": "update project",
+          "description": "description"
+          }
+          }}
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 2|8EYBYnTUxZ5e8etdkHYpik1kYkWPL0cIDpthpAUce72bb176'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PATCH
+    uri: 'api/v1/tasks/{task_id}/assign'
+    metadata:
+      groupName: 'Task Management'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update the assigned developer and QA for the task.'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      task_id:
+        name: task_id
+        description: 'The ID of the task.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      task_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      assigned_dev_id:
+        name: assigned_dev_id
+        description: 'The <code>id</code> of an existing record in the users table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      assigned_qa_id:
+        name: assigned_qa_id
+        description: 'The <code>id</code> of an existing record in the users table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 2|8EYBYnTUxZ5e8etdkHYpik1kYkWPL0cIDpthpAUce72bb176'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
       - GET
     uri: 'api/v1/projects/{project_id}/tasks'
     metadata:
@@ -127,7 +274,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 1|lgqxcMuZhmBmxwnneuRUljoHRip5zYa3WWUVD71C480a6482'
+      - 'Bearer 2|8EYBYnTUxZ5e8etdkHYpik1kYkWPL0cIDpthpAUce72bb176'
     controller: null
     method: null
     route: null
@@ -185,8 +332,8 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         custom: []
-      assigned_id:
-        name: assigned_id
+      assigned_dev_id:
+        name: assigned_dev_id
         description: 'The ID of the user assigned to the task. The <code>id</code> of an existing record in the users table.'
         required: false
         example: 5
@@ -257,7 +404,7 @@ endpoints:
     cleanBodyParameters:
       title: 'Implement authentication'
       description: 'Develop login and registration functionality.'
-      assigned_id: 5
+      assigned_dev_id: 5
       priority_level: High
       status: 'In Progress'
       deadline_at: '2024-01-15'
@@ -290,7 +437,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 1|lgqxcMuZhmBmxwnneuRUljoHRip5zYa3WWUVD71C480a6482'
+      - 'Bearer 2|8EYBYnTUxZ5e8etdkHYpik1kYkWPL0cIDpthpAUce72bb176'
     controller: null
     method: null
     route: null
@@ -333,7 +480,7 @@ endpoints:
     responses:
       -
         status: 200
-        content: '{"data":{"id":1,"title":"Culpa quia dolorem et consequatur.","description":"How brave they''ll all think me for a great hurry; ''and their names were Elsie, Lacie, and Tillie; and they walked off together, Alice heard it say to itself ''The Duchess! The Duchess! Oh my fur and whiskers! She''ll get me executed, as sure as ferrets are ferrets! Where CAN I have to whisper a hint to Time, and round goes the clock in a loud, indignant voice, but she did not notice this question, but hurriedly went on, ''you see, a dog growls when it''s pleased. Now I growl when I''m angry.","priority_level":"urgent","status":"blocked","deadline_at":"2025-01-06","started_at":"2025-01-02","completed_at":"2025-01-04","created_at":"2025-01-02T11:10:03.000000Z","project":{"id":1,"name":"Accusamus exercitationem quae aut voluptatem inventore odit.","description":"There was certainly English. ''I don''t think they play at all know whether it would not give all else for two reasons. First, because I''m on the spot.'' This did not like the name: however, it only.","created_at":"2025-01-02T11:10:02.000000Z"},"assigned_member":{"id":7,"name":"Perry Huel","team_role":"member"},"comments":[{"id":1,"content":"Yet you turned a back-somersault in at the Gryphon whispered in reply, ''for fear they should forget them before the end of half those long words, and, what''s more, I don''t keep the same thing as a.","created_at":"2025-01-02T11:14:32.000000Z","updated_at":"2025-01-02T11:14:32.000000Z","author":{"id":12,"name":"Mikayla Jaskolski","email":"franco.larkin@example.com","role":"admin"}}]}}'
+        content: '{"data":{"id":1,"title":"Culpa quia dolorem et consequatur.","description":"How brave they''ll all think me for a great hurry; ''and their names were Elsie, Lacie, and Tillie; and they walked off together, Alice heard it say to itself ''The Duchess! The Duchess! Oh my fur and whiskers! She''ll get me executed, as sure as ferrets are ferrets! Where CAN I have to whisper a hint to Time, and round goes the clock in a loud, indignant voice, but she did not notice this question, but hurriedly went on, ''you see, a dog growls when it''s pleased. Now I growl when I''m angry.","priority_level":"urgent","status":"blocked","deadline_at":"2025-01-04","started_at":"2025-01-02","completed_at":"2025-01-04","created_at":"2025-01-02T11:10:03.000000Z","project":{"id":1,"name":"Accusamus exercitationem quae aut voluptatem inventore odit.","description":"There was certainly English. ''I don''t think they play at all know whether it would not give all else for two reasons. First, because I''m on the spot.'' This did not like the name: however, it only.","created_at":"2025-01-02T11:10:02.000000Z"},"assigned_dev":null,"assigned_qa":null,"comments":[{"id":1,"content":"Yet you turned a back-somersault in at the Gryphon whispered in reply, ''for fear they should forget them before the end of half those long words, and, what''s more, I don''t keep the same thing as a.","created_at":"2025-01-02T11:14:32.000000Z","updated_at":"2025-01-02T11:14:32.000000Z","author":{"id":12,"name":"Mikayla Jaskolski","email":"franco.larkin@example.com","role":"admin"}}]}}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -344,7 +491,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 1|lgqxcMuZhmBmxwnneuRUljoHRip5zYa3WWUVD71C480a6482'
+      - 'Bearer 2|8EYBYnTUxZ5e8etdkHYpik1kYkWPL0cIDpthpAUce72bb176'
     controller: null
     method: null
     route: null
@@ -403,8 +550,8 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         custom: []
-      assigned_id:
-        name: assigned_id
+      assigned_dev_id:
+        name: assigned_dev_id
         description: 'The ID of the user assigned to the task. The <code>id</code> of an existing record in the users table.'
         required: false
         example: 5
@@ -475,7 +622,7 @@ endpoints:
     cleanBodyParameters:
       title: 'Implement authentication'
       description: 'Develop login and registration functionality.'
-      assigned_id: 5
+      assigned_dev_id: 5
       priority_level: High
       status: 'In Progress'
       deadline_at: '2024-01-15'
@@ -508,7 +655,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 1|lgqxcMuZhmBmxwnneuRUljoHRip5zYa3WWUVD71C480a6482'
+      - 'Bearer 2|8EYBYnTUxZ5e8etdkHYpik1kYkWPL0cIDpthpAUce72bb176'
     controller: null
     method: null
     route: null
@@ -553,7 +700,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 1|lgqxcMuZhmBmxwnneuRUljoHRip5zYa3WWUVD71C480a6482'
+      - 'Bearer 2|8EYBYnTUxZ5e8etdkHYpik1kYkWPL0cIDpthpAUce72bb176'
     controller: null
     method: null
     route: null
@@ -596,7 +743,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 1|lgqxcMuZhmBmxwnneuRUljoHRip5zYa3WWUVD71C480a6482'
+      - 'Bearer 2|8EYBYnTUxZ5e8etdkHYpik1kYkWPL0cIDpthpAUce72bb176'
     controller: null
     method: null
     route: null
