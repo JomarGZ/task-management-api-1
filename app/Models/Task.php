@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Task extends Model implements HasMedia
 {
@@ -45,7 +46,7 @@ class Task extends Model implements HasMedia
         return $this->belongsTo(User::class, 'assigned_qa_id');
     }
 
-    public function registerMediaConversion()
+    public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('thumbnail-150')
             ->width(150)
