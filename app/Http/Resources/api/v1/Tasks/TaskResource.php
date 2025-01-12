@@ -30,7 +30,16 @@ class TaskResource extends JsonResource
             'project'           => ProjectResource::make($this->whenLoaded('project')),
             'assigned_dev'      => TeamMemberResource::make($this->whenLoaded('assignedDev')),
             'assigned_qa'       => TeamMemberResource::make($this->whenLoaded('assignedQA')),
-            'comments'          => TaskCommentResource::collection($this->whenLoaded('comments'))
+            'comments'          => TaskCommentResource::collection($this->whenLoaded('comments')),
+            'photo_attachments' => $this->getMedia('task_attachments')->map(function ($media) {
+                return [
+                    'id' => $media->id,
+                    'url' => $media->getUrl(),
+                    'name' => $media->file_name,
+                    'size' => $media->size,
+                    'mime_type' => $media->mime_type,
+                ];
+            }),
         ];
     }
 }

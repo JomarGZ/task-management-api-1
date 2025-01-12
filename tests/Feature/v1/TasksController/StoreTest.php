@@ -10,6 +10,7 @@ use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Laravel\Sanctum\Sanctum;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Tests\TestCase;
 
 class StoreTest extends TestCase
@@ -66,7 +67,13 @@ class StoreTest extends TestCase
         $response = $this->postJson("api/v1/projects/{$this->project->id}/tasks", [
             'title' => 'title test',
             'description' => 'description test',
+            'photo_attachments' => [
+                new \Illuminate\Http\UploadedFile(resource_path('test-files/image-motorbike.jpg'), 'image-motorbike.jpg', 'image/jpeg', null, true),
+                new \Illuminate\Http\UploadedFile(resource_path('test-files/image-car.jpg'), 'image-car.jpg', 'image/jpeg', null, true),
+            ],
         ]);
+
+        $task = Task::latest()->first();
         $response->assertCreated();
 
         $response->assertJsonStructure([
@@ -86,7 +93,8 @@ class StoreTest extends TestCase
                 ]
             ]
         ]);
-
+        $this->assertCount(2, $task->getMedia('task_attachments'));
+        $this->assertContains('image-motorbike.jpg', $task->getMedia('task_attachments')->pluck('file_name')->toArray());
         $this->assertDatabaseHas('tasks', [
             'title' => 'title test'
         ]);

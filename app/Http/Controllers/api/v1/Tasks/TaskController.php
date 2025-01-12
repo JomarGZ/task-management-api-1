@@ -77,25 +77,50 @@ class TaskController extends ApiController
      * 
      * Store a newly created task in storage.
      * @group Task Management
-     * @response 201 {"data": {
-        "id": 18,
+     * @response 201 {    "data": {
+        "id": 43,
         "title": "new taskdasdadasdsadsasdaddadasdasddas",
-        "description": "this is description",
+        "description": "this is descriptionp",
         "priority_level": null,
         "status": null,
         "deadline_at": null,
         "started_at": null,
         "completed_at": null,
+        "created_at": "2025-01-12T05:03:50.000000Z",
+        "photo_attachments": [
+            {
+                "id": 24,
+                "url": "http://task-management-api-1.test/media/24/image-car.jpg",
+                "name": "image-car.jpg",
+                "size": 1834859,
+                "mime_type": "image/jpeg"
+            },
+            {
+                "id": 25,
+                "url": "http://task-management-api-1.test/media/25/image-motorbike.jpg",
+                "name": "image-motorbike.jpg",
+                "size": 312287,
+                "mime_type": "image/jpeg"
+            }
+        ],
         "project": {
-            "id": 2,
-            "name": "update project",
-            "description": "description"
+            "id": 1,
+            "name": "Odio et impedit error et veniam quam.",
+            "description": "I'll be jury,\" Said cunning old Fury: \"I'll try the first to speak. 'What size do you know about it, you know.' 'Not at all,' said Alice: 'besides, that's not a moment like a serpent. She had.",
+            "created_at": "2025-01-10T08:29:13.000000Z"
         }
     }}
      */
     public function store(StoreTaskRequest $request, Project $project)
     {
         $task = $project->tasks()->create($request->validated());
+
+        if ($request->hasFile('photo_attachments')) {
+            foreach($request->file('photo_attachments') as $attachment) {
+                $task->addMedia($attachment)->preservingOriginal()->toMediaCollection('task_attachments');
+            }
+                
+        }
 
         return new TaskResource($task->load('project'));
     }
@@ -108,7 +133,7 @@ class TaskController extends ApiController
      * 
      */
     public function show(Task $task)
-    {
+    { 
         Gate::authorize('view', $task);
 
        return new TaskResource($task->load([
@@ -125,19 +150,37 @@ class TaskController extends ApiController
      * 
      * Update the specified task in storage.
      * @group Task Management
-     * @response 200 {"data": {
-        "id": 15,
-        "title": "update title 1",
-        "description": "description",
-        "priority_level": "urgent",
-        "status": "completed",
+     * @response 200 {    "data": {
+        "id": 43,
+        "title": "new taskdasdadasdsadsasdaddadasdasddas",
+        "description": "this is descriptionp",
+        "priority_level": null,
+        "status": null,
         "deadline_at": null,
-        "started_at": "2024-12-22",
-        "completed_at": "2024-12-22",
+        "started_at": null,
+        "completed_at": null,
+        "created_at": "2025-01-12T05:03:50.000000Z",
+        "photo_attachments": [
+            {
+                "id": 24,
+                "url": "http://task-management-api-1.test/media/24/image-car.jpg",
+                "name": "image-car.jpg",
+                "size": 1834859,
+                "mime_type": "image/jpeg"
+            },
+            {
+                "id": 25,
+                "url": "http://task-management-api-1.test/media/25/image-motorbike.jpg",
+                "name": "image-motorbike.jpg",
+                "size": 312287,
+                "mime_type": "image/jpeg"
+            }
+        ],
         "project": {
-            "id": 2,
-            "name": "update project",
-            "description": "description"
+            "id": 1,
+            "name": "Odio et impedit error et veniam quam.",
+            "description": "I'll be jury,\" Said cunning old Fury: \"I'll try the first to speak. 'What size do you know about it, you know.' 'Not at all,' said Alice: 'besides, that's not a moment like a serpent. She had.",
+            "created_at": "2025-01-10T08:29:13.000000Z"
         }
     }}
      */

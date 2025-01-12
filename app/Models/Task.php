@@ -8,12 +8,15 @@ use App\Traits\HasComment;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Task extends Model
+class Task extends Model implements HasMedia
 {
     /** @use HasFactory<\Database\Factories\TaskFactory> */
     use HasFactory;
-    use BelongsToTenant, HasComment;
+    use BelongsToTenant, HasComment, InteractsWithMedia;
 
     protected $fillable = [
         'tenant_id',
@@ -41,6 +44,13 @@ class Task extends Model
     public function assignedQA()
     {
         return $this->belongsTo(User::class, 'assigned_qa_id');
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('thumbnail-150')
+            ->width(150)
+            ->height(150);
     }
 
     public function scopeSearch($query, $search) {
