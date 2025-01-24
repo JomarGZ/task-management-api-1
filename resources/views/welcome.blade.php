@@ -36,9 +36,6 @@
                 </div>
                 <div class="flex space-x-4">
                     <button class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition">
-                        Get API Key
-                    </button>
-                    <button class="border border-blue-600 text-blue-600 px-8 py-3 rounded-lg hover:bg-blue-50 transition">
                         View Docs
                     </button>
                 </div>
