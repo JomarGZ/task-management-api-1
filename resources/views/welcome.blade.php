@@ -31,7 +31,7 @@
                 <div class="bg-white rounded-lg p-4 shadow-md">
                     <h3 class="font-bold text-lg text-blue-600 mb-2">Quick Start</h3>
                     <code class="block bg-gray-100 p-2 rounded text-sm">
-                         GET https://api.sprintsync.tech/v1/register
+                         GET https://api.sprintsync.tech/v1/auth/register
                     </code>
                 </div>
                 <div class="flex space-x-4">
