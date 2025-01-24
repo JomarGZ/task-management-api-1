@@ -7,17 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-blue-100 min-h-screen flex flex-col">
-    <nav class="bg-white shadow-sm py-4 px-24">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="text-2xl font-bold text-blue-600">SprintSync API</div>
-            <div class="space-x-4">
-                <a href="#" class="text-gray-700 hover:text-blue-600">Documentation</a>
-                <a href="#" class="text-gray-700 hover:text-blue-600">Endpoints</a>
-                <a href="#" class="text-gray-700 hover:text-blue-600">Support</a>
-            </div>
-        </div>
-    </nav>
-
     <main class="flex-grow container mx-auto px-24 py-16 grid md:grid-cols-2 gap-12 items-center">
         <div class="space-y-6">
             <h1 class="text-5xl font-extrabold text-gray-900 leading-tight">
@@ -27,19 +16,6 @@
             <p class="text-xl text-gray-600">
                 Powerful, scalable API for seamless integration with your engineering workflow management system.
             </p>
-            <div class="space-y-4">
-                <div class="bg-white rounded-lg p-4 shadow-md">
-                    <h3 class="font-bold text-lg text-blue-600 mb-2">Quick Start</h3>
-                    <code class="block bg-gray-100 p-2 rounded text-sm">
-                         GET https://api.sprintsync.tech/v1/auth/register
-                    </code>
-                </div>
-                <div class="flex space-x-4">
-                    <button class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition">
-                        View Docs
-                    </button>
-                </div>
-            </div>
         </div>
         
         <div class="bg-white rounded-2xl shadow-2xl p-8 flex items-center justify-center">
@@ -84,7 +60,6 @@
             </div>
         </div>
     </main>
-
     <footer class="bg-white py-6 border-t">
         <div class="container mx-auto text-center text-gray-600">
             © 2025 SprintSync API. All rights reserved.
