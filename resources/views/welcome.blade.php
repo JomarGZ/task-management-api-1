@@ -10,7 +10,7 @@
     <main class="flex-grow container mx-auto px-24 py-16 grid md:grid-cols-2 gap-12 items-center">
         <div class="space-y-6">
             <h1 class="text-5xl font-extrabold text-gray-900 leading-tight">
-                SprintSync <br/>
+                SprintSynccccc <br/>
                 <span class="text-blue-600">Backend API</span>
             </h1>
             <p class="text-xl text-gray-600">
