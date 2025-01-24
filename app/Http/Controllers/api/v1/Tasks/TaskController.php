@@ -7,7 +7,7 @@ use App\Http\Requests\api\v1\Tasks\StoreTaskRequest;
 use App\Http\Resources\api\v1\Tasks\TaskResource;
 use App\Models\Project;
 use App\Models\Task;
-use App\Services\V1\TaskService;
+use App\Services\v1\TaskService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;

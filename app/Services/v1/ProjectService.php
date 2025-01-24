@@ -1,5 +1,5 @@
 <?php
-namespace App\Services\V1;
+namespace App\Services\v1;
 
 class ProjectService {
 

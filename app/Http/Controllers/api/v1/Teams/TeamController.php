@@ -6,7 +6,7 @@ use App\Http\Controllers\api\v1\ApiController;
 use App\Http\Requests\api\v1\Teams\StoreTeamRequest;
 use App\Http\Resources\api\v1\Teams\TeamResource;
 use App\Models\Team;
-use App\Services\V1\TeamService;
+use App\Services\v1\TeamService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;

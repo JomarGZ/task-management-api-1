@@ -4,12 +4,10 @@ namespace App\Http\Controllers\api\v1\Tenants;
 
 use App\Http\Controllers\api\v1\ApiController;
 use App\Http\Requests\api\v1\TenantMembers\AddMemberRequest;
-use App\Http\Requests\api\v1\TenantMembers\FilterTenantMemberRequest;
 use App\Http\Requests\api\v1\TenantMembers\UpdateMemeberRequest;
 use App\Http\Resources\api\v1\tenants\TenantMemberResource;
 use App\Models\User;
-use App\Services\V1\TenantMemberService;
-use App\Utilities\ApiResponse;
+use App\Services\v1\TenantMemberService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;

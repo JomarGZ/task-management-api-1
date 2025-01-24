@@ -6,7 +6,7 @@ use App\Http\Controllers\api\v1\ApiController;
 use App\Http\Requests\api\v1\Projects\StoreProjectRequest;
 use App\Http\Resources\api\v1\Projects\ProjectResource;
 use App\Models\Project;
-use App\Services\V1\ProjectService;
+use App\Services\v1\ProjectService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
