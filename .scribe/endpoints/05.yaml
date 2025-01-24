@@ -38,7 +38,7 @@ endpoints:
         name: status
         description: ''
         required: true
-        example: 'on hold'
+        example: blocked
         type: string
         enumValues:
           - 'not started'
@@ -50,7 +50,7 @@ endpoints:
         nullable: false
         custom: []
     cleanBodyParameters:
-      status: 'on hold'
+      status: blocked
     fileParameters: []
     responses:
       -
@@ -86,13 +86,13 @@ endpoints:
   -
     httpMethods:
       - PATCH
-    uri: 'api/v1/tasks/{task_id}/assign'
+    uri: 'api/v1/tasks/{task_id}/assign-developer'
     metadata:
       groupName: 'Task Management'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Update the assigned developer and QA for the task.'
+      title: 'assign or reassign a developer to a task'
       description: ''
       authenticated: true
       custom: []
@@ -138,7 +138,269 @@ endpoints:
         custom: []
     cleanBodyParameters: []
     fileParameters: []
-    responses: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {   "data": {
+          "id": 2,
+          "title": "Eum harum aliquid qui beatae inventore quo recusandae.",
+          "description": "I'll try if I shall remember it in large letters. It was all ridges and furrows; the balls were live hedgehogs, the mallets live flamingoes, and the Hatter continued, 'in this way:-- \"Up above the world am I? Ah, THAT'S the great puzzle!' And she began fancying the sort of thing never happened, and now here I am so VERY much out of this ointment--one shilling the box-- Allow me to introduce some other subject of conversation. 'Are you--are you fond--of--of dogs?' The Mouse only growled in.",
+          "priority_level": "low",
+          "status": "completed",
+          "deadline_at": "2025-01-14",
+          "started_at": "2025-01-10",
+          "completed_at": "2025-01-12",
+          "created_at": "2025-01-10T08:29:13.000000Z",
+          "project": {
+          "id": 1,
+          "name": "Odio et impedit error et veniam quam.",
+          "description": "I'll be jury,\" Said cunning old Fury: \"I'll try the first to speak. 'What size do you know about it, you know.' 'Not at all,' said Alice: 'besides, that's not a moment like a serpent. She had.",
+          "created_at": null
+          },
+          "assigned_dev": {
+          "id": 2,
+          "name": "Evalyn Conroy"
+          },
+          "assigned_qa": null
+          }}
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 2|8EYBYnTUxZ5e8etdkHYpik1kYkWPL0cIDpthpAUce72bb176'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/tasks/{task_id}/unassign-developer'
+    metadata:
+      groupName: 'Task Management'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'unassign a developer from a task'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      task_id:
+        name: task_id
+        description: 'The ID of the task.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      task_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {"data": {
+          "id": 2,
+          "title": "Eum harum aliquid qui beatae inventore quo recusandae.",
+          "description": "I'll try if I shall remember it in large letters. It was all ridges and furrows; the balls were live hedgehogs, the mallets live flamingoes, and the Hatter continued, 'in this way:-- \"Up above the world am I? Ah, THAT'S the great puzzle!' And she began fancying the sort of thing never happened, and now here I am so VERY much out of this ointment--one shilling the box-- Allow me to introduce some other subject of conversation. 'Are you--are you fond--of--of dogs?' The Mouse only growled in.",
+          "priority_level": "low",
+          "status": "completed",
+          "deadline_at": "2025-01-14",
+          "started_at": "2025-01-10",
+          "completed_at": "2025-01-12",
+          "created_at": "2025-01-10T08:29:13.000000Z",
+          "project": {
+          "id": 1,
+          "name": "Odio et impedit error et veniam quam.",
+          "description": "I'll be jury,\" Said cunning old Fury: \"I'll try the first to speak. 'What size do you know about it, you know.' 'Not at all,' said Alice: 'besides, that's not a moment like a serpent. She had.",
+          "created_at": null
+          },
+          "assigned_dev": null,
+          "assigned_qa": null
+          }
+          }}
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 2|8EYBYnTUxZ5e8etdkHYpik1kYkWPL0cIDpthpAUce72bb176'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PATCH
+    uri: 'api/v1/tasks/{task_id}/assign-qa'
+    metadata:
+      groupName: 'Task Management'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'assign or reassign a QA to a task'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      task_id:
+        name: task_id
+        description: 'The ID of the task.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      task_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      assigned_dev_id:
+        name: assigned_dev_id
+        description: 'The <code>id</code> of an existing record in the users table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      assigned_qa_id:
+        name: assigned_qa_id
+        description: 'The <code>id</code> of an existing record in the users table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {   "data": {
+          "id": 2,
+          "title": "Eum harum aliquid qui beatae inventore quo recusandae.",
+          "description": "I'll try if I shall remember it in large letters. It was all ridges and furrows; the balls were live hedgehogs, the mallets live flamingoes, and the Hatter continued, 'in this way:-- \"Up above the world am I? Ah, THAT'S the great puzzle!' And she began fancying the sort of thing never happened, and now here I am so VERY much out of this ointment--one shilling the box-- Allow me to introduce some other subject of conversation. 'Are you--are you fond--of--of dogs?' The Mouse only growled in.",
+          "priority_level": "low",
+          "status": "completed",
+          "deadline_at": "2025-01-14",
+          "started_at": "2025-01-10",
+          "completed_at": "2025-01-12",
+          "created_at": "2025-01-10T08:29:13.000000Z",
+          "project": {
+          "id": 1,
+          "name": "Odio et impedit error et veniam quam.",
+          "description": "I'll be jury,\" Said cunning old Fury: \"I'll try the first to speak. 'What size do you know about it, you know.' 'Not at all,' said Alice: 'besides, that's not a moment like a serpent. She had.",
+          "created_at": null
+          },
+          "assigned_dev": null,
+          "assigned_qa": {
+          "id": 2,
+          "name": "Evalyn Conroy"
+          }
+          }}
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 2|8EYBYnTUxZ5e8etdkHYpik1kYkWPL0cIDpthpAUce72bb176'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/tasks/{task_id}/unassign-qa'
+    metadata:
+      groupName: 'Task Management'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Unassign a QA to a task'
+      description: ''
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      task_id:
+        name: task_id
+        description: 'The ID of the task.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      task_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {   "data": {
+          "id": 2,
+          "title": "Eum harum aliquid qui beatae inventore quo recusandae.",
+          "description": "I'll try if I shall remember it in large letters. It was all ridges and furrows; the balls were live hedgehogs, the mallets live flamingoes, and the Hatter continued, 'in this way:-- \"Up above the world am I? Ah, THAT'S the great puzzle!' And she began fancying the sort of thing never happened, and now here I am so VERY much out of this ointment--one shilling the box-- Allow me to introduce some other subject of conversation. 'Are you--are you fond--of--of dogs?' The Mouse only growled in.",
+          "priority_level": "low",
+          "status": "completed",
+          "deadline_at": "2025-01-14",
+          "started_at": "2025-01-10",
+          "completed_at": "2025-01-12",
+          "created_at": "2025-01-10T08:29:13.000000Z",
+          "project": {
+          "id": 1,
+          "name": "Odio et impedit error et veniam quam.",
+          "description": "I'll be jury,\" Said cunning old Fury: \"I'll try the first to speak. 'What size do you know about it, you know.' 'Not at all,' said Alice: 'besides, that's not a moment like a serpent. She had.",
+          "created_at": null
+          },
+          "assigned_dev": null,
+          "assigned_qa": null
+          }}
+        headers: []
+        description: ''
+        custom: []
     responseFields: []
     auth:
       - headers
@@ -262,8 +524,8 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 200
-        content: '{"data":[],"links":{"first":"http:\/\/task-management-api-1.test\/api\/v1\/projects\/1\/tasks?page=1","last":"http:\/\/task-management-api-1.test\/api\/v1\/projects\/1\/tasks?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":null,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"http:\/\/task-management-api-1.test\/api\/v1\/projects\/1\/tasks?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"http:\/\/task-management-api-1.test\/api\/v1\/projects\/1\/tasks","per_page":5,"to":null,"total":0}}'
+        status: 401
+        content: '{"message":"Unauthenticated."}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -294,7 +556,7 @@ endpoints:
       custom: []
     headers:
       Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
+      Content-Type: multipart/form-data
       Accept: application/json
     urlParameters:
       project_id:
@@ -401,6 +663,17 @@ endpoints:
         exampleWasSpecified: false
         nullable: true
         custom: []
+      photo_attachments:
+        name: photo_attachments
+        description: 'Must be an image.'
+        required: false
+        example:
+          - null
+        type: 'file[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
     cleanBodyParameters:
       title: 'Implement authentication'
       description: 'Develop login and registration functionality.'
@@ -410,24 +683,44 @@ endpoints:
       deadline_at: '2024-01-15'
       started_at: '2024-01-01'
       completed_at: '2024-01-20'
-    fileParameters: []
+    fileParameters:
+      photo_attachments:
+        - null
     responses:
       -
         status: 201
         content: |-
-          {"data": {
-          "id": 18,
+          {    "data": {
+          "id": 43,
           "title": "new taskdasdadasdsadsasdaddadasdasddas",
-          "description": "this is description",
+          "description": "this is descriptionp",
           "priority_level": null,
           "status": null,
           "deadline_at": null,
           "started_at": null,
           "completed_at": null,
+          "created_at": "2025-01-12T05:03:50.000000Z",
+          "photo_attachments": [
+          {
+          "id": 24,
+          "url": "http://task-management-api-1.test/media/24/image-car.jpg",
+          "name": "image-car.jpg",
+          "size": 1834859,
+          "mime_type": "image/jpeg"
+          },
+          {
+          "id": 25,
+          "url": "http://task-management-api-1.test/media/25/image-motorbike.jpg",
+          "name": "image-motorbike.jpg",
+          "size": 312287,
+          "mime_type": "image/jpeg"
+          }
+          ],
           "project": {
-          "id": 2,
-          "name": "update project",
-          "description": "description"
+          "id": 1,
+          "name": "Odio et impedit error et veniam quam.",
+          "description": "I'll be jury,\" Said cunning old Fury: \"I'll try the first to speak. 'What size do you know about it, you know.' 'Not at all,' said Alice: 'besides, that's not a moment like a serpent. She had.",
+          "created_at": "2025-01-10T08:29:13.000000Z"
           }
           }}
         headers: []
@@ -479,8 +772,8 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 200
-        content: '{"data":{"id":1,"title":"Culpa quia dolorem et consequatur.","description":"How brave they''ll all think me for a great hurry; ''and their names were Elsie, Lacie, and Tillie; and they walked off together, Alice heard it say to itself ''The Duchess! The Duchess! Oh my fur and whiskers! She''ll get me executed, as sure as ferrets are ferrets! Where CAN I have to whisper a hint to Time, and round goes the clock in a loud, indignant voice, but she did not notice this question, but hurriedly went on, ''you see, a dog growls when it''s pleased. Now I growl when I''m angry.","priority_level":"urgent","status":"blocked","deadline_at":"2025-01-04","started_at":"2025-01-02","completed_at":"2025-01-04","created_at":"2025-01-02T11:10:03.000000Z","project":{"id":1,"name":"Accusamus exercitationem quae aut voluptatem inventore odit.","description":"There was certainly English. ''I don''t think they play at all know whether it would not give all else for two reasons. First, because I''m on the spot.'' This did not like the name: however, it only.","created_at":"2025-01-02T11:10:02.000000Z"},"assigned_dev":null,"assigned_qa":null,"comments":[{"id":1,"content":"Yet you turned a back-somersault in at the Gryphon whispered in reply, ''for fear they should forget them before the end of half those long words, and, what''s more, I don''t keep the same thing as a.","created_at":"2025-01-02T11:14:32.000000Z","updated_at":"2025-01-02T11:14:32.000000Z","author":{"id":12,"name":"Mikayla Jaskolski","email":"franco.larkin@example.com","role":"admin"}}]}}'
+        status: 401
+        content: '{"message":"Unauthenticated."}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -512,7 +805,7 @@ endpoints:
       custom: []
     headers:
       Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
+      Content-Type: multipart/form-data
       Accept: application/json
     urlParameters:
       id:
@@ -619,6 +912,17 @@ endpoints:
         exampleWasSpecified: false
         nullable: true
         custom: []
+      photo_attachments:
+        name: photo_attachments
+        description: 'Must be an image.'
+        required: false
+        example:
+          - null
+        type: 'file[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
     cleanBodyParameters:
       title: 'Implement authentication'
       description: 'Develop login and registration functionality.'
@@ -628,24 +932,44 @@ endpoints:
       deadline_at: '2024-01-15'
       started_at: '2024-01-01'
       completed_at: '2024-01-20'
-    fileParameters: []
+    fileParameters:
+      photo_attachments:
+        - null
     responses:
       -
         status: 200
         content: |-
-          {"data": {
-          "id": 15,
-          "title": "update title 1",
-          "description": "description",
-          "priority_level": "urgent",
-          "status": "completed",
+          {    "data": {
+          "id": 43,
+          "title": "new taskdasdadasdsadsasdaddadasdasddas",
+          "description": "this is descriptionp",
+          "priority_level": null,
+          "status": null,
           "deadline_at": null,
-          "started_at": "2024-12-22",
-          "completed_at": "2024-12-22",
+          "started_at": null,
+          "completed_at": null,
+          "created_at": "2025-01-12T05:03:50.000000Z",
+          "photo_attachments": [
+          {
+          "id": 24,
+          "url": "http://task-management-api-1.test/media/24/image-car.jpg",
+          "name": "image-car.jpg",
+          "size": 1834859,
+          "mime_type": "image/jpeg"
+          },
+          {
+          "id": 25,
+          "url": "http://task-management-api-1.test/media/25/image-motorbike.jpg",
+          "name": "image-motorbike.jpg",
+          "size": 312287,
+          "mime_type": "image/jpeg"
+          }
+          ],
           "project": {
-          "id": 2,
-          "name": "update project",
-          "description": "description"
+          "id": 1,
+          "name": "Odio et impedit error et veniam quam.",
+          "description": "I'll be jury,\" Said cunning old Fury: \"I'll try the first to speak. 'What size do you know about it, you know.' 'Not at all,' said Alice: 'besides, that's not a moment like a serpent. She had.",
+          "created_at": "2025-01-10T08:29:13.000000Z"
           }
           }}
         headers: []
@@ -731,8 +1055,8 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 200
-        content: '{"status":200,"data":{"statuses":["not started","in progress","completed","on hold","blocked"],"priorityLevels":["low","medium","high","urgent"]},"message":"Statuses and priority levels retrieved successfully"}'
+        status: 401
+        content: '{"message":"Unauthenticated."}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json

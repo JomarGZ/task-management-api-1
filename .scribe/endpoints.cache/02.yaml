@@ -40,8 +40,8 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 200
-        content: '{"data":[{"id":2,"name":"Prof. Kiera Corwin DVM","team_role":"member"},{"id":3,"name":"Eileen Thompson","team_role":"member"},{"id":4,"name":"Baylee Dicki","team_role":"member"},{"id":5,"name":"Kory Bailey","team_role":"member"},{"id":6,"name":"Okey Greenholt","team_role":"member"},{"id":7,"name":"Perry Huel","team_role":"member"},{"id":8,"name":"Herman Jenkins","team_role":"member"},{"id":9,"name":"Elyse Block","team_role":"member"},{"id":10,"name":"Hilma Fritsch","team_role":"member"},{"id":11,"name":"Piper Lemke","team_role":"team lead"}]}'
+        status: 401
+        content: '{"message":"Unauthenticated."}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -94,7 +94,7 @@ endpoints:
         name: member_id
         description: 'The <code>id</code> of an existing record in the users table.'
         required: true
-        example: cum
+        example: esse
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -114,7 +114,7 @@ endpoints:
         nullable: false
         custom: []
     cleanBodyParameters:
-      member_id: cum
+      member_id: esse
       role: member
     fileParameters: []
     responses:

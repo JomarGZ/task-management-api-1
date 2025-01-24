@@ -27,7 +27,7 @@ endpoints:
         name: current_password
         description: ''
         required: true
-        example: molestiae
+        example: quia
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -37,15 +37,15 @@ endpoints:
         name: password
         description: ''
         required: true
-        example: provident
+        example: nihil
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
     cleanBodyParameters:
-      current_password: molestiae
-      password: provident
+      current_password: quia
+      password: nihil
     fileParameters: []
     responses:
       -

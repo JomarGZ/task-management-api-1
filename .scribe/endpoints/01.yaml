@@ -60,8 +60,8 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 200
-        content: '{"data":[],"links":{"first":"http:\/\/task-management-api-1.test\/api\/v1\/teams?page=1","last":"http:\/\/task-management-api-1.test\/api\/v1\/teams?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":null,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"http:\/\/task-management-api-1.test\/api\/v1\/teams?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"http:\/\/task-management-api-1.test\/api\/v1\/teams","per_page":5,"to":null,"total":0}}'
+        status: 401
+        content: '{"message":"Unauthenticated."}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
