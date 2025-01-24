@@ -26,7 +26,7 @@ jobs:
         node-version: 22
 
     - name: Install NPM Dependencies 
-      run: npm ci
+      run: npm install
     - name: Check npm and node versions
       run: |
         node -v
