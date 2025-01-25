@@ -33,12 +33,6 @@ jobs:
         npm -v
     - name: Build NPM Assets
       run: npm run build
-    - name: Check Permissions and Files in Build Directory
-      run: |
-        echo "Checking whoami and permissions on the build directory"
-        whoami
-        ls -l /var/www/task-management-api-1/public/build/
-        ls -ld /var/www/task-management-api-1/public/build/
 
     - name: Synchronize Files To Server
       uses: easingthemes/ssh-deploy@main
