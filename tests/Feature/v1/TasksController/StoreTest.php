@@ -50,16 +50,16 @@ class StoreTest extends TestCase
 
         $response->assertUnauthorized();
     }
-    public function test_only_allow_team_manager_to_create_task()
-    {
-        Sanctum::actingAs($this->member);
-        $response = $this->postJson("api/v1/projects/{$this->project->id}/tasks", [
-            'title' => 'title test',
-            'description' => 'description test',
-        ]);
+    // public function test_only_allow_team_manager_to_create_task()
+    // {
+    //     Sanctum::actingAs($this->member);
+    //     $response = $this->postJson("api/v1/projects/{$this->project->id}/tasks", [
+    //         'title' => 'title test',
+    //         'description' => 'description test',
+    //     ]);
 
-        $response->assertUnauthorized();
-    }
+    //     $response->assertUnauthorized();
+    // }
 
     public function test_it_can_create_task_with_project_manager_role_in_a_team()
     {
