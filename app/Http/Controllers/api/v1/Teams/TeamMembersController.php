@@ -21,9 +21,11 @@ class TeamMembersController extends ApiController
      */
     public function index(Team $team)
     {
-        $team->load('members');
+        $members = $team->members()
+        ->where('users.tenant_id', auth()->user()->tenant_id)
+        ->get();
         
-        return TeamMemberResource::collection($team->members);
+        return TeamMemberResource::collection($members);
     }
 
     /**
