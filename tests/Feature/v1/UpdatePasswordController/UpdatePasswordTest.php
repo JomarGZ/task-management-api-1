@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UpdatePasswordTest extends TestCase
 {
-    use LazilyRefreshDatabase;
+    use RefreshDatabase;
 
     private User $user;
     private string $currentPassword = 'current-password';

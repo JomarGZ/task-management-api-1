@@ -8,13 +8,14 @@ use App\Models\TeamUser;
 use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class DestroyTest extends TestCase
 {
-    use LazilyRefreshDatabase;
+    use RefreshDatabase;
 
     private Tenant $tenant;
     private User $admin;
@@ -30,7 +31,7 @@ class DestroyTest extends TestCase
 
         $this->admin = User::factory()->recycle($this->tenant)->create(['role' => Role::ADMIN->value]);
         $this->member = User::factory()->recycle($this->tenant)->create(['role' => Role::MEMBER->value]);
-        $this->team = Team::factory()->recycle($this->tenant)->create();
+        $this->team = Team::factory()->create();
         $this->teamMember = User::factory()->recycle($this->tenant)->create();
 
         $this->team->members()->attach($this->teamMember->id, ['tenant_id' => $this->tenant->id]);

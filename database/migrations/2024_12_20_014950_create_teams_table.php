@@ -14,11 +14,9 @@ return new class extends Migration
     {
         Schema::create('teams', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Tenant::class)->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->timestamps();
-
-            $table->index(['Tenant_id', 'created_at']);
+            $table->index('created_at');
         });
     }
 

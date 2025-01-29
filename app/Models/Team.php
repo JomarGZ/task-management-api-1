@@ -10,9 +10,8 @@ class Team extends Model
 {
     /** @use HasFactory<\Database\Factories\TeamFactory> */
     use HasFactory;
-    use BelongsToTenant;
 
-    protected $fillable = ['tenant_id', 'name'];
+    protected $fillable = ['name'];
 
     public function members()
     {
@@ -20,7 +19,8 @@ class Team extends Model
             User::class,
              'team_user', 
              'team_id', 
-             'member_id')
+             'member_id'
+             )
              ->withPivot('role')
              ->withTimestamps();
     }

@@ -10,7 +10,8 @@ use Tests\TestCase;
 
 class LoginUserTest extends TestCase
 {
-    use LazilyRefreshDatabase;
+    use RefreshDatabase;
+    
     /**
      * A basic feature test example.
      */

@@ -17,7 +17,7 @@ use Tests\TestCase;
 
 class StoreTest extends TestCase
 {
-    use LazilyRefreshDatabase;
+    use RefreshDatabase;
 
     private User $user;
     private Team $team;
@@ -29,15 +29,13 @@ class StoreTest extends TestCase
         
         $this->tenant = Tenant::factory()->create();
         $this->user = User::factory()->recycle($this->tenant)->create();
-        $this->team = Team::factory()->recycle($this->tenant)->create();
+        $this->team = Team::factory()->create();
         
         // Authenticate user
-        Sanctum::actingAs($this->user);
     }
 
     public function test_it_requires_authentication_to_create_a_project()
     {
-        $this->refreshApplication();
         
         $response = $this->postJson('api/v1/projects', [
             'name' => 'add project',
@@ -49,6 +47,8 @@ class StoreTest extends TestCase
     }
     public function test_can_create_project(): void
     {
+        Sanctum::actingAs($this->user);
+
         $response = $this->postJson('api/v1/projects', [
             'name' => 'add project',
             'description' => 'description'
@@ -60,6 +60,8 @@ class StoreTest extends TestCase
 
     public function test_project_should_belongs_to_the_authenticated_user_who_created_the_project()
     {
+        Sanctum::actingAs($this->user);
+
         $response = $this->postJson('api/v1/projects', [
             'name' => 'add project',
             'description' => 'description'
@@ -91,6 +93,7 @@ class StoreTest extends TestCase
         if (isset($data['team_id']) && $data['team_id'] === 1) {
             $data['team_id'] = $this->team->id;
         }
+        Sanctum::actingAs($this->user);
 
         $response = $this->postJson('/api/v1/projects', $data);
 

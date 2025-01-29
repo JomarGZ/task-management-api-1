@@ -9,6 +9,7 @@ use App\Models\Project;
 use App\Models\Task;
 use App\Models\Team;
 use App\Models\TeamUser;
+use Database\Seeders\v1\TeamSeeder;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -19,7 +20,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-
         $tenant = Tenant::factory()
             ->create();
 
@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
         ]);
         $members = User::factory(9)->recycle($tenant)->create(['role' => Role::MEMBER->value]);
 
-        $team = Team::factory()->recycle($tenant)->create();
+        $team = Team::factory()->create();
         $members->each(function($member) use ($team, $tenant) {
             TeamUser::factory()->recycle($team)->recycle($member)->recycle($tenant)->create([
                 'role' => Role::MEMBER->value

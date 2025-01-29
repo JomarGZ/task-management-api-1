@@ -16,7 +16,7 @@ use Tests\TestCase;
 
 class DestroyTest extends TestCase
 {
-    use LazilyRefreshDatabase;
+    use RefreshDatabase;
     
     private User $manager;
     private User $member;
@@ -32,7 +32,7 @@ class DestroyTest extends TestCase
         $this->tenant = Tenant::factory()->create();
         $this->manager = User::factory()->recycle($this->tenant)->create(['role' => Role::MEMBER->value]);
         $this->member = User::factory()->recycle($this->tenant)->create(['role' => Role::MEMBER->value]);
-        $this->team = Team::factory()->recycle($this->tenant)->create();
+        $this->team = Team::factory()->create();
         
         $this->team->members()->attach($this->manager->id, ['role' => Role::PROJECT_MANAGER->value, 'tenant_id' => $this->tenant->id]);
         $this->team->members()->attach($this->member->id, ['role' => Role::MEMBER->value, 'tenant_id' => $this->tenant->id]);
