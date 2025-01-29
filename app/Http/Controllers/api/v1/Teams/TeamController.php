@@ -6,12 +6,20 @@ use App\Http\Controllers\api\v1\ApiController;
 use App\Http\Requests\api\v1\Teams\StoreTeamRequest;
 use App\Http\Resources\api\v1\Teams\TeamResource;
 use App\Models\Team;
+use App\Services\v1\TeamService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 
 class TeamController extends ApiController
 {
+
+    protected $teamService;
+
+    public function __construct(TeamService $teamService)
+    {
+        $this->teamService = $teamService;
+    }
     /**
      * List Teams
      * 
@@ -25,17 +33,14 @@ class TeamController extends ApiController
      */
     public function index(Request $request)
     {
-        $column = $request->query('column', 'created_at');
-        $direction = $request->query('direction', 'desc');
-
-        if (!in_array($direction, ['asc', 'desc'])) {
-            $direction = 'desc';
-        }
-
-        if (!in_array($column, ['name'])) {
-            $column = 'created_at';
-        }
-
+        $column = $this->teamService
+            ->getValidSortColumn(
+                $request->query('column', 'created_at')
+            );
+        $direction = $this->teamService
+            ->getValidSortDirection(
+                $request->query('direction', 'desc')
+            );
         $teams = Team::query()
             ->select(['id', 'name'])
             ->search($request->query('search'))
@@ -43,7 +48,6 @@ class TeamController extends ApiController
             ->paginate(5);
 
        return TeamResource::collection($teams);
-
     }
 
     /**

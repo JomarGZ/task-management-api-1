@@ -14,7 +14,7 @@ paths:
       description: 'Change user password'
       parameters: []
       responses:
-        201:
+        200:
           description: ''
           content:
             application/json:
@@ -42,12 +42,12 @@ paths:
                 current_password:
                   type: string
                   description: ''
-                  example: sed
+                  example: molestiae
                   nullable: false
                 password:
                   type: string
                   description: ''
-                  example: omnis
+                  example: provident
                   nullable: false
               required:
                 - current_password
@@ -65,8 +65,16 @@ paths:
             application/json:
               schema:
                 type: object
-                example: {  }
-                properties: {  }
+                example:
+                  status: 200
+                  message: 'Successfully logged out.'
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: 'Successfully logged out.'
       tags:
         - Authentication
   /api/v1/auth/register:
@@ -85,7 +93,11 @@ paths:
                 example:
                   status: 201
                   data:
-                    access_token: '{YOUR_AUTH_KEY}'
+                    user:
+                      id: 16
+                      name: 'jomar godinez'
+                      email: jomar23@gmail.com
+                    access_token: 13|UDbQwZ8VdvhF635bikuBhejmBYO5LzdBXDYufIK6e8f5b1bf
                   message: 'Registered Successfully'
                 properties:
                   status:
@@ -94,9 +106,21 @@ paths:
                   data:
                     type: object
                     properties:
+                      user:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 16
+                          name:
+                            type: string
+                            example: 'jomar godinez'
+                          email:
+                            type: string
+                            example: jomar23@gmail.com
                       access_token:
                         type: string
-                        example: '{YOUR_AUTH_KEY}'
+                        example: 13|UDbQwZ8VdvhF635bikuBhejmBYO5LzdBXDYufIK6e8f5b1bf
                   message:
                     type: string
                     example: 'Registered Successfully'
@@ -136,30 +160,46 @@ paths:
       description: "Authenticate the user and returns the user's API token"
       parameters: []
       responses:
-        201:
+        200:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  status: 201
+                  status: 200
                   data:
-                    access_token: '{Your_auth_token}'
-                  message: Authenticated
+                    access_token: 14|75JIc0wUjVULaI7t7Lnh5JC3SV5xjvkSB6CQ1zUF1913f9e1
+                    user:
+                      id: 16
+                      name: 'jomar godinez'
+                      email: jomar23@gmail.com
+                  message: 'Authenticated successfully.'
                 properties:
                   status:
                     type: integer
-                    example: 201
+                    example: 200
                   data:
                     type: object
                     properties:
                       access_token:
                         type: string
-                        example: '{Your_auth_token}'
+                        example: 14|75JIc0wUjVULaI7t7Lnh5JC3SV5xjvkSB6CQ1zUF1913f9e1
+                      user:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 16
+                          name:
+                            type: string
+                            example: 'jomar godinez'
+                          email:
+                            type: string
+                            example: jomar23@gmail.com
                   message:
                     type: string
-                    example: Authenticated
+                    example: 'Authenticated successfully.'
       tags:
         - Authentication
       requestBody:
@@ -382,7 +422,7 @@ paths:
                   type: string
                   description: 'The ID of the team assigned to the project. This field is optional. The <code>id</code> of an existing record in the teams table.'
                   example: 3
-                  nullable: true
+                  nullable: false
               required:
                 - name
                 - description
@@ -496,7 +536,7 @@ paths:
                   type: string
                   description: 'The ID of the team assigned to the project. This field is optional. The <code>id</code> of an existing record in the teams table.'
                   example: 3
-                  nullable: true
+                  nullable: false
               required:
                 - name
                 - description
@@ -521,7 +561,290 @@ paths:
         in: path
         name: id
         description: 'The ID of the project.'
-        example: 2
+        example: 1
+        required: true
+        schema:
+          type: integer
+  '/api/v1/tasks/{task_id}/comments':
+    post:
+      summary: 'Create task comment'
+      operationId: createTaskComment
+      description: ''
+      parameters: []
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 7
+                    content: 'new comment'
+                    created_at: '2025-01-03T05:27:32.000000Z'
+                    updated_at: '2025-01-03T05:27:32.000000Z'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 7
+                      content:
+                        type: string
+                        example: 'new comment'
+                      created_at:
+                        type: string
+                        example: '2025-01-03T05:27:32.000000Z'
+                      updated_at:
+                        type: string
+                        example: '2025-01-03T05:27:32.000000Z'
+      tags:
+        - 'Task Comments Management'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  description: 'The content of the comment. Must not be greater than 255 characters.'
+                  example: 'This is a new comment'
+                  nullable: false
+              required:
+                - content
+    parameters:
+      -
+        in: path
+        name: task_id
+        description: 'The ID of the task.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+      -
+        in: path
+        name: task
+        description: 'The ID of the task whose comment is to be created.'
+        example: '1'
+        required: true
+        schema:
+          type: string
+  '/api/v1/comments/{id}':
+    get:
+      summary: 'Retrieve Task Comments'
+      operationId: retrieveTaskComments
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{  \"data\": {\n\"id\": 7,\n\"content\": \"new comment\",\n\"created_at\": \"2025-01-03T05:27:32.000000Z\",\n\"updated_at\": \"2025-01-03T05:27:32.000000Z\""
+      tags:
+        - 'Task Comments Management'
+    put:
+      summary: 'Update Task Comment'
+      operationId: updateTaskComment
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{  \"data\": {\n\"id\": 7,\n\"content\": \"update comment\",\n\"created_at\": \"2025-01-03T05:27:32.000000Z\",\n\"updated_at\": \"2025-01-03T05:27:32.000000Z\""
+      tags:
+        - 'Task Comments Management'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  description: 'The content of the comment. Must not be greater than 255 characters.'
+                  example: 'This is a new comment'
+                  nullable: false
+              required:
+                - content
+    delete:
+      summary: 'Delete Task Comment'
+      operationId: deleteTaskComment
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Success
+                properties:
+                  message:
+                    type: string
+                    example: Success
+      tags:
+        - 'Task Comments Management'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the comment.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+      -
+        in: path
+        name: comment
+        description: 'The ID of the comment to be retrieved.'
+        example: '1'
+        required: true
+        schema:
+          type: string
+  '/api/v1/tasks/{task_id}/status':
+    patch:
+      summary: 'Update Task Status'
+      operationId: updateTaskStatus
+      description: 'Update the status of the specified task.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 15
+                    title: 'update title 1'
+                    description: description
+                    priority_level: urgent
+                    status: completed
+                    deadline_at: null
+                    started_at: '2024-12-22'
+                    completed_at: '2024-12-22'
+                    project:
+                      id: 2
+                      name: 'update project'
+                      description: description
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 15
+                      title:
+                        type: string
+                        example: 'update title 1'
+                      description:
+                        type: string
+                        example: description
+                      priority_level:
+                        type: string
+                        example: urgent
+                      status:
+                        type: string
+                        example: completed
+                      deadline_at:
+                        type: string
+                        example: null
+                      started_at:
+                        type: string
+                        example: '2024-12-22'
+                      completed_at:
+                        type: string
+                        example: '2024-12-22'
+                      project:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 2
+                          name:
+                            type: string
+                            example: 'update project'
+                          description:
+                            type: string
+                            example: description
+      tags:
+        - 'Task Management'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  description: ''
+                  example: 'on hold'
+                  nullable: false
+                  enum:
+                    - 'not started'
+                    - 'in progress'
+                    - completed
+                    - 'on hold'
+                    - blocked
+              required:
+                - status
+    parameters:
+      -
+        in: path
+        name: task_id
+        description: 'The ID of the task.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  '/api/v1/tasks/{task_id}/assign':
+    patch:
+      summary: 'Update the assigned developer and QA for the task.'
+      operationId: updateTheAssignedDeveloperAndQAForTheTask
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Task Management'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                assigned_dev_id:
+                  type: string
+                  description: 'The <code>id</code> of an existing record in the users table.'
+                  example: null
+                  nullable: true
+                assigned_qa_id:
+                  type: string
+                  description: 'The <code>id</code> of an existing record in the users table.'
+                  example: null
+                  nullable: true
+    parameters:
+      -
+        in: path
+        name: task_id
+        description: 'The ID of the task.'
+        example: 1
         required: true
         schema:
           type: integer
@@ -607,8 +930,8 @@ paths:
                 example:
                   data: []
                   links:
-                    first: 'http://task-management-api-1.test/api/v1/projects/2/tasks?page=1'
-                    last: 'http://task-management-api-1.test/api/v1/projects/2/tasks?page=1'
+                    first: 'http://task-management-api-1.test/api/v1/projects/1/tasks?page=1'
+                    last: 'http://task-management-api-1.test/api/v1/projects/1/tasks?page=1'
                     prev: null
                     next: null
                   meta:
@@ -621,14 +944,14 @@ paths:
                         label: '&laquo; Previous'
                         active: false
                       -
-                        url: 'http://task-management-api-1.test/api/v1/projects/2/tasks?page=1'
+                        url: 'http://task-management-api-1.test/api/v1/projects/1/tasks?page=1'
                         label: '1'
                         active: true
                       -
                         url: null
                         label: 'Next &raquo;'
                         active: false
-                    path: 'http://task-management-api-1.test/api/v1/projects/2/tasks'
+                    path: 'http://task-management-api-1.test/api/v1/projects/1/tasks'
                     per_page: 5
                     to: null
                     total: 0
@@ -641,10 +964,10 @@ paths:
                     properties:
                       first:
                         type: string
-                        example: 'http://task-management-api-1.test/api/v1/projects/2/tasks?page=1'
+                        example: 'http://task-management-api-1.test/api/v1/projects/1/tasks?page=1'
                       last:
                         type: string
-                        example: 'http://task-management-api-1.test/api/v1/projects/2/tasks?page=1'
+                        example: 'http://task-management-api-1.test/api/v1/projects/1/tasks?page=1'
                       prev:
                         type: string
                         example: null
@@ -671,7 +994,7 @@ paths:
                             label: '&laquo; Previous'
                             active: false
                           -
-                            url: 'http://task-management-api-1.test/api/v1/projects/2/tasks?page=1'
+                            url: 'http://task-management-api-1.test/api/v1/projects/1/tasks?page=1'
                             label: '1'
                             active: true
                           -
@@ -692,7 +1015,7 @@ paths:
                               example: false
                       path:
                         type: string
-                        example: 'http://task-management-api-1.test/api/v1/projects/2/tasks'
+                        example: 'http://task-management-api-1.test/api/v1/projects/1/tasks'
                       per_page:
                         type: integer
                         example: 5
@@ -789,7 +1112,7 @@ paths:
                   description: 'A brief description of the task. Must not be greater than 500 characters.'
                   example: 'Develop login and registration functionality.'
                   nullable: false
-                assigned_id:
+                assigned_dev_id:
                   type: string
                   description: 'The ID of the user assigned to the task. The <code>id</code> of an existing record in the users table.'
                   example: 5
@@ -838,7 +1161,7 @@ paths:
         in: path
         name: project_id
         description: 'The ID of the project.'
-        example: 2
+        example: 1
         required: true
         schema:
           type: integer
@@ -865,58 +1188,128 @@ paths:
                 type: object
                 example:
                   data:
-                    id: 12
-                    title: 'update title 1'
-                    description: description
-                    priority_level: low
-                    status: completed
-                    deadline_at: null
-                    started_at: '2024-12-22'
-                    completed_at: '2024-12-22'
+                    id: 1
+                    title: 'Culpa quia dolorem et consequatur.'
+                    description: "How brave they'll all think me for a great hurry; 'and their names were Elsie, Lacie, and Tillie; and they walked off together, Alice heard it say to itself 'The Duchess! The Duchess! Oh my fur and whiskers! She'll get me executed, as sure as ferrets are ferrets! Where CAN I have to whisper a hint to Time, and round goes the clock in a loud, indignant voice, but she did not notice this question, but hurriedly went on, 'you see, a dog growls when it's pleased. Now I growl when I'm angry."
+                    priority_level: urgent
+                    status: blocked
+                    deadline_at: '2025-01-04'
+                    started_at: '2025-01-02'
+                    completed_at: '2025-01-04'
+                    created_at: '2025-01-02T11:10:03.000000Z'
                     project:
-                      id: 2
-                      name: 'update project'
-                      description: description
+                      id: 1
+                      name: 'Accusamus exercitationem quae aut voluptatem inventore odit.'
+                      description: "There was certainly English. 'I don't think they play at all know whether it would not give all else for two reasons. First, because I'm on the spot.' This did not like the name: however, it only."
+                      created_at: '2025-01-02T11:10:02.000000Z'
+                    assigned_dev: null
+                    assigned_qa: null
+                    comments:
+                      -
+                        id: 1
+                        content: "Yet you turned a back-somersault in at the Gryphon whispered in reply, 'for fear they should forget them before the end of half those long words, and, what's more, I don't keep the same thing as a."
+                        created_at: '2025-01-02T11:14:32.000000Z'
+                        updated_at: '2025-01-02T11:14:32.000000Z'
+                        author:
+                          id: 12
+                          name: 'Mikayla Jaskolski'
+                          email: franco.larkin@example.com
+                          role: admin
                 properties:
                   data:
                     type: object
                     properties:
                       id:
                         type: integer
-                        example: 12
+                        example: 1
                       title:
                         type: string
-                        example: 'update title 1'
+                        example: 'Culpa quia dolorem et consequatur.'
                       description:
                         type: string
-                        example: description
+                        example: "How brave they'll all think me for a great hurry; 'and their names were Elsie, Lacie, and Tillie; and they walked off together, Alice heard it say to itself 'The Duchess! The Duchess! Oh my fur and whiskers! She'll get me executed, as sure as ferrets are ferrets! Where CAN I have to whisper a hint to Time, and round goes the clock in a loud, indignant voice, but she did not notice this question, but hurriedly went on, 'you see, a dog growls when it's pleased. Now I growl when I'm angry."
                       priority_level:
                         type: string
-                        example: low
+                        example: urgent
                       status:
                         type: string
-                        example: completed
+                        example: blocked
                       deadline_at:
                         type: string
-                        example: null
+                        example: '2025-01-04'
                       started_at:
                         type: string
-                        example: '2024-12-22'
+                        example: '2025-01-02'
                       completed_at:
                         type: string
-                        example: '2024-12-22'
+                        example: '2025-01-04'
+                      created_at:
+                        type: string
+                        example: '2025-01-02T11:10:03.000000Z'
                       project:
                         type: object
                         properties:
                           id:
                             type: integer
-                            example: 2
+                            example: 1
                           name:
                             type: string
-                            example: 'update project'
+                            example: 'Accusamus exercitationem quae aut voluptatem inventore odit.'
                           description:
                             type: string
-                            example: description
+                            example: "There was certainly English. 'I don't think they play at all know whether it would not give all else for two reasons. First, because I'm on the spot.' This did not like the name: however, it only."
+                          created_at:
+                            type: string
+                            example: '2025-01-02T11:10:02.000000Z'
+                      assigned_dev:
+                        type: string
+                        example: null
+                      assigned_qa:
+                        type: string
+                        example: null
+                      comments:
+                        type: array
+                        example:
+                          -
+                            id: 1
+                            content: "Yet you turned a back-somersault in at the Gryphon whispered in reply, 'for fear they should forget them before the end of half those long words, and, what's more, I don't keep the same thing as a."
+                            created_at: '2025-01-02T11:14:32.000000Z'
+                            updated_at: '2025-01-02T11:14:32.000000Z'
+                            author:
+                              id: 12
+                              name: 'Mikayla Jaskolski'
+                              email: franco.larkin@example.com
+                              role: admin
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              example: 1
+                            content:
+                              type: string
+                              example: "Yet you turned a back-somersault in at the Gryphon whispered in reply, 'for fear they should forget them before the end of half those long words, and, what's more, I don't keep the same thing as a."
+                            created_at:
+                              type: string
+                              example: '2025-01-02T11:14:32.000000Z'
+                            updated_at:
+                              type: string
+                              example: '2025-01-02T11:14:32.000000Z'
+                            author:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                  example: 12
+                                name:
+                                  type: string
+                                  example: 'Mikayla Jaskolski'
+                                email:
+                                  type: string
+                                  example: franco.larkin@example.com
+                                role:
+                                  type: string
+                                  example: admin
       tags:
         - 'Task Management'
     put:
@@ -1004,7 +1397,7 @@ paths:
                   description: 'A brief description of the task. Must not be greater than 500 characters.'
                   example: 'Develop login and registration functionality.'
                   nullable: false
-                assigned_id:
+                assigned_dev_id:
                   type: string
                   description: 'The ID of the user assigned to the task. The <code>id</code> of an existing record in the users table.'
                   example: 5
@@ -1061,7 +1454,7 @@ paths:
         in: path
         name: id
         description: 'The ID of the task.'
-        example: 12
+        example: 1
         required: true
         schema:
           type: integer
@@ -1412,68 +1805,88 @@ paths:
                   data:
                     -
                       id: 2
-                      name: 'Trey Bechtelar'
+                      name: 'Prof. Kiera Corwin DVM'
+                      team_role: member
                     -
                       id: 3
-                      name: 'Emerald Mertz'
+                      name: 'Eileen Thompson'
+                      team_role: member
                     -
                       id: 4
-                      name: 'Barney Gorczany'
+                      name: 'Baylee Dicki'
+                      team_role: member
                     -
                       id: 5
-                      name: 'Cristal Cronin'
+                      name: 'Kory Bailey'
+                      team_role: member
                     -
                       id: 6
-                      name: 'Keyshawn Hyatt'
+                      name: 'Okey Greenholt'
+                      team_role: member
                     -
                       id: 7
-                      name: 'Jermey Lesch'
+                      name: 'Perry Huel'
+                      team_role: member
                     -
                       id: 8
-                      name: 'Lindsey Green'
+                      name: 'Herman Jenkins'
+                      team_role: member
                     -
                       id: 9
-                      name: 'Ruben Marvin'
+                      name: 'Elyse Block'
+                      team_role: member
                     -
                       id: 10
-                      name: 'Tyrique Schmeler DDS'
+                      name: 'Hilma Fritsch'
+                      team_role: member
                     -
                       id: 11
-                      name: 'Kacie Doyle'
+                      name: 'Piper Lemke'
+                      team_role: 'team lead'
                 properties:
                   data:
                     type: array
                     example:
                       -
                         id: 2
-                        name: 'Trey Bechtelar'
+                        name: 'Prof. Kiera Corwin DVM'
+                        team_role: member
                       -
                         id: 3
-                        name: 'Emerald Mertz'
+                        name: 'Eileen Thompson'
+                        team_role: member
                       -
                         id: 4
-                        name: 'Barney Gorczany'
+                        name: 'Baylee Dicki'
+                        team_role: member
                       -
                         id: 5
-                        name: 'Cristal Cronin'
+                        name: 'Kory Bailey'
+                        team_role: member
                       -
                         id: 6
-                        name: 'Keyshawn Hyatt'
+                        name: 'Okey Greenholt'
+                        team_role: member
                       -
                         id: 7
-                        name: 'Jermey Lesch'
+                        name: 'Perry Huel'
+                        team_role: member
                       -
                         id: 8
-                        name: 'Lindsey Green'
+                        name: 'Herman Jenkins'
+                        team_role: member
                       -
                         id: 9
-                        name: 'Ruben Marvin'
+                        name: 'Elyse Block'
+                        team_role: member
                       -
                         id: 10
-                        name: 'Tyrique Schmeler DDS'
+                        name: 'Hilma Fritsch'
+                        team_role: member
                       -
                         id: 11
-                        name: 'Kacie Doyle'
+                        name: 'Piper Lemke'
+                        team_role: 'team lead'
                     items:
                       type: object
                       properties:
@@ -1482,7 +1895,10 @@ paths:
                           example: 2
                         name:
                           type: string
-                          example: 'Trey Bechtelar'
+                          example: 'Prof. Kiera Corwin DVM'
+                        team_role:
+                          type: string
+                          example: member
       tags:
         - 'Team Members Management'
     post:
@@ -1494,30 +1910,10 @@ paths:
         200:
           description: ''
           content:
-            application/json:
+            text/plain:
               schema:
-                type: object
-                example:
-                  data:
-                    -
-                      id: 2
-                      name: 'Trey Bechtelar'
-                properties:
-                  data:
-                    type: array
-                    example:
-                      -
-                        id: 2
-                        name: 'Trey Bechtelar'
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                          example: 2
-                        name:
-                          type: string
-                          example: 'Trey Bechtelar'
+                type: string
+                example: "{  \"data\": [\n{\n\"id\": 2,\n\"name\": \"Trey Bechtelar\"\n\"role\": \"member\"\n}\n]}"
       tags:
         - 'Team Members Management'
       requestBody:
@@ -1528,11 +1924,10 @@ paths:
               type: object
               properties:
                 member_id:
-                  type: array
+                  type: string
                   description: 'The <code>id</code> of an existing record in the users table.'
-                  example: null
-                  items:
-                    type: string
+                  example: cum
+                  nullable: false
                 role:
                   type: string
                   description: 'The role to assign to the team members. Valid values: `admin`, `member`, `project manager`, `team lead`.'
@@ -1543,6 +1938,7 @@ paths:
                     - member
                     - 'project manager'
               required:
+                - member_id
                 - role
     parameters:
       -
@@ -1669,7 +2065,7 @@ paths:
                         label: 'Next &raquo;'
                         active: false
                     path: 'http://task-management-api-1.test/api/v1/tenant/members'
-                    per_page: 2
+                    per_page: 10
                     to: null
                     total: 0
                 properties:
@@ -1735,7 +2131,7 @@ paths:
                         example: 'http://task-management-api-1.test/api/v1/tenant/members'
                       per_page:
                         type: integer
-                        example: 2
+                        example: 10
                       to:
                         type: string
                         example: null
@@ -1946,6 +2342,9 @@ tags:
     description: ''
   -
     name: 'Project Management'
+    description: ''
+  -
+    name: 'Task Comments Management'
     description: ''
   -
     name: 'Task Management'

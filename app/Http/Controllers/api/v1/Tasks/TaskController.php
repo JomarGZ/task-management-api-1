@@ -4,17 +4,22 @@ namespace App\Http\Controllers\api\v1\Tasks;
 
 use App\Http\Controllers\api\v1\ApiController;
 use App\Http\Requests\api\v1\Tasks\StoreTaskRequest;
-use App\Http\Resources\api\v1\Projects\ProjectResource;
 use App\Http\Resources\api\v1\Tasks\TaskResource;
 use App\Models\Project;
 use App\Models\Task;
-use App\Utilities\ApiResponse;
+use App\Services\v1\TaskService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 
 class TaskController extends ApiController
 {
+    protected $taskService;
+
+    public function __construct(TaskService $taskService)
+    {
+        $this->taskService = $taskService;
+    }
     /**
      * List Tasks
      * 
@@ -34,25 +39,14 @@ class TaskController extends ApiController
      */
     public function index(Request $request, Project $project)
     {
-        $column = $request->query('column', 'created_at');
-        $direction = $request->query('direction', 'desc');
-
-        if (!in_array($direction, ['asc', 'desc'])) {
-            $direction = 'desc';
-        }
-
-        if (!in_array($column, [
-            'title', 
-            'description',
-            'priority_levels',
-            'status',
-            'deadline_at',
-            'started_at',
-            'completed_at',
-            'deadline_at'
-            ])) {
-            $column = 'created_at';
-        }
+        $column = $this->taskService
+            ->getValidSortColumn(
+                $request->query('column', 'created_at')
+            );
+        $direction = $this->taskService
+            ->getValidSortDirection(
+                $request->query('direction', 'desc')
+            );
 
         $tasks = $project->tasks()
             ->select([
@@ -63,7 +57,8 @@ class TaskController extends ApiController
                 'status',
                 'deadline_at',
                 'started_at',
-                'completed_at'
+                'completed_at',
+                'created_at'
             ])
             ->search($request->query('search'))
             ->filterByStatus($request->query('status'))
@@ -82,25 +77,50 @@ class TaskController extends ApiController
      * 
      * Store a newly created task in storage.
      * @group Task Management
-     * @response 201 {"data": {
-        "id": 18,
+     * @response 201 {    "data": {
+        "id": 43,
         "title": "new taskdasdadasdsadsasdaddadasdasddas",
-        "description": "this is description",
+        "description": "this is descriptionp",
         "priority_level": null,
         "status": null,
         "deadline_at": null,
         "started_at": null,
         "completed_at": null,
+        "created_at": "2025-01-12T05:03:50.000000Z",
+        "photo_attachments": [
+            {
+                "id": 24,
+                "url": "http://task-management-api-1.test/media/24/image-car.jpg",
+                "name": "image-car.jpg",
+                "size": 1834859,
+                "mime_type": "image/jpeg"
+            },
+            {
+                "id": 25,
+                "url": "http://task-management-api-1.test/media/25/image-motorbike.jpg",
+                "name": "image-motorbike.jpg",
+                "size": 312287,
+                "mime_type": "image/jpeg"
+            }
+        ],
         "project": {
-            "id": 2,
-            "name": "update project",
-            "description": "description"
+            "id": 1,
+            "name": "Odio et impedit error et veniam quam.",
+            "description": "I'll be jury,\" Said cunning old Fury: \"I'll try the first to speak. 'What size do you know about it, you know.' 'Not at all,' said Alice: 'besides, that's not a moment like a serpent. She had.",
+            "created_at": "2025-01-10T08:29:13.000000Z"
         }
     }}
      */
     public function store(StoreTaskRequest $request, Project $project)
     {
         $task = $project->tasks()->create($request->validated());
+
+        if ($request->hasFile('photo_attachments')) {
+            foreach($request->file('photo_attachments') as $attachment) {
+                $task->addMedia($attachment)->preservingOriginal()->toMediaCollection('task_attachments');
+            }
+                
+        }
 
         return new TaskResource($task->load('project'));
     }
@@ -113,10 +133,16 @@ class TaskController extends ApiController
      * 
      */
     public function show(Task $task)
-    {
+    { 
         Gate::authorize('view', $task);
 
-       return new TaskResource($task->load('project'));
+       return new TaskResource($task->load([
+            'project:id,name,description,created_at',
+            'assignedDev:id,name,email',
+            'assignedQA:id,name,email', 
+            'comments:id,commentable_id,commentable_type,author_id,content,created_at,updated_at',
+            'comments.author:id,name,email,role'
+        ]));
     }
 
     /**
@@ -124,19 +150,37 @@ class TaskController extends ApiController
      * 
      * Update the specified task in storage.
      * @group Task Management
-     * @response 200 {"data": {
-        "id": 15,
-        "title": "update title 1",
-        "description": "description",
-        "priority_level": "urgent",
-        "status": "completed",
+     * @response 200 {    "data": {
+        "id": 43,
+        "title": "new taskdasdadasdsadsasdaddadasdasddas",
+        "description": "this is descriptionp",
+        "priority_level": null,
+        "status": null,
         "deadline_at": null,
-        "started_at": "2024-12-22",
-        "completed_at": "2024-12-22",
+        "started_at": null,
+        "completed_at": null,
+        "created_at": "2025-01-12T05:03:50.000000Z",
+        "photo_attachments": [
+            {
+                "id": 24,
+                "url": "http://task-management-api-1.test/media/24/image-car.jpg",
+                "name": "image-car.jpg",
+                "size": 1834859,
+                "mime_type": "image/jpeg"
+            },
+            {
+                "id": 25,
+                "url": "http://task-management-api-1.test/media/25/image-motorbike.jpg",
+                "name": "image-motorbike.jpg",
+                "size": 312287,
+                "mime_type": "image/jpeg"
+            }
+        ],
         "project": {
-            "id": 2,
-            "name": "update project",
-            "description": "description"
+            "id": 1,
+            "name": "Odio et impedit error et veniam quam.",
+            "description": "I'll be jury,\" Said cunning old Fury: \"I'll try the first to speak. 'What size do you know about it, you know.' 'Not at all,' said Alice: 'besides, that's not a moment like a serpent. She had.",
+            "created_at": "2025-01-10T08:29:13.000000Z"
         }
     }}
      */

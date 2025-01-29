@@ -40,8 +40,8 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 200
-        content: '{"data":[{"id":2,"name":"Trey Bechtelar"},{"id":3,"name":"Emerald Mertz"},{"id":4,"name":"Barney Gorczany"},{"id":5,"name":"Cristal Cronin"},{"id":6,"name":"Keyshawn Hyatt"},{"id":7,"name":"Jermey Lesch"},{"id":8,"name":"Lindsey Green"},{"id":9,"name":"Ruben Marvin"},{"id":10,"name":"Tyrique Schmeler DDS"},{"id":11,"name":"Kacie Doyle"}]}'
+        status: 401
+        content: '{"message":"Unauthenticated."}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -52,7 +52,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 12|gLFSM1rR1Jt3oik6nfFAhm4kjwhNHFSsrE4TTyz1749f108d'
+      - 'Bearer 2|8EYBYnTUxZ5e8etdkHYpik1kYkWPL0cIDpthpAUce72bb176'
     controller: null
     method: null
     route: null
@@ -93,9 +93,9 @@ endpoints:
       member_id:
         name: member_id
         description: 'The <code>id</code> of an existing record in the users table.'
-        required: false
-        example: null
-        type: 'string[]'
+        required: true
+        example: esse
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
@@ -114,6 +114,7 @@ endpoints:
         nullable: false
         custom: []
     cleanBodyParameters:
+      member_id: esse
       role: member
     fileParameters: []
     responses:
@@ -124,6 +125,7 @@ endpoints:
           {
           "id": 2,
           "name": "Trey Bechtelar"
+          "role": "member"
           }
           ]}
         headers: []
@@ -133,7 +135,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 12|gLFSM1rR1Jt3oik6nfFAhm4kjwhNHFSsrE4TTyz1749f108d'
+      - 'Bearer 2|8EYBYnTUxZ5e8etdkHYpik1kYkWPL0cIDpthpAUce72bb176'
     controller: null
     method: null
     route: null
@@ -195,7 +197,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 12|gLFSM1rR1Jt3oik6nfFAhm4kjwhNHFSsrE4TTyz1749f108d'
+      - 'Bearer 2|8EYBYnTUxZ5e8etdkHYpik1kYkWPL0cIDpthpAUce72bb176'
     controller: null
     method: null
     route: null

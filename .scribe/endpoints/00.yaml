@@ -27,7 +27,7 @@ endpoints:
         name: current_password
         description: ''
         required: true
-        example: sed
+        example: quia
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -37,19 +37,19 @@ endpoints:
         name: password
         description: ''
         required: true
-        example: omnis
+        example: nihil
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
     cleanBodyParameters:
-      current_password: sed
-      password: omnis
+      current_password: quia
+      password: nihil
     fileParameters: []
     responses:
       -
-        status: 201
+        status: 200
         content: |-
           { "status": 200,
           "message": "Your password has been updated."}
@@ -60,7 +60,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 12|gLFSM1rR1Jt3oik6nfFAhm4kjwhNHFSsrE4TTyz1749f108d'
+      - 'Bearer 2|8EYBYnTUxZ5e8etdkHYpik1kYkWPL0cIDpthpAUce72bb176'
     controller: null
     method: null
     route: null
@@ -92,7 +92,9 @@ endpoints:
     responses:
       -
         status: 200
-        content: '{}'
+        content: |-
+          {  "status": 200,
+          "message": "Successfully logged out."}
         headers: []
         description: ''
         custom: []
@@ -100,7 +102,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 12|gLFSM1rR1Jt3oik6nfFAhm4kjwhNHFSsrE4TTyz1749f108d'
+      - 'Bearer 2|8EYBYnTUxZ5e8etdkHYpik1kYkWPL0cIDpthpAUce72bb176'
     controller: null
     method: null
     route: null
@@ -165,9 +167,14 @@ endpoints:
       -
         status: 201
         content: |-
-          {  "status": 201,
+          { "status": 201,
           "data": {
-          "access_token": "{YOUR_AUTH_KEY}"
+          "user": {
+          "id": 16,
+          "name": "jomar godinez",
+          "email": "jomar23@gmail.com"
+          },
+          "access_token": "13|UDbQwZ8VdvhF635bikuBhejmBYO5LzdBXDYufIK6e8f5b1bf"
           },
           "message": "Registered Successfully"}
         headers: []
@@ -226,13 +233,18 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 201
+        status: 200
         content: |-
-          {"status": 201,
+          {"status": 200,
           "data": {
-          "access_token": "{Your_auth_token}"
+          "access_token": "14|75JIc0wUjVULaI7t7Lnh5JC3SV5xjvkSB6CQ1zUF1913f9e1",
+          "user": {
+          "id": 16,
+          "name": "jomar godinez",
+          "email": "jomar23@gmail.com"
+          }
           },
-          "message": "Authenticated"}
+          "message": "Authenticated successfully."}
         headers: []
         description: ''
         custom: []

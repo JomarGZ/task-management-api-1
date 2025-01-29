@@ -5,12 +5,15 @@ use App\Http\Controllers\api\v1\auth\LogoutController;
 use App\Http\Controllers\api\v1\auth\PasswordUpdateController;
 use App\Http\Controllers\api\v1\auth\RegisterController;
 use App\Http\Controllers\api\v1\Projects\ProjectController;
+use App\Http\Controllers\api\v1\TaskComments\TaskCommentController;
+use App\Http\Controllers\api\v1\Tasks\ProjectTaskDevAssignmentController;
+use App\Http\Controllers\api\v1\Tasks\ProjectTaskQAAssignmentController;
 use App\Http\Controllers\api\v1\Tasks\TaskController;
 use App\Http\Controllers\api\v1\Tasks\TaskPriorityLevelsAndStatusesController;
 use App\Http\Controllers\api\v1\Teams\TeamController;
 use App\Http\Controllers\api\v1\Teams\TeamMembersController;
 use App\Http\Controllers\api\v1\Tenants\TenantMembersController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\api\v1\Tasks\TaskStatusController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/user', function (Request $request) {
@@ -29,7 +32,14 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('tenant/members', TenantMembersController::class)
         ->parameters(['members' => 'user']);
     Route::apiResource('projects', ProjectController::class);
+
+    Route::patch('tasks/{task}/status', [TaskStatusController::class, 'update']);
+    Route::patch('tasks/{task}/assign-developer', [ProjectTaskDevAssignmentController::class, 'store']);
+    Route::delete('tasks/{task}/unassign-developer', [ProjectTaskDevAssignmentController::class, 'destroy']);
+    Route::patch('tasks/{task}/assign-qa', [ProjectTaskQAAssignmentController::class, 'store']);
+    Route::delete('tasks/{task}/unassign-qa', [ProjectTaskQAAssignmentController::class, 'destroy']);
     Route::apiResource('projects.tasks', TaskController::class)->shallow();
+    Route::apiResource('tasks.comments', TaskCommentController::class)->shallow()->except('index');
     Route::get('statuses-and-priority-levels', TaskPriorityLevelsAndStatusesController::class);
 });
 

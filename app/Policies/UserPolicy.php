@@ -51,6 +51,6 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        return $user->isAdmin() && $user->belongsToTenant($model);
+        return $user->isAdmin() && $user->belongsToTenant($model) && $user->id !== $model->id;
     }
 }

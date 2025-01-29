@@ -17,11 +17,16 @@ class LoginController extends ApiController
      * Authenticate the user and returns the user's API token
      * @unauthenticated
      * @group Authentication
-     * @response 201 {"status": 201,
+     * @response 200 {"status": 200,
     "data": {
-        "access_token": "{Your_auth_token}"
+        "access_token": "14|75JIc0wUjVULaI7t7Lnh5JC3SV5xjvkSB6CQ1zUF1913f9e1",
+        "user": {
+            "id": 16,
+            "name": "jomar godinez",
+            "email": "jomar23@gmail.com"
+        }
     },
-    "message": "Authenticated"}
+    "message": "Authenticated successfully."}
      */
     public function __invoke(LoginRequest $request)
     {
@@ -35,12 +40,18 @@ class LoginController extends ApiController
 
         $device = substr($request->userAgent() ?? '', 0, 255);
 
-        $expiresAt = $request->remember ? null : now()->addMinutes((int) config('session.lifetime'));
-        
+        // $expiresAt = $request->remember ? null : now()->addMinutes((int) config('session.lifetime'));
+        $token = $user->createToken($device)->plainTextToken;
+
         return $this->success(
-            'Authenticated',
-            ['access_token' => $user->createToken($device,expiresAt: $expiresAt)->plainTextToken],
-            Response::HTTP_CREATED
-        );
+            'Authenticated successfully.',
+            [
+                'access_token' => $token,
+                'user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                ],
+            ]);
     }
 }

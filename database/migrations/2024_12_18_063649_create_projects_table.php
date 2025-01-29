@@ -15,11 +15,13 @@ return new class extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Tenant::class)->constrained()->cascadeOnDelete()->index();
+            $table->foreignIdFor(Tenant::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Team::class)->nullable();
             $table->string('name');
             $table->text('description');
             $table->timestamps();
+
+            $table->index(['Tenant_id', 'created_at']);
         });
     }
 

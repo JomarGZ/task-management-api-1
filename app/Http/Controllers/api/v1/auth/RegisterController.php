@@ -18,9 +18,14 @@ class RegisterController extends ApiController
      * Register and authenticated the user and returns the user's API token
      * @unauthenticated
      * @group Authentication
-     * @response 201 {  "status": 201,
+     * @response 201 { "status": 201,
     "data": {
-        "access_token": "{YOUR_AUTH_KEY}"
+        "user": {
+            "id": 16,
+            "name": "jomar godinez",
+            "email": "jomar23@gmail.com"
+        },
+        "access_token": "13|UDbQwZ8VdvhF635bikuBhejmBYO5LzdBXDYufIK6e8f5b1bf"
     },
     "message": "Registered Successfully"}
      */
@@ -44,7 +49,14 @@ class RegisterController extends ApiController
 
         return $this->success(
             'Registered Successfully',
-            ['access_token' => $user->createToken($device)->plainTextToken],
+            [
+                'user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                ],
+                'access_token' => $user->createToken($device)->plainTextToken,
+            ],
             Response::HTTP_CREATED
         );
     }

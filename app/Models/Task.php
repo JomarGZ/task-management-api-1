@@ -4,20 +4,25 @@ namespace App\Models;
 
 use App\Enums\Enums\Statuses;
 use App\Traits\BelongsToTenant;
+use App\Traits\HasComment;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Task extends Model
+class Task extends Model implements HasMedia
 {
     /** @use HasFactory<\Database\Factories\TaskFactory> */
     use HasFactory;
-    use BelongsToTenant;
+    use BelongsToTenant, HasComment, InteractsWithMedia;
 
     protected $fillable = [
         'tenant_id',
         'project_id',
-        'assigned_id',
+        'assigned_dev_id',
+        'assigned_qa_id',
         'title',
         'description',
         'status',
@@ -27,29 +32,25 @@ class Task extends Model
         'priority_level'
     ];
 
-    protected static function booted()
-    {
-        static::saving(function ($task) {
-
-            $task->updatePreviousDeadlineIfChanged();
-            if ($task->isInProgress()) {
-                $task->markAsInProgress();
-            }
-            if ($task->isCompleted()) {
-                $task->markAsCompleted();
-            }
-        });
-    }
-
-
     public function project()
     {
         return $this->belongsTo(Project::class);
     }
 
-    public function assignee()
+    public function assignedDev()
     {
-        return $this->belongsTo(User::class, 'assigned_id');
+        return $this->belongsTo(User::class, 'assigned_dev_id');
+    }
+    public function assignedQA()
+    {
+        return $this->belongsTo(User::class, 'assigned_qa_id');
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('thumbnail-150')
+            ->width(150)
+            ->height(150);
     }
 
     public function scopeSearch($query, $search) {
@@ -67,6 +68,7 @@ class Task extends Model
             $query->where('status', $status);
         });
     }
+
     public function scopeFilterByPriorityLevel($query, $priorityLevel)
     {
         return $query->when($priorityLevel, function (Builder $query, $priorityLevel) {
@@ -86,13 +88,13 @@ class Task extends Model
     public function markAsInProgress()
     {
         if (is_null($this->started_at)) {
-            $this->started_at = now();
+            $this->update(['started_at' => now()]);
         }
     }
     public function markAsCompleted()
     {
         if (is_null($this->completed_at)) {
-            $this->completed_at = now();
+            $this->update(['completed_at' => now()]);
         }
     }
 
@@ -100,6 +102,16 @@ class Task extends Model
     {
         if ($this->isDirty('deadline_at')) {
             $this->previous_deadline_at = $this->getOriginal('deadline_at');
+        }
+    }
+
+    public function updateTimeStampsBaseOnStatus()
+    {
+        if ($this->isInProgress()) {
+            $this->markAsInProgress();
+        }
+        if ($this->isCompleted()) {
+            $this->markAsCompleted();
         }
     }
 }

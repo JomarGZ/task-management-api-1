@@ -21,7 +21,8 @@ class Team extends Model
              'team_user', 
              'team_id', 
              'member_id')
-             ->withPivot('role')->withTimestamps();
+             ->withPivot('role')
+             ->withTimestamps();
     }
 
     public function projects()
@@ -32,7 +33,7 @@ class Team extends Model
     public function scopeSearch($query, $search)
     {
         return $query->when($search, function(Builder $query, $search) {
-            $query->where('name', "%{$search}%");
+            $query->where('name', 'like', "%{$search}%");
         });
     }
 }

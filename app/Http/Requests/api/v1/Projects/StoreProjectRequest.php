@@ -28,7 +28,7 @@ class StoreProjectRequest extends FormRequest
         return [
             'name'          => ['required', 'string', 'max:255'],
             'description'   => ['required', 'string', 'max:500'],
-            'team_id'       => ['nullable', 'exists:teams,id']
+            'team_id'       => ['sometimes', 'exists:teams,id']
         ];
     }
 

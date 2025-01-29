@@ -13,12 +13,12 @@ class LogoutController extends ApiController
      * Signs out the user and destroy the API token
      * 
      * @group Authentication
-     * @response 200 {}
+     * @response 200 {  "status": 200,
+    "message": "Successfully logged out."}
      */
     public function __invoke(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();;
-        
-        return $this->ok('');
+        $request->user()->currentAccessToken()->delete();
+        return $this->ok('Successfully logged out.');
     }
 }

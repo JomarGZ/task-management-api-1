@@ -11,18 +11,18 @@ trait BelongsToTenant
 {
     protected static function bootBelongsToTenant(): void
     {
-        if (app()->runningInConsole()) {
-            return;
-        }
+        // if (app()->runningInConsole()) {
+        //     return;
+        // }
         static::addGlobalScope(new tenantScope);
-
+      
         static::creating(function(Model $model){
             if (self::shouldSkipTenantAssignmentIfRegisterRoute()) {
                 return;
             }
-            self::ensureUserIsAuthenticated();
-
-            $model->tenant_id = auth()->user()->tenant_id;
+            if (auth()->check()) {
+                $model->tenant_id = auth()->user()->tenant_id;
+            }
         });
     }
 
@@ -36,10 +36,5 @@ trait BelongsToTenant
         return request()->routeIs('register');
     }
 
-    protected static function ensureUserIsAuthenticated()
-    {
-        if (!auth()->check()) {
-            abort(Response::HTTP_UNAUTHORIZED, 'You are not authenticate to perform this action');
-        }
-    }
+  
 }

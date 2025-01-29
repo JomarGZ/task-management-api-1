@@ -4,6 +4,7 @@ namespace App\Http\Requests\api\v1\Tasks;
 
 use App\Enums\Enums\PriorityLevel;
 use App\Enums\Enums\Statuses;
+use App\Models\Task;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -14,10 +15,11 @@ class StoreTaskRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if (in_array(request()->method(), ['PUT','PATCH'])) {
-            return request()->user()->can('update', $this->route('task'));
-        }
-        return request()->user()->can('create', $this->route('project'));
+       $project = $this->route('project');
+       if($this->routeIs('tasks.update')) {
+            return request()->user()->can('update', [Task::class, $this->route('task')]);
+       }
+        return request()->user()->can('create', [Task::class, $project]);
     }
 
     /**
@@ -30,12 +32,13 @@ class StoreTaskRequest extends FormRequest
         return [
             'title'             => ['required', 'string', 'max:255'],
             'description'       => ['required', 'string', 'max:500'],
-            'assigned_id'       => ['nullable', 'exists:users,id'],
+            'assigned_dev_id'   => ['nullable', 'exists:users,id'],
             'priority_level'    => ['nullable', Rule::in(PriorityLevel::cases())],
             'status'            => ['sometimes', Rule::in(Statuses::cases())],
             'deadline_at'       => ['nullable'],
             'started_at'        => ['nullable'],
             'completed_at'      => ['nullable'],
+            'photo_attachments.*'       => ['sometimes', 'image'],
         ];
     }
 
@@ -65,7 +68,7 @@ class StoreTaskRequest extends FormRequest
                 'description' => 'A brief description of the task.',
                 'example' => 'Develop login and registration functionality.',
             ],
-            'assigned_id' => [
+            'assigned_dev_id' => [
                 'description' => 'The ID of the user assigned to the task.',
                 'example' => 5,
             ],

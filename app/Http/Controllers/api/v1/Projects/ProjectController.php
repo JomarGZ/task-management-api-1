@@ -6,11 +6,18 @@ use App\Http\Controllers\api\v1\ApiController;
 use App\Http\Requests\api\v1\Projects\StoreProjectRequest;
 use App\Http\Resources\api\v1\Projects\ProjectResource;
 use App\Models\Project;
+use App\Services\v1\ProjectService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class ProjectController extends ApiController
 {
+    protected $projectService;
+
+    public function __construct(ProjectService $projectService)
+    {
+        $this->projectService = $projectService;
+    }
     /**
      * List Projects
      *
@@ -24,20 +31,17 @@ class ProjectController extends ApiController
      */
     public function index(Request $request)
     {
-        $column = $request->query('column', 'created_at');  
-        $direction = $request->query('direction', 'desc'); 
-    
-        if (!in_array($direction, ['asc', 'desc'])) {
-            $direction = 'asc'; 
-        }
-    
-        $validColumns = ['name', 'description', 'created_at'];
-        if (!in_array($column, $validColumns)) {
-            $column = 'created_at';
-        }
+        $column = $this->projectService
+            ->getValidSortColumn(
+                $request->query('column', 'created_at')
+            );  
+        $direction = $this->projectService
+            ->getValidSortDirection(
+                $request->query('direction', 'desc')
+            ); 
     
         $projects = Project::query()
-            ->select(['id', 'team_id', 'name', 'description'])
+            ->select(['id', 'team_id', 'name', 'description', 'created_at'])
             ->with('teamAssignee:id,name')
             ->search($request->query('search'))
             ->orderBy($column, $direction)
@@ -83,7 +87,7 @@ class ProjectController extends ApiController
     {
         Gate::authorize('view', $project);
      
-        return new ProjectResource($project->load('teamAssignee'));
+        return new ProjectResource($project->load('teamAssignee:id,name'));
     }
 
     /**
@@ -105,7 +109,7 @@ class ProjectController extends ApiController
     {
         $project->update($request->validated());
 
-        return new ProjectResource($project->load('teamAssignee'));
+        return new ProjectResource($project->load('teamAssignee:id,name'));
     }
 
     /**
