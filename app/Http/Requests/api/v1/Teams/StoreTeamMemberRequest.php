@@ -26,7 +26,7 @@ class StoreTeamMemberRequest extends FormRequest
     {
         return [
             'member_id'     => ['required', 'exists:users,id', 'unique:team_user,member_id'],
-            'role'          => ['required', Rule::in([Role::TEAM_LEAD->value, Role::MEMBER->value, Role::PROJECT_MANAGER])]
+            'role'          => ['nullable', Rule::in([Role::TEAM_LEAD->value, Role::MEMBER->value, Role::PROJECT_MANAGER])]
         ];
     }
 

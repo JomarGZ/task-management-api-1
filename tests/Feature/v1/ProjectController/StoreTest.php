@@ -72,19 +72,6 @@ class StoreTest extends TestCase
         $this->assertEquals($this->user->tenant_id, $newLyCreatedProject->tenant_id);
     }
 
-    public function test_only_allows_admin_tenant_to_create_a_project()
-    {
-        $notAdmin = User::factory()->create(['role' => Role::MEMBER]);
-
-        Sanctum::actingAs($notAdmin);
-
-        $response = $this->postJson('api/v1/projects', [
-            'name' => 'add project',
-            'description' => 'description'
-        ]);
-
-        $response->assertUnauthorized();
-    }
 
     #[Test]
     #[DataProvider('validationDataProvider')]

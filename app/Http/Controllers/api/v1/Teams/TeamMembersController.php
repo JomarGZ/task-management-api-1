@@ -7,8 +7,8 @@ use App\Http\Requests\api\v1\Teams\StoreTeamMemberRequest;
 use App\Http\Resources\api\v1\Teams\TeamMemberResource;
 use App\Models\Team;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class TeamMembersController extends ApiController
@@ -19,11 +19,15 @@ class TeamMembersController extends ApiController
      * Display a listing of the team members.
      * @group Team Members Management
      */
-    public function index(Team $team)
+    public function index(Request $request, Team $team)
     {
         $members = $team->members()
-        ->where('users.tenant_id', auth()->user()->tenant_id)
-        ->get();
+            ->select('users.id', 'users.name')
+            ->when($request->name, function ($query, $name) {
+                $query->where('users.name', 'like', "%$name%");
+            })
+            ->where('users.tenant_id', auth()->user()->tenant_id)
+            ->paginate(5);
         
         return TeamMemberResource::collection($members);
     }

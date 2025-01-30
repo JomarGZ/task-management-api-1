@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignIdFor(Tenant::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(User::class, 'member_id')->constrained()->cascadeOnDelete();
             $table->foreignIdFor(model: Team::class)->constrained()->cascadeOnDelete();
-            $table->string('role')->default(Role::MEMBER->value);
+            $table->string('role')->nullable();
             $table->timestamps();
 
             $table->unique(['tenant_id', 'member_id', 'team_id']);

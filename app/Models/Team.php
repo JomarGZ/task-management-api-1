@@ -25,6 +25,10 @@ class Team extends Model
              ->withTimestamps();
     }
 
+    public function roles()
+    {
+        return $this->hasMany(Role::class);
+    }
     public function projects()
     {
         return $this->hasMany(Project::class);

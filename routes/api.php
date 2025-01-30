@@ -14,6 +14,7 @@ use App\Http\Controllers\api\v1\Teams\TeamController;
 use App\Http\Controllers\api\v1\Teams\TeamMembersController;
 use App\Http\Controllers\api\v1\Tenants\TenantMembersController;
 use App\Http\Controllers\api\v1\Tasks\TaskStatusController;
+use App\Http\Controllers\api\v1\Teams\TeamStatisticController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/user', function (Request $request) {
@@ -41,6 +42,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('projects.tasks', TaskController::class)->shallow();
     Route::apiResource('tasks.comments', TaskCommentController::class)->shallow()->except('index');
     Route::get('statuses-and-priority-levels', TaskPriorityLevelsAndStatusesController::class);
+
+    Route::get('teams/{team}/statistic', [TeamStatisticController::class, 'index']);
 });
 
 Route::post('auth/register', RegisterController::class)->name('register');
