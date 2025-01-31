@@ -16,7 +16,7 @@ use Tests\TestCase;
 
 class IndexTest extends TestCase
 {
-    use RefreshDatabase;
+    use LazilyRefreshDatabase;
     private User $member;
     private Tenant $tenant;
 

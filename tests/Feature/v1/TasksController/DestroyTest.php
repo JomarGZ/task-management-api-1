@@ -16,7 +16,7 @@ use Tests\TestCase;
 
 class DestroyTest extends TestCase
 {
-    use RefreshDatabase;
+    use LazilyRefreshDatabase;
     
     private User $manager;
     private User $member;

@@ -5,12 +5,13 @@ namespace Tests\Feature\v1\RegisterController;
 use App\Enums\Role;
 use App\Models\Tenant;
 use App\Models\User;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class RegisterUserTest extends TestCase
 {
-    use RefreshDatabase;
+    use LazilyRefreshDatabase;
  
     public function test_it_can_register_a_user(): void
     {

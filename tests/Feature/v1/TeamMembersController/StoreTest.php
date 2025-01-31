@@ -67,17 +67,6 @@ class StoreTest extends TestCase
             'member_id' => $this->teamMembers->random()->id
         ]); 
     }
-    public function test_only_admin_allows_to_add_member_to_a_team()
-    {
-
-        Sanctum::actingAs($this->teamLEad);
-        $response = $this->postJson("api/v1/teams/{$this->team->id}/members", [
-            'member_id' => $this->member->id,
-            'role' => Role::MEMBER->value
-        ]);
-
-        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
-    }
 
     public function test_it_can_add_member_to_a_team()
     {

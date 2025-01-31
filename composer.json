@@ -13,7 +13,6 @@
         "spatie/laravel-medialibrary": "^11.11"
     },
     "require-dev": {
-        "brianium/paratest": "^7.7",
         "fakerphp/faker": "^1.23",
         "knuckleswtf/scribe": "^4.38",
         "laravel/pail": "^1.1",

@@ -19,6 +19,13 @@ class Project extends Model
         'description'
     ];
 
+    public function assignedTeamMembers()
+    {
+        return $this->belongsToMany(User::class, 'project_team', 'project_id', 'user_id')
+            ->withPivot('position')
+            ->withTimestamps();
+    }
+
     public function teamAssignee()
     {
         return $this->belongsTo(Team::class, 'team_id');
