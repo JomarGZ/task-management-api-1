@@ -7,12 +7,13 @@ use App\Models\Team;
 use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class IndexTest extends TestCase
 {
-    use LazilyRefreshDatabase;
+    use RefreshDatabase;
 
     private User $user;
     private Team $team;
@@ -24,7 +25,7 @@ class IndexTest extends TestCase
         
         $this->tenant = Tenant::factory()->create();
         $this->user = User::factory()->recycle($this->tenant)->create();
-        $this->team = Team::factory()->recycle($this->tenant)->create();
+        $this->team = Team::factory()->create();
         
         // Authenticate user
         Sanctum::actingAs($this->user);

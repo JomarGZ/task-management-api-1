@@ -9,12 +9,13 @@ use App\Models\Team;
 use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class UpdateTest extends TestCase
 {
-    use LazilyRefreshDatabase;
+    use RefreshDatabase;
     
     private User $manager;
     private User $member;
@@ -30,7 +31,7 @@ class UpdateTest extends TestCase
         $this->tenant = Tenant::factory()->create();
         $this->manager = User::factory()->recycle($this->tenant)->create(['role' => Role::MEMBER->value]);
         $this->member = User::factory()->recycle($this->tenant)->create(['role' => Role::MEMBER->value]);
-        $this->team = Team::factory()->recycle($this->tenant)->create();
+        $this->team = Team::factory()->create();
         
         $this->team->members()->attach($this->manager->id, ['role' => Role::PROJECT_MANAGER->value, 'tenant_id' => $this->tenant->id]);
         $this->team->members()->attach($this->member->id, ['role' => Role::MEMBER->value, 'tenant_id' => $this->tenant->id]);

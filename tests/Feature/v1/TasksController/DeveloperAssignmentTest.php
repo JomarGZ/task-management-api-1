@@ -8,13 +8,13 @@ use App\Models\Tenant;
 use App\Models\User;
 use App\Notifications\TaskAssignedNotification;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
-
 class DeveloperAssignmentTest extends TestCase
 {
-    use LazilyRefreshDatabase;
+    use RefreshDatabase;
     private Task $task;
     
     private Tenant $tenant;

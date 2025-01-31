@@ -14,12 +14,6 @@ use Illuminate\Support\Facades\Gate;
 class TeamController extends ApiController
 {
 
-    protected $teamService;
-
-    public function __construct(TeamService $teamService)
-    {
-        $this->teamService = $teamService;
-    }
     /**
      * List Teams
      * 
@@ -33,40 +27,8 @@ class TeamController extends ApiController
      */
     public function index(Request $request)
     {
-        $column = $this->teamService
-            ->getValidSortColumn(
-                $request->query('column', 'created_at')
-            );
-        $direction = $this->teamService
-            ->getValidSortDirection(
-                $request->query('direction', 'desc')
-            );
-        $teams = Team::query()
-            ->select(['id', 'name'])
-            ->search($request->query('search'))
-            ->orderBy($column, $direction)
-            ->paginate(5);
-
+       $teams = Team::select(['id', 'name'])->get();
        return TeamResource::collection($teams);
-    }
-
-    /**
-     * Create Team
-     * 
-     * Store a newly created team in storage.
-     * @group Team Management
-     * @response 201 {  "data": {
-        "id": 2,
-        "name": "new team"
-    }}
-     * 
-     */
-    public function store(StoreTeamRequest $request)
-    {
-
-        $team = Team::create($request->validated());
-       
-        return new TeamResource($team);
     }
 
     /**
@@ -91,41 +53,7 @@ class TeamController extends ApiController
      */
     public function show(Team $team)
     {
-        Gate::authorize('view', $team);
-       
-        return new TeamResource($team->load('members'));
-    }
-
-    /**
-     * Update Team
-     * 
-     * Update the specified team in storage.
-     * @group Team Management
-     * @response 200 { "data": {
-        "id": 1,
-        "name": "updated team"
-    }}
-     * 
-     */
-    public function update(StoreTeamRequest $request, Team $team)
-    {
-        $team->update($request->validated());
-
         return new TeamResource($team);
     }
 
-    /**
-     * Delete Team
-     * 
-     * Remove the specified team storage.
-     * @group Team Management
-     * @response 200 {}
-     */
-    public function destroy(Team $team)
-    {
-        Gate::authorize('delete', $team);
-        $team->delete();
-
-        return $this->ok('');
-    }
 }
