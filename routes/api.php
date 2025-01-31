@@ -15,6 +15,7 @@ use App\Http\Controllers\api\v1\Teams\TeamMembersController;
 use App\Http\Controllers\api\v1\Tenants\TenantMembersController;
 use App\Http\Controllers\api\v1\Tasks\TaskStatusController;
 use App\Http\Controllers\api\v1\Teams\TeamStatisticController;
+use App\Http\Controllers\api\v1\Tenants\TenantMemberListController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/user', function (Request $request) {
@@ -30,8 +31,11 @@ Route::middleware('auth:sanctum')->group(function() {
         ->parameters(['members' => 'user'])
         ->except(['update', 'show']);
         
+    Route::get('tenant/members/list', TenantMemberListController::class);
     Route::apiResource('tenant/members', TenantMembersController::class)
         ->parameters(['members' => 'user']);
+
+
     Route::apiResource('projects', ProjectController::class);
 
     Route::patch('tasks/{task}/status', [TaskStatusController::class, 'update']);

@@ -46,13 +46,13 @@ class TenantMembersController extends ApiController
             );
         
         $members = User::query()
-        ->select(['id', 'name', 'role', 'email'])
-        ->search($request->query('search')) 
-        ->filterByRole($request->query('role'))
-        ->orderBy(
-            $column,
-            $direction)
-        ->paginate(10);
+            ->select(['id', 'name', 'role', 'email'])
+            ->search($request->query('search')) 
+            ->filterByRole($request->query('role'))
+            ->orderBy(
+                $column,
+                $direction)
+            ->paginate(10);
 
         return TenantMemberResource::collection($members);
     }
