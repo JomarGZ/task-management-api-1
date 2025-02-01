@@ -5,6 +5,7 @@ use App\Http\Controllers\api\v1\auth\LogoutController;
 use App\Http\Controllers\api\v1\auth\PasswordUpdateController;
 use App\Http\Controllers\api\v1\auth\RegisterController;
 use App\Http\Controllers\api\v1\Projects\ProjectController;
+use App\Http\Controllers\api\v1\Projects\ProjectTeamController;
 use App\Http\Controllers\api\v1\TaskComments\TaskCommentController;
 use App\Http\Controllers\api\v1\Tasks\ProjectTaskDevAssignmentController;
 use App\Http\Controllers\api\v1\Tasks\ProjectTaskQAAssignmentController;
@@ -35,7 +36,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('tenant/members', TenantMembersController::class)
         ->parameters(['members' => 'user']);
 
-
+    Route::post('projects/{project}/assignment', [ProjectTeamController::class, 'store']);
     Route::apiResource('projects', ProjectController::class);
 
     Route::patch('tasks/{task}/status', [TaskStatusController::class, 'update']);

@@ -14,11 +14,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('project_team', function (Blueprint $table) {
+        Schema::create('project_user', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Project::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
-            $table->string('position');
             $table->timestamps();
         });
     }

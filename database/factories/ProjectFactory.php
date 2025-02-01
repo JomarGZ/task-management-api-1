@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Team;
 use App\Models\Tenant;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,6 +22,7 @@ class ProjectFactory extends Factory
         return [
             'tenant_id' => Tenant::factory(),
             'team_id' => Team::factory(),
+            'project_manager' => User::factory(),
             'name' => fake()->sentence(),
             'description' => fake()->realText()
         ];

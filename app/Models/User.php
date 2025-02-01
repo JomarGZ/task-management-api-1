@@ -65,15 +65,9 @@ class User extends Authenticatable
          ->withTimestamps();
     }
 
-    public function projects()
+    public function assignedProjectAsManager()
     {
-        return $this->belongsToMany(
-            Project::class,
-            'project_team',
-            'user_id',
-            'project_id'
-        )->withPivot('position')
-         ->withTimestamps();
+        return $this->hasOne(Project::class, 'project_manager');
     }
 
 

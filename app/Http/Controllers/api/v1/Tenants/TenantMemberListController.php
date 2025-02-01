@@ -13,11 +13,17 @@ class TenantMemberListController extends ApiController
     /**
      * Handle the incoming request.
      */
-    public function __invoke()
+    public function __invoke(Request $request)
     {
+        $users = User::query()
+            ->select('id', 'name')
+            ->when($request->query('filtered_out_member_ids'),function ($query) use ($request) {
+                $query->whereNotIn('id', $request->query('filtered_out_member_ids'));
+            })
+            ->get();
         return $this->success(
             'Tenant members retrieved successfully',
-            User::select('id', 'name')->get()
+            $users
         );
     }
 }
