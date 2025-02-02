@@ -29,7 +29,7 @@ class StoreProjectRequest extends FormRequest
             'name'          => ['required', 'string', 'max:255'],
             'description'   => ['required', 'string', 'max:500'],
             'team_id'       => ['sometimes', 'exists:teams,id'],
-            'project_manager' => ['sometimes', 'exists:users,id'],
+            'project_manager' => ['nullable', 'exists:users,id'],
         ];
     }
 
