@@ -2,6 +2,7 @@
 
 use App\Models\Team;
 use App\Models\Tenant;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,6 +18,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Tenant::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Team::class)->nullable();
+            $table->foreignIdFor(User::class, 'project_manager')->nullable();
             $table->string('name');
             $table->text('description');
             $table->timestamps();

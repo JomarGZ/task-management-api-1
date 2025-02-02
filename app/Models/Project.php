@@ -14,10 +14,22 @@ class Project extends Model
 
     protected $fillable = [
         'tenant_id',
+        'project_manager',
         'team_id',
         'name',
         'description'
     ];
+
+    public function projectManager()
+    {
+        return $this->belongsTo(User::class, 'project_manager');
+    }
+
+    public function assignedTeamMembers()
+    {
+        return $this->belongsToMany(User::class, 'project_user', 'project_id', 'user_id')
+            ->withTimestamps();
+    }
 
     public function teamAssignee()
     {

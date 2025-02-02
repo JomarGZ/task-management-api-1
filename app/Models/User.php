@@ -65,6 +65,11 @@ class User extends Authenticatable
          ->withTimestamps();
     }
 
+    public function assignedProjectAsManager()
+    {
+        return $this->hasMany(Project::class, 'project_manager');
+    }
+
 
     public function assignedTasks()
     {
