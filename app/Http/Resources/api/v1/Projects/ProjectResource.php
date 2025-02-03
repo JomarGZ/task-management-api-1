@@ -20,9 +20,15 @@ class ProjectResource extends JsonResource
             'id'            => $this->id,
             'name'          => $this->name,
             'description'   => $this->description,
+            'started_at'   => $this->started_at,
+            'ended_at'   => $this->ended_at,
+            'budget'   => $this->budget,
+            'status'   => $this->status,
+            'priority'   => $this->priority,
+            'client_name'   => $this->client_name,
             'created_at'    => $this->created_at,
             'team_assignee' => TeamResource::make($this->whenLoaded('teamAssignee')),
-            'project_manager' => TenantMemberResource::make($this->whenLoaded('projectManager')),
+            'manager' => TenantMemberResource::make($this->whenLoaded('projectManager')),
             'assigned_members' => TenantMemberResource::collection($this->whenLoaded('assignedTeamMembers')),
         ];
     }

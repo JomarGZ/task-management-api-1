@@ -5,6 +5,8 @@ use App\Http\Controllers\api\v1\auth\LogoutController;
 use App\Http\Controllers\api\v1\auth\PasswordUpdateController;
 use App\Http\Controllers\api\v1\auth\RegisterController;
 use App\Http\Controllers\api\v1\Projects\ProjectController;
+use App\Http\Controllers\api\v1\Projects\ProjectPriorityController;
+use App\Http\Controllers\api\v1\Projects\ProjectStatusController;
 use App\Http\Controllers\api\v1\Projects\ProjectTeamController;
 use App\Http\Controllers\api\v1\TaskComments\TaskCommentController;
 use App\Http\Controllers\api\v1\Tasks\ProjectTaskDevAssignmentController;
@@ -35,7 +37,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('tenant/members/list', TenantMemberListController::class);
     Route::apiResource('tenant/members', TenantMembersController::class)
         ->parameters(['members' => 'user']);
-
+    Route::get('project-statuses', [ProjectStatusController::class, 'index']);
+    Route::get('project-priority-levels', ProjectPriorityController::class);
     Route::post('projects/{project}/assignment', [ProjectTeamController::class, 'store']);
     Route::apiResource('projects', ProjectController::class);
 

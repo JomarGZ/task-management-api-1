@@ -28,8 +28,14 @@ class StoreProjectRequest extends FormRequest
         return [
             'name'          => ['required', 'string', 'max:255'],
             'description'   => ['required', 'string', 'max:500'],
+            'client_name'   => ['required', 'string', 'max:255'],
+            'started_at'    => ['nullable'],
+            'ended_at'      => ['nullable'],
+            'budget'        => ['nullable', 'numeric', 'max_digits:10'],
+            'status'        => ['nullable'],
+            'priority'      => ['nullable'],
             'team_id'       => ['sometimes', 'exists:teams,id'],
-            'project_manager' => ['nullable', 'exists:users,id'],
+            'manager'       => ['nullable', 'exists:users,id'],
         ];
     }
 
