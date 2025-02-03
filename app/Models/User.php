@@ -67,7 +67,7 @@ class User extends Authenticatable
 
     public function assignedProjectAsManager()
     {
-        return $this->hasMany(Project::class, 'project_manager');
+        return $this->hasMany(Project::class, 'manager');
     }
 
 

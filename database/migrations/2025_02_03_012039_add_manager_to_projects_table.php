@@ -13,7 +13,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('projects', function (Blueprint $table) {
-            $table->foreignIdFor(User::class, 'project_manager')->nullable();
+            $table->foreignId('manager')
+            ->nullable()
+            ->constrained('users') // Explicitly reference the 'users' table
+            ->onDelete('set null'); // Optional: Define the behavior on delete
         });
     }
 
@@ -23,8 +26,10 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('projects', function (Blueprint $table) {
-            $table->dropForeign(['project_manager']);
-            $table->dropColumn('project_manager');  
+               // Drop the foreign key constraint first
+               $table->dropForeign(['manager']);
+               // Then drop the 'manager' column
+               $table->dropColumn('manager');
         });
     }
 };

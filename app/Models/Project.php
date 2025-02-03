@@ -14,15 +14,37 @@ class Project extends Model
 
     protected $fillable = [
         'tenant_id',
-        'project_manager',
+        'manager',
+        'client_name',
+        'started_at',
+        'ended_at',
+        'budget',
+        'priority',
+        'status',
         'team_id',
         'name',
         'description'
     ];
 
+    protected function casts () {
+        return [
+            'started_at' => 'datetime',
+            'ended_at' => 'datetime',
+        ];
+    }
+
+    public function setBudgetAttribute($value)
+    {
+        $this->attributes['budget'] = (int) $value * 100;
+    }
+    public function getBudgetAttribute($value)
+    {
+        return (int) $value / 100;
+    }
+
     public function projectManager()
     {
-        return $this->belongsTo(User::class, 'project_manager');
+        return $this->belongsTo(User::class, 'manager');
     }
 
     public function assignedTeamMembers()
