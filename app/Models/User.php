@@ -54,6 +54,16 @@ class User extends Authenticatable
         ];
     }
 
+    public function assignments()
+    {
+        return $this->hasMany(Assignment::class);
+    }
+
+    public function tasks()
+    {
+        return $this->morphedByMany(Task::class, 'assignable', 'assignments');
+    }
+
     public function teams()
     {
         return $this->belongsToMany(
