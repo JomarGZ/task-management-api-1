@@ -24,6 +24,7 @@ trait BelongsToTenant
                 $model->tenant_id = auth()->user()->tenant_id;
             }
         });
+
     }
 
     public function tenant()

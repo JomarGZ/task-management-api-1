@@ -37,6 +37,17 @@ class Task extends Model implements HasMedia
         return $this->belongsTo(Project::class);
     }
 
+   public function assignments()
+   {
+        return $this->morphMany(Assignment::class, 'assignable');
+   }
+
+   public function assignedUsers()
+   {
+        return $this->morphToMany(User::class, 'assignable', 'assignments')
+            ->withTimestamps();
+   }
+
     public function assignedDev()
     {
         return $this->belongsTo(User::class, 'assigned_dev_id');

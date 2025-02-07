@@ -141,7 +141,8 @@ class TaskController extends ApiController
             'assignedDev:id,name,email',
             'assignedQA:id,name,email', 
             'comments:id,commentable_id,commentable_type,author_id,content,created_at,updated_at',
-            'comments.author:id,name,email,role'
+            'comments.author:id,name,email,role',
+            'assignedUsers:id,name'
         ]));
     }
 
