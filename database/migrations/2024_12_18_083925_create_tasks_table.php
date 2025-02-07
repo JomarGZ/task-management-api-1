@@ -24,8 +24,8 @@ return new class extends Migration
             $table->foreignIdFor(User::class, 'assigned_qa_id')->nullable();
             $table->string('title');
             $table->text('description');
-            $table->string('priority_level')->default(PriorityLevel::LOW->value);
-            $table->string('status')->default(Statuses::NOT_STARTED->value);
+            $table->string('priority_level');
+            $table->string('status');
             $table->date('deadline_at')->nullable();
             $table->date('previous_deadline_at')->nullable();
             $table->date('started_at')->nullable();
