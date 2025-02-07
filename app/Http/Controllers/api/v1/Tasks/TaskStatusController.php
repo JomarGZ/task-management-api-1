@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\api\v1\Tasks;
 
+use App\Enums\Enums\Statuses;
 use App\Http\Controllers\api\v1\ApiController;
 use App\Http\Requests\api\v1\Tasks\UpdateTaskStatusRequest;
 use App\Http\Resources\api\v1\Tasks\TaskResource;
@@ -10,6 +11,14 @@ use Illuminate\Support\Facades\Gate;
 
 class TaskStatusController extends ApiController
 {
+
+    public function index() 
+    {
+        return $this->success(
+            'Statuses retrieved successfully',
+            Statuses::cases()
+        );
+    }
     /**
      * Update Task Status
      * 

@@ -30,27 +30,25 @@ class StoreTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'             => ['required', 'string', 'max:255'],
-            'description'       => ['required', 'string', 'max:500'],
-            'assigned_dev_id'   => ['nullable', 'exists:users,id'],
-            'priority_level'    => ['nullable', Rule::in(PriorityLevel::cases())],
-            'status'            => ['sometimes', Rule::in(Statuses::cases())],
-            'deadline_at'       => ['nullable'],
-            'started_at'        => ['nullable'],
-            'completed_at'      => ['nullable'],
-            'photo_attachments.*'       => ['sometimes', 'image'],
+            'title'                 => ['required', 'string', 'max:255'],
+            'description'           => ['required', 'string', 'max:500'],
+            'assigned_dev_id'       => ['nullable', 'exists:users,id'],
+            'deadline_at'           => ['nullable'],
+            'started_at'            => ['nullable'],
+            'completed_at'          => ['nullable'],
+            'photo_attachments.*'   => ['sometimes', 'image'],
         ];
     }
 
-    public function messages()
-    {
-        $priorityLevels = implode(',', array_column(PriorityLevel::cases(), 'value'));
-        $statuses = implode(',', array_column(Statuses::cases(), 'value'));
-        return [
-            'priority_level.in' => "The selected priority level is invalid. The valid priority level are: $priorityLevels",
-            'status.in'         => "The selected statuses is invalid. The valid statuses are: $statuses"
-        ];
-    }
+    // public function messages()
+    // {
+    //     $priorityLevels = implode(',', array_column(PriorityLevel::cases(), 'value'));
+    //     $statuses = implode(',', array_column(Statuses::cases(), 'value'));
+    //     return [
+    //         'priority_level.in' => "The selected priority level is invalid. The valid priority level are: $priorityLevels",
+    //         'status.in'         => "The selected statuses is invalid. The valid statuses are: $statuses"
+    //     ];
+    // }
 
         /**
      * Define body parameters for API documentation (if applicable).

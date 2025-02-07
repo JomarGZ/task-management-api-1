@@ -5,6 +5,7 @@ namespace App\Enums\Enums;
 enum Statuses: string
 {
     case NOT_STARTED = 'not started';
+    case TO_DO = 'to do';
     case PLANNING = 'planning';
     case IN_PROGRESS = 'in progress';
     case ON_HOLD = 'on hold';
