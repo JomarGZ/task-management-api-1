@@ -13,7 +13,7 @@ use App\Http\Controllers\api\v1\Tasks\ProjectTaskDevAssignmentController;
 use App\Http\Controllers\api\v1\Tasks\ProjectTaskQAAssignmentController;
 use App\Http\Controllers\api\v1\Tasks\TaskAssignmentController;
 use App\Http\Controllers\api\v1\Tasks\TaskController;
-use App\Http\Controllers\api\v1\Tasks\TaskPriorityLevelsAndStatusesController;
+use App\Http\Controllers\api\v1\Tasks\TaskPriorityController;
 use App\Http\Controllers\api\v1\Teams\TeamController;
 use App\Http\Controllers\api\v1\Teams\TeamMembersController;
 use App\Http\Controllers\api\v1\Tenants\TenantMembersController;
@@ -43,6 +43,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('projects/{project}/assignment', [ProjectTeamController::class, 'store']);
     Route::apiResource('projects', ProjectController::class);
 
+    Route::get('task-priority-levels', [TaskPriorityController::class, 'index']);
     Route::post('tasks/{task}/assignment', [TaskAssignmentController::class, 'store']);
     Route::put('tasks/{task}/unassignment', [TaskAssignmentController::class, 'update']);
     Route::patch('tasks/{task}/status', [TaskStatusController::class, 'update']);
