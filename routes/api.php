@@ -7,6 +7,7 @@ use App\Http\Controllers\api\v1\auth\RegisterController;
 use App\Http\Controllers\api\v1\Projects\ProjectController;
 use App\Http\Controllers\api\v1\Projects\ProjectPriorityController;
 use App\Http\Controllers\api\v1\Projects\ProjectStatusController;
+use App\Http\Controllers\api\v1\Projects\ProjectTaskController;
 use App\Http\Controllers\api\v1\Projects\ProjectTeamController;
 use App\Http\Controllers\api\v1\TaskComments\TaskCommentController;
 use App\Http\Controllers\api\v1\Tasks\ProjectTaskDevAssignmentController;
@@ -52,7 +53,11 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::delete('tasks/{task}/unassign-developer', [ProjectTaskDevAssignmentController::class, 'destroy']);
     Route::patch('tasks/{task}/assign-qa', [ProjectTaskQAAssignmentController::class, 'store']);
     Route::delete('tasks/{task}/unassign-qa', [ProjectTaskQAAssignmentController::class, 'destroy']);
-    Route::apiResource('projects.tasks', TaskController::class)->shallow();
+   
+    Route::apiResource('projects.tasks', ProjectTaskController::class)->shallow();
+    Route::prefix('standalone')->group(function () {
+        Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');
+    });
     Route::apiResource('tasks.comments', TaskCommentController::class)->shallow()->except('index');
     Route::get('project-statuses', [ProjectStatusController::class, 'index']);
     Route::get('teams/{team}/statistic', [TeamStatisticController::class, 'index']);
