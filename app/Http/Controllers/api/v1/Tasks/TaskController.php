@@ -25,26 +25,11 @@ class TaskController extends ApiController
                 'project:id,name', 
                 'assignedUsers:id,name'
             ])
-            ->when($request->status, function ($query) use ($request) {
-                $query->where('status', $request->status);
-            })
-            ->when($request->priority_level, function ($query) use ($request) {
-                $query->where('priority_level', $request->priority_level);
-            })
-            ->when($request->project_id, function ($query)  use ($request) {
-                $query->where('project_id', $request->project_id);
-            })
-            ->when($request->assigneeId, function ($query) use($request) {
-                $query->whereHas('assignedUsers', function (Builder $query) use ($request){
-                    $query->where('users.id', $request->assigneeId);
-                });
-            })
-            ->when($request->search, function ($query) use($request) {
-                $query->whereAny([
-                    'title',
-                    'description'
-                ], 'like', "%$request->search%");
-            })
+            ->filterByStatus($request->status)
+            ->filterByPriorityLevel($request->priority_level)
+            ->filterByProjectId($request->project_id)
+            ->filterByAssigneeId($request->assigneeId)
+            ->filterBySearch($request->search)
             ->paginate(10);
 
         return TaskResource::collection($tasks);

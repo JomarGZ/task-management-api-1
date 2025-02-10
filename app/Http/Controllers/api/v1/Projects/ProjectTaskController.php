@@ -61,9 +61,9 @@ class ProjectTaskController extends ApiController
                 'completed_at',
                 'created_at'
             ])
-            ->search($request->query('search'))
-            ->filterByStatus($request->query('status'))
-            ->filterByPriorityLevel($request->query('priority_level'))
+            ->filterBySearch($request->search)
+            ->filterByStatus($request->status)
+            ->filterByPriorityLevel($request->priority_level)
             ->orderBy(
                 $column, 
                 $direction

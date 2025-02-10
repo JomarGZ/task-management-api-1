@@ -64,27 +64,29 @@ class Task extends Model implements HasMedia
             ->height(150);
     }
 
-    public function scopeSearch($query, $search) {
-        return $query->when($search, function (Builder $query, $search) {
-            $query->whereAny([
-                'title',
-                'description'
-            ], 'like', "%$search%");
-        });
-    }
-
     public function scopeFilterByStatus($query, $status)
     {
-        return $query->when($status, function (Builder $query, $status) {
-            $query->where('status', $status);
-        });
+        return $query->when($status, fn ($query) => $query->where('status', $status));
     }
 
     public function scopeFilterByPriorityLevel($query, $priorityLevel)
     {
-        return $query->when($priorityLevel, function (Builder $query, $priorityLevel) {
-            $query->where('priority_level', $priorityLevel);
-        });
+        return $query->when($priorityLevel, fn ($query) => $query->where('priority_level', $priorityLevel));
+    }
+
+    public function scopeFilterByProjectId($query, $projectId)
+    {
+        return $query->when($projectId, fn ($query) => $query->where('project_id', $projectId));
+    }
+
+    public function scopeFilterByAssigneeId($query, $assigneeId)
+    {
+        return $query->when($assigneeId, fn ($query) => $query->whereHas('assignedUsers', fn ($query) => $query->where('users.id', $assigneeId)));
+    }
+
+    public function scopeFilterBySearch($query, $search)
+    {
+        return $query->when($search, fn ($query) => $query->whereAny(['title', 'description'], 'like', "%$search%"));
     }
 
     public function isInProgress()
