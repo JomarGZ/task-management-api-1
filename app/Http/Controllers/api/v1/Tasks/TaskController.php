@@ -28,15 +28,15 @@ class TaskController extends ApiController
             ->when($request->status, function ($query) use ($request) {
                 $query->where('status', $request->status);
             })
-            ->when($request->priority, function ($query) use ($request) {
-                $query->where('priority', $request->priority);
+            ->when($request->priority_level, function ($query) use ($request) {
+                $query->where('priority_level', $request->priority_level);
             })
             ->when($request->project_id, function ($query)  use ($request) {
                 $query->where('project_id', $request->project_id);
             })
-            ->when($request->assignee, function ($query) use($request) {
+            ->when($request->assigneeId, function ($query) use($request) {
                 $query->whereHas('assignedUsers', function (Builder $query) use ($request){
-                    $query->where('users.id', $request->assignee);
+                    $query->where('users.id', $request->assigneeId);
                 });
             })
             ->when($request->search, function ($query) use($request) {
