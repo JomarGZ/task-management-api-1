@@ -7,6 +7,7 @@ use App\Http\Resources\api\v1\TaskComment\TaskCommentResource;
 use App\Http\Resources\api\v1\Teams\TeamMemberResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
 
 class TaskResource extends JsonResource
 {
@@ -20,7 +21,11 @@ class TaskResource extends JsonResource
         return [
             'id'                => $this->id,
             'title'             => $this->title,
-            'description'       => $this->description,
+            'description'       => $this->when(
+                $request->routeIs('tasks.index'),
+                Str::limit($this->description, 50, '...'),
+                $this->description
+            ),
             'priority_level'    => $this->priority_level,
             'status'            => $this->status,
             'deadline_at'       => $this->deadline_at,
@@ -29,8 +34,6 @@ class TaskResource extends JsonResource
             'created_at'        => $this->created_at,
             'assigned_users'    => TeamMemberResource::collection($this->whenLoaded('assignedUsers')),
             'project'           => ProjectResource::make($this->whenLoaded('project')),
-            'assigned_dev'      => TeamMemberResource::make($this->whenLoaded('assignedDev')),
-            'assigned_qa'       => TeamMemberResource::make($this->whenLoaded('assignedQA')),
             'comments'          => TaskCommentResource::collection($this->whenLoaded('comments')),
             'photo_attachments' => $this->getMedia('task_attachments')->map(function ($media) {
                 return [
