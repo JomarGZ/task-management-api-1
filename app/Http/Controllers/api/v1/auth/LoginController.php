@@ -30,7 +30,7 @@ class LoginController extends ApiController
      */
     public function __invoke(LoginRequest $request)
     {
-        $user = User::where('email', $request->email)->first();
+        $user = User::whereRaw('BINARY email = ?', [$request->email])->first();
 
         if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
