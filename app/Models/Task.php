@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\Enums\Statuses;
 use App\Traits\BelongsToTenant;
 use App\Traits\HasComment;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -62,6 +63,23 @@ class Task extends Model implements HasMedia
         $this->addMediaConversion('thumbnail-150')
             ->width(150)
             ->height(150);
+    }
+
+    public function scopeUpcomingDeadlines(Builder $query, $startDate = null, $endDate = null)
+    {
+        $startDate = $startDate instanceof Carbon ? $startDate->toDateString() : now()->toDateString();
+        $endDate = $endDate instanceof Carbon  ? $endDate->toDateString() : now()->addDays(7)->toDateString();
+
+        return $query
+            ->whereNotNull('deadline_at')
+            ->whereBetween('deadline_at', [$startDate, $endDate]);
+    }
+
+    public function scopeAssignedTo(Builder $query, $userId = null)
+    {
+        return $query->whereHas('assignments', function ($query) use ($userId) {
+            $query->where('user_id', $userId ??= auth()->user()->id);
+        });
     }
 
     public function scopeFilterByStatus($query, $status)
