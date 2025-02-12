@@ -19,6 +19,7 @@ use App\Http\Controllers\api\v1\Teams\TeamController;
 use App\Http\Controllers\api\v1\Teams\TeamMembersController;
 use App\Http\Controllers\api\v1\Tenants\TenantMembersController;
 use App\Http\Controllers\api\v1\Tasks\TaskStatusController;
+use App\Http\Controllers\api\v1\Tasks\UserTasksController;
 use App\Http\Controllers\api\v1\Tasks\UserTaskStatusController;
 use App\Http\Controllers\api\v1\Tasks\UserUpcomingTaskDeadlineController;
 use App\Http\Controllers\api\v1\Teams\TeamStatisticController;
@@ -68,6 +69,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::prefix('user')->group(function () {
         Route::apiResource('task-status-counts', UserTaskStatusController::class)->only('index');
         Route::apiResource('upcoming-tasks-deadlines', UserUpcomingTaskDeadlineController::class)->only('index');
+        Route::apiResource('assigned-tasks', UserTasksController::class)->only('index');
     });
 });
 
