@@ -21,4 +21,5 @@ enum Statuses: string
     case REOPENED = 'reopened';
     case SCHEDULED = 'scheduled';
     case DRAFT = 'draft';
+    case OVER_DUE = 'overdue';
 }
