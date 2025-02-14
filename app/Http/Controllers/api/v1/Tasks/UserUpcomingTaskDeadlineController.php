@@ -16,7 +16,9 @@ class UserUpcomingTaskDeadlineController extends Controller
                 'tasks.deadline_at',
                 'tasks.title',
                 'tasks.id',
+                'tasks.project_id',
             ])
+            ->with('project:id,name')
             ->upcomingDeadlines()
             ->assignedTo()
             ->orderBy('deadline_at')
