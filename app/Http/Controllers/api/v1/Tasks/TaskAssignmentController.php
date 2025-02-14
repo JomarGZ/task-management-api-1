@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\api\v1\Assignments\DestroyAssignmentRequest;
 use App\Http\Requests\api\v1\Assignments\StoreAssignmentRequest;
 use App\Models\Task;
+use App\Services\V1\TaskAssignmentService;
 use Illuminate\Http\Request;
 
 class TaskAssignmentController extends ApiController
@@ -14,8 +15,9 @@ class TaskAssignmentController extends ApiController
     public function store(Task $task, StoreAssignmentRequest $request)
     {
         if ($request->has('assignees')) {
-            $assignees = array_fill_keys($request->assignees, ['tenant_id' => auth()->user()->tenant_id]);
-            $task->assignedUsers()->syncWithoutDetaching($assignees);
+            $assignmentService = new TaskAssignmentService($task);
+            $assignees = $assignmentService->prepareAssignees($request->assignees);
+            $assignmentService->assignToTask($assignees)->notifyAssignees();
         }
         $task->load('assignedUsers');
         return $this->success(

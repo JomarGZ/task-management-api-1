@@ -19,6 +19,7 @@ class TaskAssignedNotification extends Notification implements ShouldQueue
     public function __construct(Task $task)
     {
         $this->task = $task;
+        $this->afterCommit();
     }
 
     /**
@@ -28,7 +29,7 @@ class TaskAssignedNotification extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['mail', 'database'];
+        return ['database'];
     }
 
     /**
@@ -50,6 +51,7 @@ class TaskAssignedNotification extends Notification implements ShouldQueue
     public function toArray(object $notifiable): array
     {
         return [
+            'You are assigned to a task',
             'task_id' => $this->task->id,
             'task_title' => $this->task->title,
             'task_description' => $this->task->description,
