@@ -53,6 +53,8 @@ class ProjectController extends ApiController
             ])
             ->with('teamAssignee:id,name')
             ->search($request->query('search'))
+            ->filterByPriority($request->priority)
+            ->filterByStatus($request->status)
             ->orderBy($column, $direction)
             ->paginate(5);
 

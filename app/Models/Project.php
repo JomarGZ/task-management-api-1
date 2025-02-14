@@ -73,5 +73,15 @@ class Project extends Model
         });
     }
 
+    public function scopeFilterByStatus(Builder $query, $status)
+    {
+        return $query->when($status, fn($query) => $query->where('status', $status));
+    }
+
+    public function scopeFilterByPriority(Builder $query, $priority)
+    {
+        return $query->when($priority, fn($query) => $query->where('priority', $priority));
+    }
+
 
 }
