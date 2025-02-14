@@ -75,7 +75,7 @@ class ProjectController extends ApiController
     public function store(StoreProjectRequest $request)
     {
         $project = Project::create($request->validated());
-
+        
         return new ProjectResource($project); 
     }
 
