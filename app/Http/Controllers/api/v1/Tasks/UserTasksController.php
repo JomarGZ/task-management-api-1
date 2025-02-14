@@ -13,7 +13,8 @@ class UserTasksController extends Controller
     public function index(Request $request)
     {
         $tasks = Task::query()
-            ->select(['id', 'title', 'status', 'priority_level'])
+            ->select(['id', 'title', 'status', 'priority_level', 'project_id'])
+            ->with('project:id,name')
             ->assignedTo()
             ->filterBySearch($request->search)
             ->filterByStatus($request->status)
