@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,11 +14,13 @@ class TaskAssignedNotification extends Notification implements ShouldQueue
     use Queueable;
 
     protected Task $task;
+    protected $project;
     /**
      * Create a new notification instance.
      */
-    public function __construct(Task $task)
+    public function __construct(Task $task,?Project $project = null)
     {
+        $this->project = $project;
         $this->task = $task;
         $this->afterCommit();
     }
@@ -51,10 +54,15 @@ class TaskAssignedNotification extends Notification implements ShouldQueue
     public function toArray(object $notifiable): array
     {
         return [
-            'You are assigned to a task',
-            'task_id' => $this->task->id,
-            'task_title' => $this->task->title,
-            'task_description' => $this->task->description,
+            "message" => "You have been assigned to a task: {$this->task->title}",
+            'main_entity' => [
+                'entity_id' => $this->task->id,
+                'entity_type' => 'task'
+            ],
+            'related_entity' => [
+                'entity_id' => $this->project->id,
+                'entity_type' => 'project',
+            ],
         ];
     }
 }

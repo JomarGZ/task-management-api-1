@@ -51,8 +51,12 @@ class AssignedToProjectNotification extends Notification implements ShouldQueue
     public function toArray(object $notifiable): array
     {
         return [
-            'You are assigned to a project',
-            'project_id' => $this->project->id
+            "message" => "You have been assigned to a project: {$this->project->name}",
+            'main_entity' => [
+                'entity_id' => $this->project->id,
+                'entity_type' => 'task'
+            ],
+            'related_entity' => [],
         ];
     }
 }

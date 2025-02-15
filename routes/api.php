@@ -4,6 +4,7 @@ use App\Http\Controllers\api\v1\auth\LoginController;
 use App\Http\Controllers\api\v1\auth\LogoutController;
 use App\Http\Controllers\api\v1\auth\PasswordUpdateController;
 use App\Http\Controllers\api\v1\auth\RegisterController;
+use App\Http\Controllers\api\v1\notifications\NotificationController;
 use App\Http\Controllers\api\v1\Projects\ProjectController;
 use App\Http\Controllers\api\v1\Projects\ProjectPriorityController;
 use App\Http\Controllers\api\v1\Projects\ProjectStatusController;
@@ -70,6 +71,8 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::apiResource('task-status-counts', UserTaskStatusController::class)->only('index');
         Route::apiResource('upcoming-tasks-deadlines', UserUpcomingTaskDeadlineController::class)->only('index');
         Route::apiResource('assigned-tasks', UserTasksController::class)->only('index');
+        
+        Route::get('notifications', [NotificationController::class, 'index']);
     });
 });
 

@@ -22,7 +22,7 @@ class ProjectTeamAssignmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'assign_team_members' => ['required', 'array'],
+            'assign_team_members' => ['nullable', 'array'],
             'assign_team_members.*' => ['exists:users,id'],
         ];
     }

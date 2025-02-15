@@ -8,11 +8,9 @@ use Illuminate\Support\Facades\Notification;
 class TaskAssignmentService {
     protected $task;
     
-
     public function __construct(?Task $task = null)
     {
         $this->task = $task;
-
     }
     private function ensureAssigneesNotEmpty(array $assignees)
     {
@@ -34,10 +32,10 @@ class TaskAssignmentService {
 
     public function notifyAssignees()
     {
-        $this->task->load('assignedUsers');
+        $this->task->load(['assignedUsers', 'project']);
         $assignees = $this->task->assignedUsers;
-
-        Notification::send($assignees, new TaskAssignedNotification($this->task));
+        $project = $this->task->project;
+        Notification::send($assignees, new TaskAssignedNotification($this->task, $project));
         return $this;
     }
 
