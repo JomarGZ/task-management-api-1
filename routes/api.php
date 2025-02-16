@@ -26,6 +26,7 @@ use App\Http\Controllers\api\v1\Tasks\UserUpcomingTaskDeadlineController;
 use App\Http\Controllers\api\v1\Teams\TeamStatisticController;
 use App\Http\Controllers\api\v1\Tenants\TenantMemberListController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/user', function (Request $request) {
@@ -78,3 +79,5 @@ Route::middleware('auth:sanctum')->group(function() {
 
 Route::post('auth/register', RegisterController::class)->name('register');
 Route::post('auth/login', LoginController::class);
+
+Broadcast::routes(['middleware' => ['auth:sanctum']]);
