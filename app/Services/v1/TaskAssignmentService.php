@@ -1,5 +1,5 @@
 <?php
-namespace App\Services\V1;
+namespace App\Services\v1;
 
 use App\Models\Task;
 use App\Notifications\TaskAssignedNotification;
