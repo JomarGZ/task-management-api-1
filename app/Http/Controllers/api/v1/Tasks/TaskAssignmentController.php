@@ -15,9 +15,8 @@ class TaskAssignmentController extends ApiController
     public function store(Task $task, StoreAssignmentRequest $request)
     {
         if ($request->has('assignees')) {
-            $assignmentService = new TaskAssignmentService($task);
-            $assignees = $assignmentService->prepareAssignees($request->assignees);
-            $assignmentService->assignToTask($assignees)->notifyAssignees();
+            $service = new TaskAssignmentService($task, $request->assignees);
+            $service->assignToTask()->notifyAssignees();
         }
         $task->load('assignedUsers');
         return $this->success(

@@ -7,32 +7,37 @@ use Illuminate\Support\Facades\Notification;
 
 class TaskAssignmentService {
     protected $task;
+    protected $assigneeIds;
     
-    public function __construct(?Task $task = null)
+    public function __construct(?Task $task = null, array $assigneeIds)
     {
         $this->task = $task;
+        $this->assigneeIds = $assigneeIds;
     }
-    private function ensureAssigneesNotEmpty(array $assignees)
+    private function ensureAssigneesNotEmpty()
     {
-        throw_if(empty($assignees), \InvalidArgumentException::class, 'Assignees cannot be empty.');
-    }
-
-    public function prepareAssignees(array $assignees)
-    {
-        $this->ensureAssigneesNotEmpty($assignees);
-        return array_fill_keys($assignees, ['tenant_id' => auth()->user()->tenant_id]);
+        throw_if(empty($this->assigneeIds), \InvalidArgumentException::class, 'Assignees cannot be empty.');
     }
 
-    public function assignToTask(array $assignees)
+    public function prepareAssignees()
     {
-        $this->ensureAssigneesNotEmpty($assignees);
-        $this->task->assignedUsers()->syncWithoutDetaching($assignees);
+        $this->ensureAssigneesNotEmpty();
+        return array_fill_keys($this->assigneeIds, ['tenant_id' => auth()->user()->tenant_id]);
+    }
+
+    public function assignToTask()
+    {
+        $this->ensureAssigneesNotEmpty();
+        $assigneesWithTenantId = $this->prepareAssignees();
+        $this->task->assignedUsers()->syncWithoutDetaching($assigneesWithTenantId);
         return $this;
     }
 
     public function notifyAssignees()
     {
-        $this->task->load(['assignedUsers', 'project']);
+        $this->task->load(['assignedUsers' => function ($query) {
+            $query->whereIn('users.id', $this->assigneeIds);
+        }, 'project']);
         $assignees = $this->task->assignedUsers;
         $project = $this->task->project;
         Notification::send($assignees, new TaskAssignedNotification($this->task, $project));
