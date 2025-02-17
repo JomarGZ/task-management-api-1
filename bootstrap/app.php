@@ -18,8 +18,14 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
         apiPrefix:'api/v1'
     )
+    ->withBroadcasting(base_path('routes/channels.php'), attributes: ['middleware' => ['api', 'auth:sanctum']])
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->prependToGroup('api', AlwaysAcceptJson::class);
+        $middleware->group('broadcasting', [
+            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            \Illuminate\Auth\Middleware\Authenticate::class,
+        ]);
+          
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->renderable(function(NotFoundHttpException $e) {

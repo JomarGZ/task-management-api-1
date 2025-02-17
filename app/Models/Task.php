@@ -68,7 +68,7 @@ class Task extends Model implements HasMedia
     public function scopeUpcomingDeadlines(Builder $query, $startDate = null, $endDate = null)
     {
         $startDate = $startDate instanceof Carbon ? $startDate->toDateString() : now()->toDateString();
-        $endDate = $endDate instanceof Carbon  ? $endDate->toDateString() : now()->addDays(7)->toDateString();
+        $endDate = $endDate instanceof Carbon  ? $endDate->toDateString() : now()->addDays(3)->toDateString();
 
         return $query
             ->whereNotNull('deadline_at')

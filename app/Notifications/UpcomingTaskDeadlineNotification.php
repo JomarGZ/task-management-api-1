@@ -2,8 +2,10 @@
 
 namespace App\Notifications;
 
+use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
@@ -14,12 +16,14 @@ class UpcomingTaskDeadlineNotification extends Notification implements ShouldQue
 
     public $tries = 5;
     protected $task;
+    protected $project;
     /**
      * Create a new notification instance.
      */
-    public function __construct(Task $task)
+    public function __construct(Task $task, ?Project $project = null)
     {
         $this->task = $task;
+        $this->project = $project;
     }
     /**
      * Get the notification's delivery channels.
@@ -28,7 +32,7 @@ class UpcomingTaskDeadlineNotification extends Notification implements ShouldQue
      */
     public function via(object $notifiable): array
     {
-        return ['mail', 'database'];
+        return ['mail', 'database', 'broadcast'];
     }
 
     /**
@@ -51,15 +55,16 @@ class UpcomingTaskDeadlineNotification extends Notification implements ShouldQue
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            "message" => "You have upcoming task deadline: {$this->task->title}",
+            'main_entity' => [
+                'entity_id' => $this->task->id,
+                'entity_type' => 'task'
+            ],
+            'related_entity' => [
+                'entity_id' => $this->project->id,
+                'entity_type' => 'project',
+            ],
         ];
     }
-    public function toDatabase($notifiable)
-    {
-        return [
-            'task_id' => $this->task->id,
-            'title' => $this->task->title,
-            'deadline' => $this->task->deadline_at,
-        ];
-    }
+   
 }
