@@ -55,7 +55,7 @@ class ManagerAssignedProjectNotification extends Notification implements ShouldQ
             "message" => "You have been assigned to a project as project manager: {$this->project->name}",
             'main_entity' => [
                 'entity_id' => $this->project->id,
-                'entity_type' => 'task'
+                'entity_type' => 'project'
             ],
             'related_entity' => [],
         ];

@@ -74,6 +74,7 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::apiResource('assigned-tasks', UserTasksController::class)->only('index');
         
         Route::get('notifications', [NotificationController::class, 'index']);
+        Route::patch('notifications/{id}/mark-as-read', [NotificationController::class, 'update']);
     });
 });
 

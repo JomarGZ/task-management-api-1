@@ -17,4 +17,15 @@ class NotificationController extends ApiController
             $notifications
         );
     }
+
+    public function update($id)
+    {
+        $notification = auth()->user()->notifications()->findOrFail($id);
+        $notification->markAsRead();
+
+        return $this->success(
+            'Notification mark read successfully',
+            $notification
+        );
+    }
 }
