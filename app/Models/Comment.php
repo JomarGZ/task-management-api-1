@@ -35,6 +35,16 @@ class Comment extends Model
     {
         return $this->morphTo();
     }
+    public function replies()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+    
+    public function parentComment()
+    {
+        return $this->belongsTo(Comment::class, 'commentable_id')
+            ->where('commentable_type', self::class);
+    }
 
     public function author()
     {

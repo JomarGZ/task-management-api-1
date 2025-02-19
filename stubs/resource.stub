@@ -3,9 +3,10 @@
 namespace {{ namespace }};
 
 use Illuminate\Http\Request;
+use App\Http\Resources\BaseJsonResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class {{ class }} extends JsonResource
+class {{ class }} extends BaseJsonResource
 {
     /**
      * Transform the resource into an array.

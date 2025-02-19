@@ -2,10 +2,10 @@
 
 namespace App\Http\Resources\api\v1\tenants;
 
+use App\Http\Resources\BaseJsonResource;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 
-class TenantMemberResource extends JsonResource
+class TenantMemberResource extends BaseJsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,10 +15,10 @@ class TenantMemberResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'    => $this->id,
-            'name'  => $this->name,
-            'email' => $this->email,
-            'role'  => $this->role,
+            'id'    => $this->whenSet($this->id),
+            'name'  => $this->whenSet($this->name),
+            'email' => $this->whenSet($this->email),
+            'role'  => $this->whenSet($this->role),
         ];
     }
 }
