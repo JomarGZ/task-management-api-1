@@ -16,7 +16,8 @@ class Comment extends Model
         'author_id',
         'commentable_id',
         'commentable_type',
-        'content'
+        'content',
+        'parent_id'
     ];
 
     protected static function boot()
@@ -37,7 +38,12 @@ class Comment extends Model
     }
     public function replies()
     {
-        return $this->morphMany(Comment::class, 'commentable');
+        return $this->hasMany(Comment::class, 'parent_id');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Comment::class, 'parent_id');
     }
     
     public function parentComment()
