@@ -60,6 +60,7 @@ class TaskCommentController extends ApiController
      */
     public function show(Comment $comment)
     {
+        $comment->load(['author:id,name', 'replies:id,content,created_at']);
         return new TaskCommentResource($comment);
     }
 
@@ -81,6 +82,7 @@ class TaskCommentController extends ApiController
         $comment->update([
             'content' => $request->content
         ]);
+        $comment->load(['author:id,name', 'replies:id,content,created_at']);
         return new TaskCommentResource($comment);
     }
 
