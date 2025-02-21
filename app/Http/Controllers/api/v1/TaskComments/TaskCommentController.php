@@ -4,13 +4,25 @@ namespace App\Http\Controllers\api\v1\TaskComments;
 
 use App\Http\Controllers\api\v1\ApiController;
 use App\Http\Requests\api\v1\TaskComment\StoreTaskCommentRequest;
+use App\Http\Resources\api\v1\Comments\CommentResource;
 use App\Http\Resources\api\v1\TaskComment\TaskCommentResource;
 use App\Models\Comment;
 use App\Models\Task;
+use App\Services\v1\TaskCommentService;
 
 class TaskCommentController extends ApiController 
 {
+    protected $taskCommentService;
+    public function __construct(TaskCommentService $taskCommentService)
+    {
+        $this->taskCommentService = $taskCommentService;
+    }
+    public function index(Task $task)
+    {
+        $taskComments = $this->taskCommentService->getTaskComments($task);
 
+        return CommentResource::collection($taskComments);
+    }
     /**
      * Create task comment
      * 
@@ -30,7 +42,8 @@ class TaskCommentController extends ApiController
         $taskNewComment = $task->comments()->create([
             'content' => $request->content
         ]);
-        return new TaskCommentResource($taskNewComment);
+        $taskNewComment->load(['author:id,name', 'replies:id,content,created_at']);
+        return new CommentResource($taskNewComment);
     }
 
     /**
@@ -47,6 +60,7 @@ class TaskCommentController extends ApiController
      */
     public function show(Comment $comment)
     {
+        $comment->load(['author:id,name', 'replies:id,content,created_at']);
         return new TaskCommentResource($comment);
     }
 
@@ -68,6 +82,7 @@ class TaskCommentController extends ApiController
         $comment->update([
             'content' => $request->content
         ]);
+        $comment->load(['author:id,name', 'replies:id,content,created_at']);
         return new TaskCommentResource($comment);
     }
 

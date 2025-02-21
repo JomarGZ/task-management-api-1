@@ -12,10 +12,7 @@ class StoreTaskCommentRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if ($this->routeIs('comments.update')) {
-            return request()->user()->can('update', [Comment::class, $this->route('comment')]);
-        }
-        return request()->user()->can('create', Comment::class);
+        return true;
     }
 
     /**
@@ -26,7 +23,7 @@ class StoreTaskCommentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'content' => 'required|string|max:255',
+            'content' => 'required|string|max:1000',
         ];
     }
 

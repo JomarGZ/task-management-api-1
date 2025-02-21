@@ -64,7 +64,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::prefix('standalone')->group(function () {
         Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');
     });
-    Route::apiResource('tasks.comments', TaskCommentController::class)->shallow()->except('index');
+    Route::apiResource('tasks.comments', TaskCommentController::class)->shallow();
     Route::get('project-statuses', [ProjectStatusController::class, 'index']);
     Route::get('teams/{team}/statistic', [TeamStatisticController::class, 'index']);
 

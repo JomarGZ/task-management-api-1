@@ -1,22 +1,24 @@
 <?php
 
-namespace {{ namespace }};
+namespace App\Notifications;
 
+use App\Models\Comment;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class {{ class }} extends Notification
+class TaskCommentNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct(protected Comment $comment, protected $message)
     {
-        //
+        $this->afterCommit();
     }
 
     /**
@@ -26,7 +28,7 @@ class {{ class }} extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['database', 'broadcast'];
     }
 
     /**
@@ -47,15 +49,17 @@ class {{ class }} extends Notification
      */
     public function toArray(object $notifiable): array
     {
+        $task = $this->comment->commentable;
+        $project = $this->comment->commentable->project;
         return [
-            "message" => "Message here",
+            "message" => $this->message,
             'main_entity' => [
-                'entity_id' => "entity id here",
-                'entity_type' => 'entity type here'
+                'entity_id' => $task->id,
+                'entity_type' => 'task'
             ],
             'related_entity' => [
-                'entity_id' => "related entity id here",
-                'entity_type' => 'related entity type here',
+                'entity_id' => $project->id,
+                'entity_type' => 'project'
             ],
         ];
     }

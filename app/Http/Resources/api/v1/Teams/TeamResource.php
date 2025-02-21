@@ -2,10 +2,10 @@
 
 namespace App\Http\Resources\api\v1\Teams;
 
+use App\Http\Resources\BaseJsonResource;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 
-class TeamResource extends JsonResource
+class TeamResource extends BaseJsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,8 +15,8 @@ class TeamResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'        => $this->id,
-            'name'      => $this->name,
+            'id'        => $this->whenSet($this->id),
+            'name'      => $this->wwhenSet($this->name),
             'members'   => TeamMemberResource::collection($this->whenLoaded('members')),
         ];
     }

@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Comment;
 use App\Models\Project;
 use App\Models\Task;
+use App\Observers\v1\CommentObserver;
 use App\Observers\v1\ProjectObserver;
 use App\Observers\v1\TaskObserver;
 use Illuminate\Support\ServiceProvider;
@@ -32,5 +34,7 @@ class AppServiceProvider extends ServiceProvider
         }
         Task::observe(TaskObserver::class);
         Project::observe(ProjectObserver::class);
+        Comment::observe(CommentObserver::class);
+
     }
 }
