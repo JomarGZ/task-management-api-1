@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\api\v1\Assignments\DestroyAssignmentRequest;
 use App\Http\Requests\api\v1\Assignments\StoreAssignmentRequest;
 use App\Models\Task;
-use App\Services\V1\TaskAssignmentService;
+use App\Services\v1\TaskAssignmentService;
 use Illuminate\Http\Request;
 
 class TaskAssignmentController extends ApiController
