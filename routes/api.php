@@ -5,6 +5,7 @@ use App\Http\Controllers\api\v1\auth\LogoutController;
 use App\Http\Controllers\api\v1\auth\PasswordUpdateController;
 use App\Http\Controllers\api\v1\auth\RegisterController;
 use App\Http\Controllers\api\v1\notifications\NotificationController;
+use App\Http\Controllers\api\v1\Profile\ProfileController;
 use App\Http\Controllers\api\v1\Projects\ProjectController;
 use App\Http\Controllers\api\v1\Projects\ProjectPriorityController;
 use App\Http\Controllers\api\v1\Projects\ProjectStatusController;
@@ -36,6 +37,8 @@ Route::get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->group(function() {
     Route::put('auth/password-update', PasswordUpdateController::class);
     Route::post('auth/logout', LogoutController::class);
+
+    Route::post('user/profile-update', [ProfileController::class, 'store']);
 
     Route::apiResource('teams', TeamController::class)->shallow();
     Route::apiResource('teams.members', TeamMembersController::class)
