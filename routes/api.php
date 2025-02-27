@@ -27,12 +27,14 @@ use App\Http\Controllers\api\v1\Tasks\UserTaskStatusController;
 use App\Http\Controllers\api\v1\Tasks\UserUpcomingTaskDeadlineController;
 use App\Http\Controllers\api\v1\Teams\TeamStatisticController;
 use App\Http\Controllers\api\v1\Tenants\TenantMemberListController;
+use App\Http\Resources\api\v1\tenants\TenantMemberResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/user', function (Request $request) {
-    return $request->user();
+    $user = $request->user()->load('media'); 
+    return new TenantMemberResource($user);
 })->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->group(function() {
