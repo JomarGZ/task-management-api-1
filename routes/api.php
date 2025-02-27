@@ -6,6 +6,7 @@ use App\Http\Controllers\api\v1\auth\PasswordUpdateController;
 use App\Http\Controllers\api\v1\auth\RegisterController;
 use App\Http\Controllers\api\v1\notifications\NotificationController;
 use App\Http\Controllers\api\v1\Profile\ProfileController;
+use App\Http\Controllers\api\v1\Profile\UpdateProfilePhotoController;
 use App\Http\Controllers\api\v1\Projects\ProjectController;
 use App\Http\Controllers\api\v1\Projects\ProjectPriorityController;
 use App\Http\Controllers\api\v1\Projects\ProjectStatusController;
@@ -39,7 +40,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('auth/logout', LogoutController::class);
 
     Route::post('user/profile-update', [ProfileController::class, 'store']);
-
+    Route::post('user/profile-avatar', [UpdateProfilePhotoController::class, 'store']);
     Route::apiResource('teams', TeamController::class)->shallow();
     Route::apiResource('teams.members', TeamMembersController::class)
         ->parameters(['members' => 'user'])

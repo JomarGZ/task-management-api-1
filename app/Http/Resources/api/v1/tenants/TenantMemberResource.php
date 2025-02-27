@@ -19,6 +19,19 @@ class TenantMemberResource extends BaseJsonResource
             'name'  => $this->whenSet($this->name),
             'email' => $this->whenSet($this->email),
             'role'  => $this->whenSet($this->role),
+            'avatar' => $this->whenSet($this->getFirstMediaUrl('avatar'),function () {
+                    return [
+                        'thumb-200' => $this->getFirstMediaUrl('avatar', 'thumb-200'),
+                        'thumb-60' => $this->getFirstMediaUrl('avatar', 'thumb-60'),
+                    ];
+            })
         ];
     }
+
+    // 'avatar' => $this->whenSet($this->getMediaUrl('avatar'),function () {
+    //     return [
+    //         'thumb-200' => $this->getMediaUrl('avatar', 'thumb-200'),
+    //         'thumb-60' => $this->getMediaUrl('avatar', 'thumb-60'),
+    //     ];
+    // })
 }
