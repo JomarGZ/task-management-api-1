@@ -5,7 +5,7 @@ namespace App\Observers\v1;
 use App\Enums\Enums\PriorityLevel;
 use App\Enums\Enums\Statuses;
 use App\Models\Project;
-use App\Services\V1\ProjectAssignmentService;
+use App\Services\v1\ProjectAssignmentService;
 
 class ProjectObserver
 {

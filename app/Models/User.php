@@ -60,17 +60,20 @@ class User extends Authenticatable implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('avatar')
-            ->singleFile() 
+            ->singleFile()
+            ->useDisk('s3') // Use the S3 disk
             ->registerMediaConversions(function (Media $media) {
                 $this->addMediaConversion('thumb-200')
                     ->width(200)
                     ->height(200)
                     ->sharpen(10);
+    
                 $this->addMediaConversion('thumb-60')
                     ->width(60)
                     ->height(60)
                     ->sharpen(3);
             });
+           
     }
     public function assignments()
     {
