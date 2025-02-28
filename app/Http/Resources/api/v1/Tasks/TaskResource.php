@@ -28,7 +28,7 @@ class TaskResource extends BaseJsonResource
             'started_at'     => $this->whenSet($this->started_at),
             'completed_at'   => $this->whenSet($this->completed_at),
             'created_at'     => $this->whenSet($this->created_at),
-            'description'    => $this->whenSet($this->description, fn($desc) => Str::limit($desc, 50, '...')),
+            'description'    => $this->whenSet($this->description,  $this->description),
             'assigned_users' => TeamMemberResource::collection($this->whenLoaded('assignedUsers')),
             'project'        => ProjectResource::make($this->whenLoaded('project')),
             'comments'       => CommentResource::collection($this->whenLoaded('comments')),
