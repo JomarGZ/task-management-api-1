@@ -6,6 +6,7 @@ use App\Http\Controllers\api\v1\auth\PasswordUpdateController;
 use App\Http\Controllers\api\v1\auth\RegisterController;
 use App\Http\Controllers\api\v1\notifications\NotificationController;
 use App\Http\Controllers\api\v1\Profile\ProfileController;
+use App\Http\Controllers\api\v1\Profile\UpdateProfilePhotoController;
 use App\Http\Controllers\api\v1\Projects\ProjectController;
 use App\Http\Controllers\api\v1\Projects\ProjectPriorityController;
 use App\Http\Controllers\api\v1\Projects\ProjectStatusController;
@@ -26,12 +27,14 @@ use App\Http\Controllers\api\v1\Tasks\UserTaskStatusController;
 use App\Http\Controllers\api\v1\Tasks\UserUpcomingTaskDeadlineController;
 use App\Http\Controllers\api\v1\Teams\TeamStatisticController;
 use App\Http\Controllers\api\v1\Tenants\TenantMemberListController;
+use App\Http\Resources\api\v1\tenants\TenantMemberResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/user', function (Request $request) {
-    return $request->user();
+    $user = $request->user()->load('media'); 
+    return new TenantMemberResource($user);
 })->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->group(function() {
@@ -39,7 +42,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('auth/logout', LogoutController::class);
 
     Route::post('user/profile-update', [ProfileController::class, 'store']);
-
+    Route::post('user/profile-avatar', [UpdateProfilePhotoController::class, 'store']);
     Route::apiResource('teams', TeamController::class)->shallow();
     Route::apiResource('teams.members', TeamMembersController::class)
         ->parameters(['members' => 'user'])

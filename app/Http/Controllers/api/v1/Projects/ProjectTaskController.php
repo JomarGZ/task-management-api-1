@@ -120,7 +120,6 @@ class ProjectTaskController extends ApiController
             foreach($request->file('photo_attachments') as $attachment) {
                 $task->addMedia($attachment)->preservingOriginal()->toMediaCollection('task_attachments');
             }
-                
         }
 
         return new TaskResource($task->load('project'));

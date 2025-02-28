@@ -17,6 +17,12 @@ class TeamMemberResource extends BaseJsonResource
         return [
             'id' => $this->whenSet($this->id),
             'name' => $this->whenSet($this->name),
+            'avatar' => $this->whenSet($this->getFirstMediaUrl('avatar'),function () {
+                return [
+                    'thumb-200' => $this->getFirstMediaUrl('avatar', 'thumb-200'),
+                    'thumb-60' => $this->getFirstMediaUrl('avatar', 'thumb-60'),
+                ];
+            })
         ];
     }
 }
