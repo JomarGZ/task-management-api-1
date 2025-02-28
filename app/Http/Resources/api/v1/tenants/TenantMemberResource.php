@@ -27,11 +27,4 @@ class TenantMemberResource extends BaseJsonResource
             })
         ];
     }
-
-    // 'avatar' => $this->whenSet($this->getMediaUrl('avatar'),function () {
-    //     return [
-    //         'thumb-200' => $this->getMediaUrl('avatar', 'thumb-200'),
-    //         'thumb-60' => $this->getMediaUrl('avatar', 'thumb-60'),
-    //     ];
-    // })
 }
