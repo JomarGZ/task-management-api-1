@@ -13,7 +13,11 @@ class UpdateProfilePhotoController extends ApiController
     {
         if ($request->hasFile('avatar')) {
             $user = User::findOrFail($request->user()->id);
-            $user->addMediaFromRequest('avatar')->toMediaCollection('avatar');
+            $user->addMediaFromRequest('avatar')
+                    ->addCustomHeaders([
+                        'ACL' => 'public-read'
+                    ])
+                    ->toMediaCollection('avatar');
 
             return new TenantMemberResource($user);
         }
