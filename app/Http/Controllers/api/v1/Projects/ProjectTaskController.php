@@ -138,7 +138,8 @@ class ProjectTaskController extends ApiController
 
         return new TaskResource($task->load([
             'project:id,name,description,created_at', 
-            'assignedUsers:id,name'
+            'assignedUsers:id,name',
+            'assignedUsers.media'
         ]));
         
     }

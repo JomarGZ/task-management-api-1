@@ -32,17 +32,17 @@ class TaskResource extends BaseJsonResource
             'assigned_users' => TeamMemberResource::collection($this->whenLoaded('assignedUsers')),
             'project'        => ProjectResource::make($this->whenLoaded('project')),
             'comments'       => CommentResource::collection($this->whenLoaded('comments')),
-            'photo_attachments' => $this->when(isset($this->id), function () {
-                return $this->getMedia('task_attachments')->map(function ($media) {
-                    return [
-                        'id' => $media->id,
-                        'url' => $media->getUrl(),
-                        'name' => $media->file_name,
-                        'size' => $media->size,
-                        'mime_type' => $media->mime_type,
-                    ];
-                });
-            }),
+            'photo_attachments' => $this->whenLoaded('media', function () {
+            return $this->getMedia('task_attachments')->map(function ($media) {
+                return [
+                    'id' => $media->id,
+                    'url' => $media->getUrl(),
+                    'name' => $media->file_name,
+                    'size' => $media->size,
+                    'mime_type' => $media->mime_type,
+                ];
+            });
+        }),
         ], fn($value) => !is_null($value));
     }
 }
