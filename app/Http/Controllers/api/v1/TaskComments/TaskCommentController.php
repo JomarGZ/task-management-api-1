@@ -42,7 +42,7 @@ class TaskCommentController extends ApiController
         $taskNewComment = $task->comments()->create([
             'content' => $request->content
         ]);
-        $taskNewComment->load(['author:id,name', 'replies:id,content,created_at']);
+        $taskNewComment->load(['author:id,name', 'replies:id,content,created_at', 'author.media']);
         return new CommentResource($taskNewComment);
     }
 
