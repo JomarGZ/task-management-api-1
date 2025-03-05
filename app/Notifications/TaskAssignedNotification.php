@@ -42,9 +42,12 @@ class TaskAssignedNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('You have been assigned a new task.')
-                    ->action('View Task', url('/'))
-                    ->line('Thank you for using our application!');
+                    ->subject('Task Assigned Notification')
+                    ->view('emails.task_assigned', [
+                        'task' => $this->task,
+                        'project' => $this->project,
+                        'site_url' => env('FRONTEND_URL')
+                    ]);
     }
 
     /**
