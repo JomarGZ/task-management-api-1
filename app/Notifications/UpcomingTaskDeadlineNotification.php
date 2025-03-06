@@ -5,7 +5,6 @@ namespace App\Notifications;
 use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
@@ -40,11 +39,29 @@ class UpcomingTaskDeadlineNotification extends Notification implements ShouldQue
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
-                    ->subject('Upcoming task deadline.')
-                    ->line('Your task is due tomorrow!')
-                    ->line("Your task title: {$this->task->title}")
-                    ->action('Notification Action', env('FRONTEND_URL'));
+        $frontendUrl = config('app.frontend_url');
+
+        $mail =  (new MailMessage)
+            ->subject('Upcoming Task Deadline')
+            ->line('**You have upcoming task deadline**')
+            ->line('**Task Details:**');
+        if ($this->task) {
+            $mail->line("**Name:** " . ($this->task->title ?? 'Not specified'));
+            $mail->line("**Deadline:** " . ($this->task->deadline_at ?? 'Not specified')); 
+            $mail->line("**Priority:** " . ucfirst($this->task->priority_level ?? 'Not specified'));
+            $mail->line("**Status:** " . ucfirst($this->task->status ?? 'Not specified'));
+        }
+        info($this->task);
+        if (isset($this->task->project) && isset($this->task->project->id)) {
+            $mail->line("**Project Name:** {$this->task->project->name}");
+            if (isset($this->task->project->id) && isset($this->task->id)) {
+                $mail->action('View Task', $frontendUrl . '/projects/' . $this->task->project->id . '/tasks/' . $this->task->id);
+            }
+        }
+        $mail->line('Thank you for using our application!');
+
+        return $mail;
+       
     }
 
     /**
@@ -54,17 +71,27 @@ class UpcomingTaskDeadlineNotification extends Notification implements ShouldQue
      */
     public function toArray(object $notifiable): array
     {
-        return [
-            "message" => "You have upcoming task deadline: {$this->task->title}",
-            'main_entity' => [
+        $result = [
+            "message" => "You have an upcoming task deadline",
+        ];
+        if (isset($this->task)) {
+            if (isset($this->task->title)) {
+                $result['message'] = "You have upcoming task deadline: {$this->task->title}";
+            }
+        }
+        if (isset($this->task->id)) {
+            $result['main_entity'] = [
                 'entity_id' => $this->task->id,
                 'entity_type' => 'task'
-            ],
-            'related_entity' => [
-                'entity_id' => $this->project->id,
+            ];
+        }
+        if (isset($this->task->project) && isset($this->task->project->id)) {
+            $result['related_entity'] = [
+                'entity_id' => $this->task->project->id,
                 'entity_type' => 'project',
-            ],
-        ];
+            ];
+        }
+        return $result;
     }
    
 }

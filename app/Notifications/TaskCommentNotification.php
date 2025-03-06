@@ -51,16 +51,24 @@ class TaskCommentNotification extends Notification implements ShouldQueue
     {
         $task = $this->comment->commentable;
         $project = $this->comment->commentable->project;
-        return [
-            "message" => $this->message,
-            'main_entity' => [
+        $result = [
+            'message' => 'There is noew comment to the task assigned to you'
+        ];
+        if (isset($this->message)) {
+            $result['message'] = $this->message;
+        }
+        if (isset($task->id)) {
+            $result['main_entity'] =  [
                 'entity_id' => $task->id,
                 'entity_type' => 'task'
-            ],
-            'related_entity' => [
+            ];
+        }
+        if (isset($project->id)) {
+            $result['related_entity'] = [
                 'entity_id' => $project->id,
                 'entity_type' => 'project'
-            ],
-        ];
+            ];
+        }
+        return $result;
     }
 }
