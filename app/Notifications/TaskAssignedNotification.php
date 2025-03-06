@@ -53,7 +53,7 @@ class TaskAssignedNotification extends Notification implements ShouldQueue
             $mail->line("**Status:** " . ($this->task->status ?? 'Not specified')); 
         }
         if (isset($this->task->project)) {
-            $mail->line("**Project Name:** " . ($this->project->name ?? 'Not specified'));
+            $mail->line("**Project Name:** " . ($this->taskk->project->name ?? 'Not specified'));
             if (isset($this->task->project->id) && isset($this->task->id)) {
                 $mail->action('View Task', $frontendUrl . '/projects/' . $this->task->project->id . '/tasks/' . $this->task->id);
             }
