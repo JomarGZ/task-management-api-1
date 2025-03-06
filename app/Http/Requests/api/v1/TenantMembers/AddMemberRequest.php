@@ -14,7 +14,7 @@ class AddMemberRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth()->user()->can('create', User::class);
+        return true;
     }
 
     /**

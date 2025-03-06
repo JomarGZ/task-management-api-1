@@ -72,13 +72,12 @@ class TenantMembersController extends ApiController
      */
     public function store(AddMemberRequest $request)
     {
-        $newMember = User::create([
-            'name'      => $request->name,
-            'email'     => $request->email,
-            'role'      => $request->role,
-            'password'  => Hash::make('password'),
-        ]);
-
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'role' => $request->role,
+        ];
+       $newMember = $this->tenantMemberService->addMember($data);
        return new TenantMemberResource($newMember);
     }
 
