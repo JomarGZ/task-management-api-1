@@ -51,7 +51,6 @@ class UpcomingTaskDeadlineNotification extends Notification implements ShouldQue
             $mail->line("**Priority:** " . ucfirst($this->task->priority_level ?? 'Not specified'));
             $mail->line("**Status:** " . ucfirst($this->task->status ?? 'Not specified'));
         }
-        info($this->task);
         if (isset($this->task->project) && isset($this->task->project->id)) {
             $mail->line("**Project Name:** {$this->task->project->name}");
             if (isset($this->task->project->id) && isset($this->task->id)) {
