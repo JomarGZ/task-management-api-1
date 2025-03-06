@@ -19,8 +19,8 @@ class ManagerAssignedProjectNotification extends Notification implements ShouldQ
      */
     public function __construct(Project $project)
     {
-        $this->afterCommit();
         $this->project = $project;
+        $this->afterCommit();
     }
 
     /**
@@ -30,7 +30,7 @@ class ManagerAssignedProjectNotification extends Notification implements ShouldQ
      */
     public function via(object $notifiable): array
     {
-        return ['database', 'broadcast'];
+        return ['database', 'broadcast', 'mail'];
     }
 
     /**
@@ -38,10 +38,19 @@ class ManagerAssignedProjectNotification extends Notification implements ShouldQ
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
-                    ->line('You are assigned to a project as project manager.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+        $frontendUrl = config('app.frontend_url');
+        $mail =  (new MailMessage)
+            ->subject('Project Assigned Notification')
+            ->line('**You are assigned to a project as project manager.**');
+
+        if ($this->project) {
+            $mail->line("**Project Name:** " .($this->project->name ?? 'Not specified'));
+            if (isset($this->project->id)) {
+                $mail->action('View Project', $frontendUrl . '/projects/' . $this->project->id);
+            }
+        }
+            $mail->line('Thank you for using our application!');
+        return $mail;
     }
 
     /**
@@ -51,13 +60,18 @@ class ManagerAssignedProjectNotification extends Notification implements ShouldQ
      */
     public function toArray(object $notifiable): array
     {
-        return [
-            "message" => "You have been assigned to a project as project manager: {$this->project->name}",
-            'main_entity' => [
+        $result = [
+            "message" => "You have been assigned to a project as project manager"
+        ];
+
+        if (isset($this->project->id)) {
+            $result['main_entity'] = [
                 'entity_id' => $this->project->id,
                 'entity_type' => 'project'
-            ],
-            'related_entity' => [],
-        ];
+            ];
+            $result['related_entity'] = [];
+        }
+
+        return $result;
     }
 }

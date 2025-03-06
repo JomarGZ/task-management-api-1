@@ -39,8 +39,9 @@ class TaskAssignmentService {
             $query->whereIn('users.id', $this->assigneeIds);
         }, 'project']);
         $assignees = $this->task->assignedUsers;
-        $project = $this->task->project;
-        Notification::send($assignees, new TaskAssignedNotification($this->task, $project));
+        if (!empty($assignees)) {
+            Notification::send($assignees, new TaskAssignedNotification($this->task));
+        }
         return $this;
     }
 

@@ -15,13 +15,11 @@ class TaskAssignedNotification extends Notification implements ShouldQueue
     use Queueable;
 
     protected Task $task;
-    protected $project;
     /**
      * Create a new notification instance.
      */
-    public function __construct(Task $task,?Project $project = null)
+    public function __construct(Task $task)
     {
-        $this->project = $project;
         $this->task = $task;
         $this->afterCommit();
     }
@@ -41,13 +39,28 @@ class TaskAssignedNotification extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
-                    ->subject('Task Assigned Notification')
-                    ->view('emails.task_assigned', [
-                        'task' => $this->task,
-                        'project' => $this->project,
-                        'site_url' => env('FRONTEND_URL')
-                    ]);
+            // Use FRONTEND_URL from the .env file
+        $frontendUrl = config('app.frontend_url'); // Ensure FRONTEND_URL is properly loaded from .env
+
+        $mail =  (new MailMessage)
+            ->subject('Task Assigned Notification')
+            ->line('**You are assigned to a task.**');
+
+        if ($this->task) {
+            $mail->line("**Name:** ".  ($this->task->title ?? 'Not specified'));
+            $mail->line("**Deadline:** " . ($this->task->deadline_at ?? 'Not specified')); 
+            $mail->line("**Priority:** " . ($this->task->priority_level ?? 'Not specified')); 
+            $mail->line("**Status:** " . ($this->task->status ?? 'Not specified')); 
+        }
+        if (isset($this->task->project)) {
+            $mail->line("**Project Name:** " . ($this->project->name ?? 'Not specified'));
+            if (isset($this->task->project->id) && isset($this->task->id)) {
+                $mail->action('View Task', $frontendUrl . '/projects/' . $this->task->project->id . '/tasks/' . $this->task->id);
+            }
+        }
+        $mail->line('Thank you for using our application!');
+
+        return $mail;
     }
 
     /**
@@ -57,16 +70,24 @@ class TaskAssignedNotification extends Notification implements ShouldQueue
      */
     public function toArray(object $notifiable): array
     {
-        return [
-            "message" => "You have been assigned to a task: {$this->task->title}",
-            'main_entity' => [
+        $result = [
+            "message" => "You have been assigned tp a task"
+        ];
+        if (isset($this->task->title)) {
+            $result['message'] = "You have been assigned to a task: {$this->task->title}";
+        }
+        if (isset($this->task->id)) {
+            $result['main_entity'] = [
                 'entity_id' => $this->task->id,
                 'entity_type' => 'task'
-            ],
-            'related_entity' => [
+            ];
+        }
+        if (isset($this->project->id)) {
+            $result['related_entity'] = [
                 'entity_id' => $this->project->id,
                 'entity_type' => 'project',
-            ],
-        ];
+            ];
+        }
+        return $result;
     }
 }
