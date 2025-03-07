@@ -23,6 +23,7 @@ class UpcomingTaskDeadlineNotification extends Notification implements ShouldQue
     {
         $this->task = $task;
         $this->project = $project;
+        $this->onQueue('notifications');
     }
     /**
      * Get the notification's delivery channels.
@@ -70,26 +71,25 @@ class UpcomingTaskDeadlineNotification extends Notification implements ShouldQue
      */
     public function toArray(object $notifiable): array
     {
-        $result = [
+        $result = [ 
             "message" => "You have an upcoming task deadline",
         ];
+        
         if (isset($this->task)) {
             if (isset($this->task->title)) {
                 $result['message'] = "You have upcoming task deadline: {$this->task->title}";
             }
         }
-        if (isset($this->task->id)) {
-            $result['main_entity'] = [
-                'entity_id' => $this->task->id,
-                'entity_type' => 'task'
-            ];
-        }
-        if (isset($this->task->project) && isset($this->task->project->id)) {
-            $result['related_entity'] = [
-                'entity_id' => $this->task->project->id,
-                'entity_type' => 'project',
-            ];
-        }
+        $result['link'] = isset($his->task->id) && isset($this->task->project->id)
+        ? [
+            'name' => 'tasks.show',
+            'params' => [
+                'projectId' => $this->task->project->id,
+                'taskId' => $this->task->id
+            ]
+        ]
+        : '#';
+        $result['is_external'] = false;
         return $result;
     }
    

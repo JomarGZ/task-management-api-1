@@ -20,6 +20,7 @@ class AssignedToProjectNotification extends Notification implements ShouldQueue
     {
         $this->project = $project;
         $this->afterCommit();
+        $this->onQueue('notifications');
     }
 
     /**
@@ -62,14 +63,18 @@ class AssignedToProjectNotification extends Notification implements ShouldQueue
         $result = [
             "message" => "You have been assigned to a project"
         ];
-
-        if (isset($this->project->id)) {
-            $result['main_entity'] = [
-                'entity_id' => $this->project->id,
-                'entity_type' => 'task'
-            ];
-            $result['related_entity'] = [];
+        if (isset($this->project->name)) {
+            $result['message'] = "You have been assigned to a project: {$this->project->name}";
         }
+        $result['link'] = isset($this->project->id)
+        ? [
+            'name' => 'projects.show',
+            'params' => [
+                'projectId' => $this->project->id
+            ]
+        ]
+        : '#';
+        $result['is_external'] = false;
         return $result;
     }
 }
