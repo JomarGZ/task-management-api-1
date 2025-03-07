@@ -21,6 +21,7 @@ class ManagerAssignedProjectNotification extends Notification implements ShouldQ
     {
         $this->project = $project;
         $this->afterCommit();
+        $this->onQueue('notifications');
     }
 
     /**
@@ -61,17 +62,20 @@ class ManagerAssignedProjectNotification extends Notification implements ShouldQ
     public function toArray(object $notifiable): array
     {
         $result = [
-            "message" => "You have been assigned to a project as project manager"
+            "message" => "You have been assigned to a project as Project Manager"
         ];
-
-        if (isset($this->project->id)) {
-            $result['main_entity'] = [
-                'entity_id' => $this->project->id,
-                'entity_type' => 'project'
-            ];
-            $result['related_entity'] = [];
+        if (isset($this->project->name)) {
+            $result['message'] = "You have been assigned to a project {$this->project->name} as project manager";
         }
-
+        $result['link'] = isset($this->project->id)
+        ? [
+            'name' => 'projects.show',
+            'params' => [
+                'projectId' => $this->project->id
+            ]
+        ]
+        : '#';
+        $result['is_external'] = false;
         return $result;
     }
 }

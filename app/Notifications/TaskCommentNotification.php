@@ -19,6 +19,7 @@ class TaskCommentNotification extends Notification implements ShouldQueue
     public function __construct(protected Comment $comment, protected $message)
     {
         $this->afterCommit();
+        $this->onQueue('notifications');
     }
 
     /**
@@ -57,18 +58,16 @@ class TaskCommentNotification extends Notification implements ShouldQueue
         if (isset($this->message)) {
             $result['message'] = $this->message;
         }
-        if (isset($task->id)) {
-            $result['main_entity'] =  [
-                'entity_id' => $task->id,
-                'entity_type' => 'task'
-            ];
-        }
-        if (isset($project->id)) {
-            $result['related_entity'] = [
-                'entity_id' => $project->id,
-                'entity_type' => 'project'
-            ];
-        }
+        $result['link'] = isset($task->id) && isset($project->id)
+        ? [
+            'name' => 'tasks.show',
+            'params' => [
+                'projectId' => $project->id,
+                'taskId' => $task->id
+            ]
+        ]
+        : '#';
+        $result['is_External'] = false;
         return $result;
     }
 }
