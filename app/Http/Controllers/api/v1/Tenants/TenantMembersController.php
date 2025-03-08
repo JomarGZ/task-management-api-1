@@ -95,7 +95,7 @@ class TenantMembersController extends ApiController
      */
     public function show(User $user)
     {
-       return new TenantMemberResource($user);
+       return new TenantMemberResource($user->load('media'));
     }
 
     /**

@@ -61,7 +61,7 @@ class User extends Authenticatable implements HasMedia
     {
         $this->addMediaCollection('avatar')
             ->singleFile()
-            ->useDisk('s3') // Use the S3 disk
+            ->useDisk(config('filesystems.default'))
             ->registerMediaConversions(function (Media $media) {
                 $this->addMediaConversion('thumb-200')
                     ->width(200)
