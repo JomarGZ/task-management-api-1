@@ -32,6 +32,9 @@ class Task extends Model implements HasMedia
         'completed_at',
         'priority_level'
     ];
+    // protected $casts = [
+    //     'deadline_at' => 'datetime',
+    // ];
 
     public function project()
     {
