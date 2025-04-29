@@ -13,6 +13,7 @@ use App\Http\Controllers\api\v1\Projects\ProjectStatusController;
 use App\Http\Controllers\api\v1\Projects\ProjectTaskController;
 use App\Http\Controllers\api\v1\Projects\ProjectTeamController;
 use App\Http\Controllers\api\v1\TaskComments\TaskCommentController;
+use App\Http\Controllers\api\v1\tasks\PriorityTimelineController;
 use App\Http\Controllers\api\v1\Tasks\ProjectTaskDevAssignmentController;
 use App\Http\Controllers\api\v1\Tasks\ProjectTaskQAAssignmentController;
 use App\Http\Controllers\api\v1\Tasks\TaskAssignmentController;
@@ -78,10 +79,12 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::apiResource('task-status-counts', UserTaskStatusController::class)->only('index');
         Route::apiResource('upcoming-tasks-deadlines', UserUpcomingTaskDeadlineController::class)->only('index');
         Route::apiResource('assigned-tasks', UserTasksController::class)->only('index');
-        
+        Route::get('priority-timeline', [PriorityTimelineController::class, 'index']);
+
         Route::get('notifications', [NotificationController::class, 'index']);
         Route::patch('notifications/{id}/mark-as-read', [NotificationController::class, 'update']);
     });
+
 });
 
 Route::post('auth/register', RegisterController::class)->name('register');

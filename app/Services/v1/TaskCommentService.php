@@ -10,7 +10,7 @@ class TaskCommentService {
         return $task->comments()
             ->select(['id', 'content', 'created_at', 'commentable_type', 'commentable_id', 'author_id', 'parent_id'])
             ->with([
-                'author:id,name',
+                'author' => fn ($query) => $query->withTrashed()->select(['id', 'name']),
                 'author.media',
                 'replies' => function ($query) {
                     $query->select(['id', 'content', 'created_at', 'author_id', 'commentable_type', 'commentable_id', 'parent_id'])
