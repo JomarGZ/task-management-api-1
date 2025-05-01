@@ -5,6 +5,7 @@ use App\Http\Controllers\api\v1\auth\LogoutController;
 use App\Http\Controllers\api\v1\auth\PasswordUpdateController;
 use App\Http\Controllers\api\v1\auth\RegisterController;
 use App\Http\Controllers\api\v1\notifications\NotificationController;
+use App\Http\Controllers\api\v1\Position\PositionController;
 use App\Http\Controllers\api\v1\Profile\ProfileController;
 use App\Http\Controllers\api\v1\Profile\UpdateProfilePhotoController;
 use App\Http\Controllers\api\v1\Projects\ProjectController;
@@ -87,6 +88,7 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::patch('notifications/{id}/mark-as-read', [NotificationController::class, 'update']);
     });
 
+    Route::apiResource('positions', PositionController::class)->shallow();
 });
 
 Route::post('auth/register', RegisterController::class)->name('register');
