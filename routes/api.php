@@ -18,6 +18,7 @@ use App\Http\Controllers\api\v1\Tasks\ProjectTaskDevAssignmentController;
 use App\Http\Controllers\api\v1\Tasks\ProjectTaskQAAssignmentController;
 use App\Http\Controllers\api\v1\Tasks\TaskAssignmentController;
 use App\Http\Controllers\api\v1\Tasks\TaskController;
+use App\Http\Controllers\api\v1\Tasks\TaskLinksController;
 use App\Http\Controllers\api\v1\Tasks\TaskPriorityController;
 use App\Http\Controllers\api\v1\Teams\TeamController;
 use App\Http\Controllers\api\v1\Teams\TeamMembersController;
@@ -66,7 +67,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::delete('tasks/{task}/unassign-developer', [ProjectTaskDevAssignmentController::class, 'destroy']);
     Route::patch('tasks/{task}/assign-qa', [ProjectTaskQAAssignmentController::class, 'store']);
     Route::delete('tasks/{task}/unassign-qa', [ProjectTaskQAAssignmentController::class, 'destroy']);
-   
+    Route::post('tasks/{task}/links', [TaskLinksController::class, 'update']);
+
     Route::apiResource('projects.tasks', ProjectTaskController::class)->shallow();
     Route::prefix('standalone')->group(function () {
         Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');

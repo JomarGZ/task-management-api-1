@@ -38,6 +38,10 @@ class StoreTaskRequest extends FormRequest
             'started_at'            => ['nullable'],
             'completed_at'          => ['nullable'],
             'photo_attachments.*'   => ['sometimes', 'image'],
+            'pr_link'               => ['nullable', 'url'],
+            'issue_link'            => ['nullable', 'url'],
+            'doc_link'              => ['nullable', 'url'],
+            'other_link'            => ['nullable', 'url'],
         ];
     }
 

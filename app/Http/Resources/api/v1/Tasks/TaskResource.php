@@ -43,6 +43,10 @@ class TaskResource extends BaseJsonResource
                 ];
             });
         }),
+        'pr_link' => $this->whenNotNull($this->pr_link),
+        'issue_link' => $this->whenNotNull($this->issue_link),
+        'doc_link' => $this->whenNotNull($this->doc_link),
+        'other_link' => $this->whenNotNull($this->other_link),
         ], fn($value) => !is_null($value));
     }
 }
