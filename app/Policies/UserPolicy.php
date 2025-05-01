@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\Role;
 use App\Models\User;
 
 class UserPolicy
@@ -35,7 +36,7 @@ class UserPolicy
      */
     public function create(User $user): bool
     {
-        return $user->isAdmin();
+        return auth()->user()->role === Role::ADMIN->value;
     }
 
     /**
@@ -43,7 +44,7 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        return ($user->isAdmin() && $user->belongsToTenant($model)) || $user->id === $model->id;
+        return (auth()->user()->role === Role::ADMIN->value && $user->belongsToTenant($model)) || $user->id === $model->id;
     }
 
     /**
@@ -51,6 +52,6 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        return $user->isAdmin() && $user->belongsToTenant($model) && $user->id !== $model->id;
+        return auth()->user()->role === Role::ADMIN->value && $user->belongsToTenant($model) && $user->id !== $model->id;
     }
 }
