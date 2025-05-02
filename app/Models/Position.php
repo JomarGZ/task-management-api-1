@@ -10,4 +10,9 @@ class Position extends Model
     use BelongsToTenant;
 
     protected $fillable = ['tenant_id', 'name'];
+    
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }
