@@ -23,6 +23,7 @@ class UpdateProfileRequest extends FormRequest
     {
         return [
             'name' => 'nullable|string|max:255',
+            'position_id' => 'nullable|exists:positions,id',
             'email' => 'nullable|email|unique:users,email,' . auth()->id(),
         ];
     }

@@ -31,6 +31,7 @@ class User extends Authenticatable implements HasMedia
         'name',
         'email',
         'password',
+        'position_id',
         'role',
         'tenant_id',
     ];
@@ -102,6 +103,10 @@ class User extends Authenticatable implements HasMedia
         return $this->hasMany(Project::class, 'manager');
     }
 
+    public function position()
+    {
+        return $this->belongsTo(Position::class);
+    }
 
     public function assignedTasks()
     {

@@ -6,6 +6,7 @@ use App\Http\Controllers\api\v1\ApiController;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\api\v1\tenants\TenantMemberResource;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class TenantMemberListController extends ApiController
@@ -17,6 +18,11 @@ class TenantMemberListController extends ApiController
     {
         $users = User::query()
             ->select('id', 'name')
+            ->when($request->query('position_id'), function (Builder $query, $positionId) {
+                $query->whereHas('position', function (Builder $query) use ($positionId) {
+                    $query->where('id', $positionId);
+                });
+            })
             ->when($request->query('filtered_out_member_ids'),function ($query) use ($request) {
                 $query->whereNotIn('id', $request->query('filtered_out_member_ids'));
             })

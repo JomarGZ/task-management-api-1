@@ -12,7 +12,7 @@ class ProfileController extends ApiController
     public function store(UpdateProfileRequest $request)
     {   
        
-        $data = $request->only(['name', 'email']);
+        $data = $request->only(['name', 'email', 'position_id']);
         $data = array_filter($data);
 
         if (empty($data)) {
