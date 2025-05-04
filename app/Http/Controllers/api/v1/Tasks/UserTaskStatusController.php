@@ -6,27 +6,29 @@ use App\Enums\Enums\Statuses;
 use App\Http\Controllers\api\v1\ApiController;
 use App\Http\Controllers\Controller;
 use App\Models\Task;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class UserTaskStatusController extends ApiController
 {
     public function index()
     {
-        $statuses = [Statuses::IN_PROGRESS->value, Statuses::COMPLETED->value, Statuses::OVER_DUE->value];
-        $selects = [];
-        foreach ($statuses as $status) {
-            $key = str_replace(' ', '_', $status);
-            $selects[] = "COUNT(case when status = '{$status}' then 1 end) as {$key}";
-        }
-        $selects[] = "COUNT(*) as total_tasks";
+       $user = auth()->user();
+       $lastWeek = now()->subWeek();
 
-        $tasksCounts = Task::query()->selectRaw(implode(', ', $selects))
-            ->assignedTo()
-            ->first();
+       $assignedTasks = Task::assignedTo($user->id);
 
-        return $this->success(
-            'Task Counts retrieved successfully',
-            $tasksCounts
-        );
+       $lastWeekTasks = fn(Builder $query) => $query->where('updated_at', '>=', $lastWeek);
+
+       return $this->success('Retrieved assigned tasks counts successfully',[
+            'total' => $assignedTasks->count(),
+            'completed' => $assignedTasks->clone()->where('status', Statuses::COMPLETED)->count(),
+            'in_progress' => $assignedTasks->clone()->where('status', Statuses::IN_PROGRESS)->count(),
+            'last_week' => [
+                'total' => $assignedTasks->clone()->where($lastWeekTasks)->count(),
+                'completed' => $assignedTasks->clone()->where($lastWeekTasks)->where('status', Statuses::COMPLETED)->count(),
+                'in_progress' => $assignedTasks->clone()->where($lastWeekTasks)->where('status', Statuses::IN_PROGRESS)->count()
+            ]
+       ]);
     }
 }
