@@ -18,6 +18,7 @@ class TenantMemberListController extends ApiController
     {
         $users = User::query()
             ->select('id', 'name')
+            ->with('media')
             ->when($request->query('position_id'), function (Builder $query, $positionId) {
                 $query->whereHas('position', function (Builder $query) use ($positionId) {
                     $query->where('id', $positionId);
@@ -27,9 +28,8 @@ class TenantMemberListController extends ApiController
                 $query->whereNotIn('id', $request->query('filtered_out_member_ids'));
             })
             ->get();
-        return $this->success(
-            'Tenant members retrieved successfully',
-            $users
-        );
+        return TenantMemberResource::collection($users)->additional([
+            'message' => 'Retrieved member list successfully'
+        ]);
     }
 }
