@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ProjectTeamAssignmentRequest extends FormRequest
 {
+    protected $maxMembers = 20;
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -22,7 +23,17 @@ class ProjectTeamAssignmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'assign_team_members' => ['nullable', 'array'],
+            'assign_team_members' => [
+                'required', 
+                'array',
+                "max:{$this->maxMembers}",
+                function ($attrubute, $value, $fail) {
+                    $existingAssignees = $this->route('project')->assignedTeamMembers()->count();
+                    if ($existingAssignees + count($value) > $this->maxMembers) {
+                        $fail("Total assign members cannot exceed {$this->maxMembers} (already has {$existingAssignees}).");
+                    }
+                }
+            ],
             'assign_team_members.*' => ['exists:users,id'],
         ];
     }
