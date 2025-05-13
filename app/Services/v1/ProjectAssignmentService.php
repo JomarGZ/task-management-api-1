@@ -9,21 +9,10 @@ use Illuminate\Support\Facades\Notification;
 
 class ProjectAssignmentService {
     protected $project;
-    protected $maxMembers = 20;
     protected $newAssigneeIds = [];
     public function __construct(Project $project)
     {
         $this->project = $project;
-    }
-
-    public function notifyAssignedManager(): self
-    {
-        $this->project->load('projectManager');
-        $manager = $this->project->projectManager;
-        if ($manager) {
-            $manager->notify(new ManagerAssignedProjectNotification($this->project));
-        }
-        return $this;
     }
 
     public function assignedProjectMembers(array $newMemberIds): self
@@ -33,9 +22,9 @@ class ProjectAssignmentService {
         $currentCount = collect($existingMemberIds)->count();
         $this->newAssigneeIds = collect($newMemberIds)->diff($existingMemberIds);
         $newCounts = count($this->newAssigneeIds);
-        if ($currentCount + $newCounts > $this->maxMembers) {
+        if ($currentCount + $newCounts > $this->getMaxUsers()) {
             throw new \InvalidArgumentException(
-                 "Project already has {$currentCount} members. Adding {$newCounts} would exceed the maxMembers of {$this->maxMembers}."
+                 "Project already has {$currentCount} members. Adding {$newCounts} would exceed the maxMembers of {$this->getMaxUsers()}."
             );
         }
         $this->project->assignedTeamMembers()->syncWithoutDetaching($newMemberIds);
@@ -61,5 +50,9 @@ class ProjectAssignmentService {
         }
         $this->project->assignedTeamMembers()->detach($userId);
     }
-   
+    
+    public function getMaxUsers()
+    {
+        return config('limits.per_item.max_user_per_project');
+    }
 }

@@ -17,16 +17,16 @@ class ProjectResource extends BaseJsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'            => $this->whenHas($this->id),
-            'name'          => $this->whenHas($this->name),
-            'description'   => $this->whenHas($this->description),
-            'started_at'    => $this->whenHas($this->started_at),
-            'ended_at'      => $this->whenHas($this->ended_at),
-            'budget'        => $this->whenHas($this->budget),
-            'status'        => $this->whenHas($this->status),
-            'priority'      => $this->whenHas($this->priority),
-            'client_name'   => $this->whenHas($this->client_name),
-            'created_at'    => $this->whenHas($this->created_at),
+            'id'            => $this->whenNotNull($this->id),
+            'name'          => $this->whenNotNull($this->name),
+            'description'   => $this->whenNotNull($this->description),
+            'started_at'    => $this->whenNotNull($this->started_at),
+            'ended_at'      => $this->whenNotNull($this->ended_at),
+            'budget'        => $this->whenNotNull($this->budget),
+            'status'        => $this->whenNotNull($this->status),
+            'priority'      => $this->whenNotNull($this->priority),
+            'client_name'   => $this->whenNotNull($this->client_name),
+            'created_at'    => $this->whenNotNull($this->created_at),
             'assigned_members' => TenantMemberResource::collection($this->whenLoaded('assignedTeamMembers')),
         ];
     }

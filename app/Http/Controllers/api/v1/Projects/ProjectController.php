@@ -105,7 +105,6 @@ class ProjectController extends ApiController
             'assignedTeamMembers.position:id,name', 
             'assignedTeamMembers.media', 
         ]);
-        return $project;
         return new ProjectResource($project);
     }
 

@@ -31,8 +31,8 @@ class StoreTaskRequest extends FormRequest
     {
         return [
             'title'                 => ['required', 'string', 'max:255'],
-            'description'           => ['required', 'string', 'max:500'],
-            'assigned_dev_id'       => ['nullable', 'exists:users,id'],
+            'description'           => ['required', 'string', 'max:700'],
+            'status'                => ['nullable', Rule::in(Statuses::cases())],
             'deadline_at'           => ['nullable'],
             'priority_level'        => ['nullable', Rule::in(PriorityLevel::cases())],
             'started_at'            => ['nullable'],

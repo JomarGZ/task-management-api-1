@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Notification;
 
 class TaskAssignmentService {
     protected $task;
-    protected $assigneeIds;
+    protected $assigneeIds = [];
+    
+    protected $maxAssignees = 5;
     
     public function __construct(?Task $task = null, array $assigneeIds)
     {
