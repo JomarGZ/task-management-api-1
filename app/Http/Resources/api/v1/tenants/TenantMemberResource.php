@@ -3,10 +3,10 @@
 namespace App\Http\Resources\api\v1\tenants;
 
 use App\Http\Resources\api\v1\Positions\PositionResource;
-use App\Http\Resources\BaseJsonResource;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-class TenantMemberResource extends BaseJsonResource
+class TenantMemberResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,10 +16,10 @@ class TenantMemberResource extends BaseJsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'    => $this->whenSet($this->id),
-            'name'  => $this->whenSet($this->name),
-            'email' => $this->whenSet($this->email),
-            'role'  => $this->whenSet($this->role),
+            'id'    => $this->whenNotNull($this->id),
+            'name'  => $this->whenNotNull($this->name),
+            'email' => $this->whenNotNull($this->email),
+            'role'  => $this->whenNotNull($this->role),
             'position'  => PositionResource::make($this->whenLoaded('position')),
             'avatar' => $this->whenLoaded('media', function () {
                 return [

@@ -17,18 +17,16 @@ class ProjectResource extends BaseJsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'            => $this->whenSet($this->id),
-            'name'          => $this->whenSet($this->name),
-            'description'   => $this->whenSet($this->description),
-            'started_at'    => $this->whenSet($this->started_at),
-            'ended_at'      => $this->whenSet($this->ended_at),
-            'budget'        => $this->whenSet($this->budget),
-            'status'        => $this->whenSet($this->status),
-            'priority'      => $this->whenSet($this->priority),
-            'client_name'   => $this->whenSet($this->client_name),
-            'created_at'    => $this->whenSet($this->created_at),
-            'team_assignee' => TeamResource::make($this->whenLoaded('teamAssignee')),
-            'manager' => TenantMemberResource::make($this->whenLoaded('projectManager')),
+            'id'            => $this->whenNotNull($this->id),
+            'name'          => $this->whenNotNull($this->name),
+            'description'   => $this->whenNotNull($this->description),
+            'started_at'    => $this->whenNotNull($this->started_at),
+            'ended_at'      => $this->whenNotNull($this->ended_at),
+            'budget'        => $this->whenNotNull($this->budget),
+            'status'        => $this->whenNotNull($this->status),
+            'priority'      => $this->whenNotNull($this->priority),
+            'client_name'   => $this->whenNotNull($this->client_name),
+            'created_at'    => $this->whenNotNull($this->created_at),
             'assigned_members' => TenantMemberResource::collection($this->whenLoaded('assignedTeamMembers')),
         ];
     }

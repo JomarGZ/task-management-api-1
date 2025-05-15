@@ -47,8 +47,6 @@ class ProjectTaskQAAssignmentController extends Controller
         return new TaskResource(
             $task->load([
                 'project:id,name,description',
-                'assignedDev:id,name,email',
-                'assignedQA:id,name,email'
             ])
         ); 
     }
@@ -86,8 +84,6 @@ class ProjectTaskQAAssignmentController extends Controller
         return new TaskResource(
             $task->load([
                 'project:id,name,description',
-                'assignedDev:id,name,email',
-                'assignedQA:id,name,email'
             ])
         );
     }

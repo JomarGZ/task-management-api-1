@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\api\v1\Projects;
 
+use App\Enums\Enums\Statuses;
 use App\Http\Controllers\api\v1\ApiController;
 use App\Http\Requests\api\v1\Projects\StoreProjectRequest;
 use App\Http\Resources\api\v1\Projects\ProjectResource;
 use App\Models\Project;
+use App\Models\Task;
 use App\Services\v1\ProjectService;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -97,18 +100,12 @@ class ProjectController extends ApiController
     public function show(Project $project)
     {
         Gate::authorize('view', $project);
-     
-        return new ProjectResource(
-            $project->load([
-                'teamAssignee:id,name',
-                'teamAssignee.media', 
-                'assignedTeamMembers:id,name,role,position_id', 
-                'assignedTeamMembers.position:id,name', 
-                'projectManager:id,name,email,position_id',
-                'projectManager.position:id,name',
-                'assignedTeamMembers.media', 
-                'projectManager.media'
-            ]));
+        $project->load([
+            'assignedTeamMembers:id,name,role,position_id', 
+            'assignedTeamMembers.position:id,name', 
+            'assignedTeamMembers.media', 
+        ]);
+        return new ProjectResource($project);
     }
 
     /**

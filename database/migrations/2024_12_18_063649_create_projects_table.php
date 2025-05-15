@@ -20,6 +20,12 @@ return new class extends Migration
             $table->foreignIdFor(Team::class)->nullable();
             $table->string('name');
             $table->text('description');
+            $table->string('client_name');
+            $table->date('started_at')->nullable();
+            $table->date('ended_at')->nullable();
+            $table->unsignedBigInteger('budget')->nullable();
+            $table->string('priority');
+            $table->string('status');
             $table->timestamps();
 
             $table->index(['Tenant_id', 'created_at']);

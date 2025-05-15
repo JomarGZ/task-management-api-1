@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Position;
 use App\Models\Tenant;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -22,6 +23,7 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
             $table->foreignIdFor(Tenant::class)->nullable();
+            $table->softDeletes();
 
             $table->index(['tenant_id', 'created_at']);
 

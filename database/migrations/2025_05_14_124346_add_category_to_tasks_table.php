@@ -12,10 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->string('pr_link')->nullable();
-            $table->string('issue_link')->nullable();
-            $table->string('doc_link')->nullable();
-            $table->string('other_link')->nullable();
+            $table->string('category');
         });
     }
 
@@ -25,10 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->dropColumn('pr_link');
-            $table->dropColumn('issue_link');
-            $table->dropColumn('doc_link');
-            $table->dropColumn('other_link');
+            $table->dropColumn('category');
         });
     }
 };

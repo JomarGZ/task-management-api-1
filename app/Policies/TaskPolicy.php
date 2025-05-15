@@ -46,7 +46,7 @@ class TaskPolicy
      */
     public function delete(User $user, Task $task): bool
     {
-        return $user->isProjectManager($task->project->team_id);
+        return true;
     }
 
 }

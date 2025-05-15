@@ -47,7 +47,6 @@ class ProjectTaskDevAssignmentController extends ApiController
         return new TaskResource(
             $task->load([
                 'project:id,name,description',
-                'assignedDev:id,name,email',
                 'assignedQA:id,name,email'
                 ])
         );
@@ -88,7 +87,6 @@ class ProjectTaskDevAssignmentController extends ApiController
         return new TaskResource(
             $task->load([
                 'project:id,name,description',
-                'assignedDev:id,name,email',
                 'assignedQA:id,name,email'
                 ])
         );
