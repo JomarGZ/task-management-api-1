@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Foundation\Auth\User;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -26,6 +25,7 @@ class Task extends Model implements HasMedia
         'project_id',
         'title',
         'description',
+        'category',
         'status',
         'deadline_at',
         'started_at',
@@ -68,7 +68,6 @@ class Task extends Model implements HasMedia
             ->whereBetween('deadline_at', [$startDate, $endDate]);
     }
 
-
     public function scopeFilterByStatus($query, $status)
     {
         return $query->when($status, fn ($query) => $query->where('status', $status));
@@ -86,12 +85,17 @@ class Task extends Model implements HasMedia
 
     public function scopeFilterByAssigneeId($query, $assigneeId)
     {
-        return $query->when($assigneeId, fn ($query) => $query->whereHas('assignedUsers', fn ($query) => $query->where('users.id', $assigneeId)));
+        return $query->when($assigneeId, fn ($query) => $query->whereHas('users', fn ($query) => $query->where('users.id', $assigneeId)));
     }
 
     public function scopeFilterBySearch($query, $search)
     {
         return $query->when($search, fn ($query) => $query->whereAny(['title', 'description'], 'like', "%$search%"));
+    }
+
+    public function scopeAssigneeIds($query)
+    {
+        return $query->users()->pluck('users.id');
     }
 
     public function isInProgress()

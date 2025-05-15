@@ -4,6 +4,7 @@ namespace App\Http\Requests\api\v1\Tasks;
 
 use App\Enums\Enums\PriorityLevel;
 use App\Enums\Enums\Statuses;
+use App\Enums\TaskCategoryEnum;
 use App\Models\Task;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -32,6 +33,7 @@ class StoreTaskRequest extends FormRequest
         return [
             'title'                 => ['required', 'string', 'max:255'],
             'description'           => ['required', 'string', 'max:700'],
+            'category'              => ['required', Rule::in(TaskCategoryEnum::cases())],
             'status'                => ['nullable', Rule::in(Statuses::cases())],
             'deadline_at'           => ['nullable'],
             'priority_level'        => ['nullable', Rule::in(PriorityLevel::cases())],
@@ -70,10 +72,6 @@ class StoreTaskRequest extends FormRequest
             'description' => [
                 'description' => 'A brief description of the task.',
                 'example' => 'Develop login and registration functionality.',
-            ],
-            'assigned_dev_id' => [
-                'description' => 'The ID of the user assigned to the task.',
-                'example' => 5,
             ],
             'priority_level' => [
                 'description' => 'The priority level of the task.',

@@ -6,6 +6,7 @@ use App\Http\Resources\api\v1\Comments\CommentResource;
 use App\Http\Resources\api\v1\Projects\ProjectResource;
 use App\Http\Resources\api\v1\TaskComment\TaskCommentResource;
 use App\Http\Resources\api\v1\Teams\TeamMemberResource;
+use App\Http\Resources\api\v1\tenants\TenantMemberResource;
 use App\Http\Resources\BaseJsonResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -28,9 +29,11 @@ class TaskResource extends BaseJsonResource
             'started_at'     => $this->whenNotNull($this->started_at),
             'completed_at'   => $this->whenNotNull($this->completed_at),
             'created_at'     => $this->whenNotNull($this->created_at),
+            'category'     => $this->whenNotNull($this->category),
             'description'    => $this->whenNotNull($this->description,  $this->description),
             'project'        => ProjectResource::make($this->whenLoaded('project')),
             'comments'       => CommentResource::collection($this->whenLoaded('comments')),
+            'assigned_users' => TenantMemberResource::collection($this->whenLoaded('users')),
             'photo_attachments' => $this->whenLoaded('media', function () {
             return $this->getMedia('task_attachments')->map(function ($media) {
                 return [

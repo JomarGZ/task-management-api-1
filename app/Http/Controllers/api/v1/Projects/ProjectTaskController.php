@@ -51,10 +51,16 @@ class ProjectTaskController extends ApiController
                 'deadline_at',
                 'started_at',
                 'completed_at',
+                'category',
                 'created_at'
             ])
+           ->with([
+            'users:id,name',
+            'users.media' 
+           ])
             ->filterBySearch($request->search)
             ->filterByStatus($request->status)
+            ->filterByAssigneeId($request->assigneeId)
             ->latest()
             ->filterByPriorityLevel($request->priority_level)
             ->paginate(5);
@@ -126,9 +132,9 @@ class ProjectTaskController extends ApiController
         Gate::authorize('view', $task);
 
         return new TaskResource($task->load([
-            'project:id,name,description,created_at', 
+            'project:id,name,description,created_at',
+            'users:id,name' 
         ]));
-        
     }
 
     /**

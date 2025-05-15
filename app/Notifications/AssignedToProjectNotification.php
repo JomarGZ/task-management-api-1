@@ -47,6 +47,7 @@ class AssignedToProjectNotification extends Notification implements ShouldQueue
             ->line('**You are assigned to a project**');
         if ($this->project) {
             $mail->line("**Project Name:** " . ($this->project->name ?? 'Not specified'));
+            $mail->line("**Assigner:** " . ($this->assigner->name ?? 'System'));
             if (isset($this->project->id)) {
                 $mail->action('View Project', $frontendUrl . '/projects/' . $this->project->id);
             }
@@ -63,7 +64,6 @@ class AssignedToProjectNotification extends Notification implements ShouldQueue
      */
     public function toArray(object $notifiable): array
     {
-        info($this->assigner);
         $projectName = $this->project->name ?? 'a project';
         $assignerName = $this->assigner->name ?? 'System';
        

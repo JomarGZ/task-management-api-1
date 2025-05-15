@@ -29,7 +29,7 @@ class ProjectTeamAssignmentRequest extends FormRequest
                 function ($attrubute, $value, $fail) {
                     $existingAssignees = $this->route('project')->assignedTeamMembers()->count();
                     if ($existingAssignees + count($value) > $this->getMaxUsers()) {
-                        $fail("Total assign members cannot exceed" . $this->getMaxUsers() . " (already has {$existingAssignees}).");
+                        $fail("Total assigned members cannot exceed to " . $this->getMaxUsers() . " (already has {$existingAssignees}) assigned members.");
                     }
                 }
             ],

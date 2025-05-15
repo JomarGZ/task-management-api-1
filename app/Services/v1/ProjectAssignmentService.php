@@ -24,10 +24,10 @@ class ProjectAssignmentService {
         $newCounts = count($this->newAssigneeIds);
         if ($currentCount + $newCounts > $this->getMaxUsers()) {
             throw new \InvalidArgumentException(
-                 "Project already has {$currentCount} members. Adding {$newCounts} would exceed the maxMembers of {$this->getMaxUsers()}."
+                 "Project already has {$currentCount} members. Adding {$newCounts} would exceed the max members of {$this->getMaxUsers()}."
             );
         }
-        $this->project->assignedTeamMembers()->syncWithoutDetaching($newMemberIds);
+        $this->project->assignedTeamMembers()->syncWithoutDetaching($this->newAssigneeIds);
         return $this;
     }
    

@@ -58,13 +58,14 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('project-statuses', [ProjectStatusController::class, 'index']);
     Route::get('project-priority-levels', ProjectPriorityController::class);
     Route::post('projects/{project}/assignment', [ProjectTeamController::class, 'store']);
+    Route::get('projects/{project}/team-members', [ProjectTeamController::class, 'index']);
     Route::delete('projects/{project}/assignment', [ProjectTeamController::class, 'destroy']);
     Route::apiResource('projects', ProjectController::class);
 
     
     Route::get('task-priority-levels', [TaskPriorityController::class, 'index']);
     Route::post('tasks/{task}/assignment', [TaskAssignmentController::class, 'store']);
-    Route::put('tasks/{task}/unassignment', [TaskAssignmentController::class, 'update']);
+    Route::delete('tasks/{task}/unassignment', [TaskAssignmentController::class, 'destroy']);
     Route::patch('tasks/{task}/status', [TaskStatusController::class, 'update']);
     Route::get('tasks-statuses', [TaskStatusController::class, 'index']);
     Route::patch('tasks/{task}/assign-developer', [ProjectTaskDevAssignmentController::class, 'store']);
