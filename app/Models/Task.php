@@ -31,10 +31,6 @@ class Task extends Model implements HasMedia
         'started_at',
         'completed_at',
         'priority_level',
-        'pr_link',
-        'issue_link',
-        'doc_link',
-        'other_link',
     ];
     // protected $casts = [
     //     'deadline_at' => 'datetime',
@@ -50,6 +46,10 @@ class Task extends Model implements HasMedia
         return $this->belongsToMany(User::class);
     }
 
+    public function links()
+    {
+        return $this->hasMany(Link::class);
+    }
 
     public function registerMediaConversions(?Media $media = null): void
     {

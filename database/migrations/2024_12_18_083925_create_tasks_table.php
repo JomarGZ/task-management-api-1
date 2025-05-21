@@ -27,10 +27,6 @@ return new class extends Migration
             $table->string('status');
             $table->date('deadline_at')->nullable();
             $table->date('previous_deadline_at')->nullable();
-            $table->string('pr_link')->nullable();
-            $table->string('issue_link')->nullable();
-            $table->string('doc_link')->nullable();
-            $table->string('other_link')->nullable();
             $table->date('started_at')->nullable();
             $table->date('completed_at')->nullable();
             $table->timestamps();

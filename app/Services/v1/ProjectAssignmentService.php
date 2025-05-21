@@ -4,7 +4,6 @@ namespace App\Services\V1;
 use App\Models\Project;
 use App\Models\User;
 use App\Notifications\AssignedToProjectNotification;
-use App\Notifications\ManagerAssignedProjectNotification;
 use Illuminate\Support\Facades\Notification;
 
 class ProjectAssignmentService {

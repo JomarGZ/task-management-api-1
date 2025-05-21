@@ -5,6 +5,7 @@ namespace App\Http\Resources\api\v1\Tasks;
 use App\Http\Resources\api\v1\Comments\CommentResource;
 use App\Http\Resources\api\v1\Projects\ProjectResource;
 use App\Http\Resources\api\v1\TaskComment\TaskCommentResource;
+use App\Http\Resources\api\v1\tasks\LinkResource;
 use App\Http\Resources\api\v1\Teams\TeamMemberResource;
 use App\Http\Resources\api\v1\tenants\TenantMemberResource;
 use App\Http\Resources\BaseJsonResource;
@@ -34,6 +35,7 @@ class TaskResource extends BaseJsonResource
             'project'        => ProjectResource::make($this->whenLoaded('project')),
             'comments'       => CommentResource::collection($this->whenLoaded('comments')),
             'assigned_users' => TenantMemberResource::collection($this->whenLoaded('users')),
+            'links' => LinkResource::collection($this->whenLoaded('links')),
             'photo_attachments' => $this->whenLoaded('media', function () {
             return $this->getMedia('task_attachments')->map(function ($media) {
                 return [
@@ -45,10 +47,6 @@ class TaskResource extends BaseJsonResource
                 ];
             });
         }),
-        'pr_link' => $this->whenNotNull($this->pr_link),
-        'issue_link' => $this->whenNotNull($this->issue_link),
-        'doc_link' => $this->whenNotNull($this->doc_link),
-        'other_link' => $this->whenNotNull($this->other_link),
         ], fn($value) => !is_null($value));
     }
 }

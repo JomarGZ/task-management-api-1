@@ -84,6 +84,11 @@ class User extends Authenticatable implements HasMedia
         return $this->belongsToMany(Task::class);
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     public function activeTasks()
     {
         return $this->tasks()->where('status', '!=', Statuses::COMPLETED->value);

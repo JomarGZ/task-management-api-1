@@ -12,43 +12,13 @@ use Illuminate\Support\Facades\Gate;
 class TaskStatusController extends ApiController
 {
 
-    public function index() 
-    {
-        return $this->success(
-            'Statuses retrieved successfully',
-            Statuses::cases()
-        );
-    }
-    /**
-     * Update Task Status
-     * 
-     * Update the status of the specified task.
-     * @group Task Management
-     * @response 200 {"data": {
-        "id": 15,
-        "title": "update title 1",
-        "description": "description",
-        "priority_level": "urgent",
-        "status": "completed",
-        "deadline_at": null,
-        "started_at": "2024-12-22",
-        "completed_at": "2024-12-22",
-        "project": {
-            "id": 2,
-            "name": "update project",
-            "description": "description"
-        }
-    }}
-     */
     public function update(UpdateTaskStatusRequest $request, Task $task)
     {
-        Gate::authorize('update', $task);
         $task->update(['status' => $request->status]);
 
-        return new TaskResource($task->load([
+          return new TaskResource($task->fresh()->load([
             'project:id,name,description,created_at',
-            'comments:id,commentable_id,commentable_type,author_id,content,created_at,updated_at',
-            'comments.author:id,name,email,role',
+            'users:id,name' 
         ]));
     }
 }

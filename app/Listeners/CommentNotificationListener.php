@@ -26,16 +26,16 @@ class CommentNotificationListener
      */
     public function handle(CommentCreated $event): void
     {
-        $commentableType = $event->comment->commentable_type;
-        $comment = $event->comment;
-        $commentable = $event->comment->commentable;
-        $author = $event->comment->author;
-        $assignedUsers = $commentable->assignedUsers()->whereNot('users.id', auth()->user()->id)->get();
-        $message = "{$author->name} commented on the task assigned to you.";
-        $notificationType = $this->mapCommentableNotification($commentableType, $comment, $message);
-        if ($assignedUsers && $notificationType) {
-            Notification::send($assignedUsers, $notificationType);
-        }
+        // $commentableType = $event->comment->commentable_type;
+        // $comment = $event->comment;
+        // $commentable = $event->comment->commentable;
+        // $author = $event->comment->author;
+        // $assignedUsers = $commentable->assignedUsers()->whereNot('users.id', auth()->user()->id)->get();
+        // $message = "{$author->name} commented on the task assigned to you.";
+        // $notificationType = $this->mapCommentableNotification($commentableType, $comment, $message);
+        // if ($assignedUsers && $notificationType) {
+        //     Notification::send($assignedUsers, $notificationType);
+        // }
 
     }
 

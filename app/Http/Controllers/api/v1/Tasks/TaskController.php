@@ -24,8 +24,6 @@ class TaskController extends ApiController
             ->with([
                 'media',
                 'project:id,name', 
-                'assignedUsers:id,name',
-                'assignedUsers.media'
             ])
             ->filterByStatus($request->status)
             ->filterByPriorityLevel($request->priority_level)

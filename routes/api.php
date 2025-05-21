@@ -4,6 +4,7 @@ use App\Http\Controllers\api\v1\auth\LoginController;
 use App\Http\Controllers\api\v1\auth\LogoutController;
 use App\Http\Controllers\api\v1\auth\PasswordUpdateController;
 use App\Http\Controllers\api\v1\auth\RegisterController;
+use App\Http\Controllers\api\v1\Comments\CommentController;
 use App\Http\Controllers\api\v1\notifications\NotificationController;
 use App\Http\Controllers\api\v1\Position\PositionController;
 use App\Http\Controllers\api\v1\Positions\PositionFetchUnpaginatedController;
@@ -67,18 +68,22 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('tasks/{task}/assignment', [TaskAssignmentController::class, 'store']);
     Route::delete('tasks/{task}/unassignment', [TaskAssignmentController::class, 'destroy']);
     Route::patch('tasks/{task}/status', [TaskStatusController::class, 'update']);
-    Route::get('tasks-statuses', [TaskStatusController::class, 'index']);
     Route::patch('tasks/{task}/assign-developer', [ProjectTaskDevAssignmentController::class, 'store']);
     Route::delete('tasks/{task}/unassign-developer', [ProjectTaskDevAssignmentController::class, 'destroy']);
     Route::patch('tasks/{task}/assign-qa', [ProjectTaskQAAssignmentController::class, 'store']);
     Route::delete('tasks/{task}/unassign-qa', [ProjectTaskQAAssignmentController::class, 'destroy']);
-    Route::post('tasks/{task}/links', [TaskLinksController::class, 'update']);
+    Route::post('tasks/{task}/links', [TaskLinksController::class, 'store']);
+    Route::put('tasks/links/{link}', [TaskLinksController::class, 'update']);
+    Route::delete('tasks/links/{link}', [TaskLinksController::class, 'destroy']);
 
     Route::apiResource('projects.tasks', ProjectTaskController::class)->shallow();
     Route::prefix('standalone')->group(function () {
         Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');
     });
-    Route::apiResource('tasks.comments', TaskCommentController::class)->shallow();
+    Route::post('/comments', [CommentController::class, 'store']);
+    Route::put('/comments/{comment}', [CommentController::class, 'update'])->middleware('can:update,comment');
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->middleware('can:delete,comment');
+    Route::get('tasks/{task}/comments',[TaskCommentController::class, 'index']);
     Route::get('project-statuses', [ProjectStatusController::class, 'index']);
     Route::get('teams/{team}/statistic', [TeamStatisticController::class, 'index']);
 
