@@ -17,7 +17,6 @@ enum Statuses: string
     case PENDING_APPROVAL = 'pending approval';
     case BACKLOG = 'backlog';
     case BLOCKED = 'blocked';
-    case ARCHIVED = 'archived';
     case REOPENED = 'reopened';
     case SCHEDULED = 'scheduled';
     case DRAFT = 'draft';

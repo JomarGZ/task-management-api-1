@@ -22,8 +22,23 @@ class ProjectTeamAssignmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'assign_team_members' => ['nullable', 'array'],
+            'assign_team_members' => [
+                'required', 
+                'array',
+                "max:" .$this->getMaxUsers(),
+                function ($attrubute, $value, $fail) {
+                    $existingAssignees = $this->route('project')->assignedTeamMembers()->count();
+                    if ($existingAssignees + count($value) > $this->getMaxUsers()) {
+                        $fail("Total assigned members cannot exceed to " . $this->getMaxUsers() . " (already has {$existingAssignees}) assigned members.");
+                    }
+                }
+            ],
             'assign_team_members.*' => ['exists:users,id'],
         ];
+    }
+
+    public function getMaxUsers()
+    {
+        return config('limits.per_item.max_user_per_project');
     }
 }

@@ -13,23 +13,17 @@ class Comment extends Model
 
     protected $fillable = [
         'tenant_id',
-        'author_id',
+        'user_id',
         'commentable_id',
         'commentable_type',
         'content',
         'parent_id'
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-        
-        static::creating(function(Comment $comment) {
 
-            if (auth()->check()) {
-                $comment->author_id = request()->user()->id;
-            }
-        });
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function commentable()
@@ -39,22 +33,23 @@ class Comment extends Model
     public function replies()
     {
         return $this->hasMany(Comment::class, 'parent_id');
+        // ->with('user', 'replies');
     }
 
-    public function parent()
+    public function scopeForModel($query, $model)
     {
-        return $this->belongsTo(Comment::class, 'parent_id');
-    }
-    
-    public function parentComment()
-    {
-        return $this->belongsTo(Comment::class, 'commentable_id')
-            ->where('commentable_type', self::class);
+        return $query->where('commentable_id', $model->id)
+            ->where('commentable_type', get_class($model));
     }
 
-    public function author()
+    public function scopeWithReplies($query)
     {
-        return $this->belongsTo(User::class, 'author_id');
+        return $query->with(['user', 'replies.user']);
+    }
+
+    public function scopeTopLevelOnly($query)
+    {
+        return $query->whereNull('parent_id');
     }
 
 }

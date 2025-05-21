@@ -21,7 +21,7 @@ class CommentResource extends BaseJsonResource
             'content' =>  $this->whenSet($this->content),
             'created_at' =>  $this->whenSet($this->created_at),
             'updated_at' =>  $this->whenSet($this->updated_at),
-            'author' => TenantMemberResource::make($this->whenLoaded('author')),
+            'user' => TenantMemberResource::make($this->whenLoaded('user')),
             'replies' => CommentReplyResource::collection($this->whenLoaded('replies')),
         ];
     }

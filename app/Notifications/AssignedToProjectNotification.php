@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -13,12 +14,14 @@ class AssignedToProjectNotification extends Notification implements ShouldQueue
     use Queueable;
 
     protected $project;
+    protected User $assigner;
     /**
      * Create a new notification instance.
      */
-    public function __construct(Project $project)
+    public function __construct(Project $project,User $assigner)
     {
         $this->project = $project;
+        $this->assigner = $assigner;
         $this->afterCommit();
         $this->onQueue('notifications');
     }
@@ -44,6 +47,7 @@ class AssignedToProjectNotification extends Notification implements ShouldQueue
             ->line('**You are assigned to a project**');
         if ($this->project) {
             $mail->line("**Project Name:** " . ($this->project->name ?? 'Not specified'));
+            $mail->line("**Assigner:** " . ($this->assigner->name ?? 'System'));
             if (isset($this->project->id)) {
                 $mail->action('View Project', $frontendUrl . '/projects/' . $this->project->id);
             }
@@ -60,21 +64,26 @@ class AssignedToProjectNotification extends Notification implements ShouldQueue
      */
     public function toArray(object $notifiable): array
     {
-        $result = [
-            "message" => "You have been assigned to a project"
+        $projectName = $this->project->name ?? 'a project';
+        $assignerName = $this->assigner->name ?? 'System';
+       
+        return [
+            'message' => "You have been assigned to {$projectName} by {$assignerName}",
+            'link' => [
+                'name' => 'projects.show',
+                'params' => ['projectId' => $this->project->id],
+                'query' => []
+            ],
+            'is_external' => false,
+            'assigner' => [
+                'name' => $assignerName,
+                'avatar' => $this->assigner?->getFirstMediaUrl('avatar', 'thumb-60')
+            ],
+            'project' => [
+                'name' => $projectName,
+                'id' => $this->project->id
+            ],
+            'type' => 'project_assignment'
         ];
-        if (isset($this->project->name)) {
-            $result['message'] = "You have been assigned to a project: {$this->project->name}";
-        }
-        $result['link'] = isset($this->project->id)
-        ? [
-            'name' => 'projects.show',
-            'params' => [
-                'projectId' => $this->project->id
-            ]
-        ]
-        : '#';
-        $result['is_external'] = false;
-        return $result;
     }
 }

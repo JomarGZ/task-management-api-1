@@ -4,6 +4,7 @@ namespace App\Notifications;
 
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -15,12 +16,14 @@ class TaskAssignedNotification extends Notification implements ShouldQueue
     use Queueable;
 
     protected Task $task;
+    protected User $assigner;
     /**
      * Create a new notification instance.
      */
-    public function __construct(Task $task)
+    public function __construct(Task $task, User $assigner)
     {
         $this->task = $task;
+        $this->assigner = $assigner;
         $this->afterCommit();
         $this->onQueue('notifications');
     }
@@ -54,7 +57,8 @@ class TaskAssignedNotification extends Notification implements ShouldQueue
             $mail->line("**Status:** " . ($this->task->status ?? 'Not specified')); 
         }
         if (isset($this->task->project)) {
-            $mail->line("**Project Name:** " . ($this->task->project->name ?? 'Not specified'));
+            $mail->line("**Project Name:** " . ($this->assigner->name ?? 'Not specified'));
+            $mail->line("**Assigner:** " . ($this->assigner->name ?? 'System'));
             if (isset($this->task->project->id) && isset($this->task->id)) {
                 $mail->action('View Task', $frontendUrl . '/projects/' . $this->task->project->id . '/tasks/' . $this->task->id);
             }
@@ -71,22 +75,26 @@ class TaskAssignedNotification extends Notification implements ShouldQueue
      */
     public function toArray(object $notifiable): array
     {
-        $result = [
-            "message" => "You have been assigned tp a task"
+        $taskName = $this->task->name ?? 'a project';
+        $assignerName = $this->assigner->name ?? 'System';
+       
+        return [
+            'message' => "You have been assigned to {$taskName} by {$assignerName}",
+            'link' => [
+                'name' => 'projects.show',
+                'params' => ['projectId' => $this->task->id],
+                'query' => []
+            ],
+            'is_external' => false,
+            'assigner' => [
+                'name' => $assignerName,
+                'avatar' => $this->assigner?->getFirstMediaUrl('avatar', 'thumb-60')
+            ],
+            'project' => [
+                'name' => $taskName,
+                'id' => $this->task->id
+            ],
+            'type' => 'project_assignment'
         ];
-        if (isset($this->task->title)) {
-            $result['message'] = "You have been assigned to a task: {$this->task->title}";
-        }
-        $result['link'] = isset($this->task->id) && isset($this->task->project->id)
-        ? [
-            'name' => 'tasks.show',
-            'params' => [
-                'taskId' => $this->task->id,
-                'projectId' => $this->task->project->id
-            ]
-        ]
-        : '#';
-        $result['is_external'] = false;
-        return $result;
     }
 }

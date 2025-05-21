@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Enums\Enums\Statuses;
 use App\Traits\BelongsToTenant;
 use App\Enums\Role;
 use Illuminate\Database\Eloquent\Builder;
@@ -77,14 +78,20 @@ class User extends Authenticatable implements HasMedia
             });
            
     }
-    public function assignments()
-    {
-        return $this->hasMany(Assignment::class);
-    }
-
+    
     public function tasks()
     {
-        return $this->morphedByMany(Task::class, 'assignable', 'assignments');
+        return $this->belongsToMany(Task::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function activeTasks()
+    {
+        return $this->tasks()->where('status', '!=', Statuses::COMPLETED->value);
     }
 
     public function teams()

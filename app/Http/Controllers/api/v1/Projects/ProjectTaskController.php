@@ -40,14 +40,6 @@ class ProjectTaskController extends ApiController
      */
     public function index(Request $request, Project $project)
     {
-        $column = $this->taskService
-            ->getValidSortColumn(
-                $request->query('column', 'created_at')
-            );
-        $direction = $this->taskService
-            ->getValidSortDirection(
-                $request->query('direction', 'desc')
-            );
 
         $tasks = $project->tasks()
             ->select([
@@ -59,15 +51,18 @@ class ProjectTaskController extends ApiController
                 'deadline_at',
                 'started_at',
                 'completed_at',
+                'category',
                 'created_at'
             ])
+           ->with([
+            'users:id,name',
+            'users.media' 
+           ])
             ->filterBySearch($request->search)
             ->filterByStatus($request->status)
+            ->filterByAssigneeId($request->assigneeId)
+            ->latest()
             ->filterByPriorityLevel($request->priority_level)
-            ->orderBy(
-                $column, 
-                $direction
-            )
             ->paginate(5);
         
         return TaskResource::collection($tasks);
@@ -137,12 +132,10 @@ class ProjectTaskController extends ApiController
         Gate::authorize('view', $task);
 
         return new TaskResource($task->load([
-            'project:id,name,description,created_at', 
-            'assignedUsers:id,name,position_id',
-            'assignedUsers.media',
-            'assignedUsers.position:id,name',
+            'project:id,name,description,created_at',
+            'users:id,name' ,
+            'links'
         ]));
-        
     }
 
     /**
@@ -190,11 +183,8 @@ class ProjectTaskController extends ApiController
 
         return new TaskResource($task->load([
             'project:id,name,description,created_at',
-            'assignedDev:id,name,email',
-            'assignedQA:id,name,email', 
             'comments:id,commentable_id,commentable_type,author_id,content,created_at,updated_at',
             'comments.author:id,name,email,role',
-            'assignedUsers:id,name'
         ]));
     }
 

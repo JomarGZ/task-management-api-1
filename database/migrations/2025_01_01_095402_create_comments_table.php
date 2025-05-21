@@ -15,10 +15,13 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Tenant::class)->constrained()->cascadeOnDelete()->index();
-            $table->foreignIdFor(User::class, 'author_id');
+            $table->foreignIdFor(User::class);
+            $table->unsignedBigInteger('parent_id')->nullable();
             $table->morphs('commentable');
             $table->text('content');
             $table->timestamps();
+
+            $table->foreign('parent_id')->references('id')->on('comments');
         });
     }
 

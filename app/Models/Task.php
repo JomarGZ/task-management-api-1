@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -22,19 +23,14 @@ class Task extends Model implements HasMedia
     protected $fillable = [
         'tenant_id',
         'project_id',
-        'assigned_dev_id',
-        'assigned_qa_id',
         'title',
         'description',
+        'category',
         'status',
         'deadline_at',
         'started_at',
         'completed_at',
         'priority_level',
-        'pr_link',
-        'issue_link',
-        'doc_link',
-        'other_link',
     ];
     // protected $casts = [
     //     'deadline_at' => 'datetime',
@@ -45,24 +41,14 @@ class Task extends Model implements HasMedia
         return $this->belongsTo(Project::class);
     }
 
-   public function assignments()
-   {
-        return $this->morphMany(Assignment::class, 'assignable');
-   }
-
-   public function assignedUsers()
-   {
-        return $this->morphToMany(User::class, 'assignable', 'assignments')
-            ->withTimestamps();
-   }
-
-    public function assignedDev()
+    public function users()
     {
-        return $this->belongsTo(User::class, 'assigned_dev_id');
+        return $this->belongsToMany(User::class);
     }
-    public function assignedQA()
+
+    public function links()
     {
-        return $this->belongsTo(User::class, 'assigned_qa_id');
+        return $this->hasMany(Link::class);
     }
 
     public function registerMediaConversions(?Media $media = null): void
@@ -82,13 +68,6 @@ class Task extends Model implements HasMedia
             ->whereBetween('deadline_at', [$startDate, $endDate]);
     }
 
-    public function scopeAssignedTo(Builder $query, $userId = null)
-    {
-        return $query->whereHas('assignments', function ($query) use ($userId) {
-            $query->where('user_id', $userId ??= auth()->user()->id);
-        });
-    }
-
     public function scopeFilterByStatus($query, $status)
     {
         return $query->when($status, fn ($query) => $query->where('status', $status));
@@ -106,12 +85,17 @@ class Task extends Model implements HasMedia
 
     public function scopeFilterByAssigneeId($query, $assigneeId)
     {
-        return $query->when($assigneeId, fn ($query) => $query->whereHas('assignedUsers', fn ($query) => $query->where('users.id', $assigneeId)));
+        return $query->when($assigneeId, fn ($query) => $query->whereHas('users', fn ($query) => $query->where('users.id', $assigneeId)));
     }
 
     public function scopeFilterBySearch($query, $search)
     {
         return $query->when($search, fn ($query) => $query->whereAny(['title', 'description'], 'like', "%$search%"));
+    }
+
+    public function scopeAssigneeIds($query)
+    {
+        return $query->users()->pluck('users.id');
     }
 
     public function isInProgress()

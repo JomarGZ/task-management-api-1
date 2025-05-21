@@ -22,7 +22,23 @@ class StoreAssignmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'assignees' => ['required', 'exists:users,id']
+            'assigneeIds' => [
+                'required',
+                'array',
+                "max:{$this->maxAssignees()}",
+                function ($attribute, $value, $fail) {
+                    $existingAssignees = $this->route('task')->users()->count();
+                    if ($existingAssignees + count($value) > $this->maxAssignees()) {
+                        $fail("Total assigned users cannot exceed " . $this->maxAssignees() . " (already has {$existingAssignees}).");
+                    }
+                }
+            ],
+            'assigneeIds.*' => ['exists:users,id'],
         ];
+    }
+
+    protected function maxAssignees()
+    {
+        return config('limits.per_item.max_user_per_task');
     }
 }

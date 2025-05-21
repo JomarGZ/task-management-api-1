@@ -30,20 +30,9 @@ class NotifyUpcomingTaskDeadlines extends Command
     {
         Task::withoutGlobalScopes()->whereDate('deadline_at', now()->addDay()->toDateString())
             ->select('id', 'project_id', 'title', 'deadline_at', 'priority_level', 'status')
-            ->with([
-                'assignedUsers' => function($query) {
-                    $query->select('users.id', 'users.email');
-                },
-                'project' => function($query) {
-                    $query->select('id', 'name');
-                }
-            ])
+           
             ->chunk(500, function ($tasks) {
-                foreach($tasks as $task) {
-                    if (!empty($task->assignedUsers)) {
-                        Notification::send($task->assignedUsers, new UpcomingTaskDeadlineNotification($task));
-                    }
-                }
+             
                 info('Task deadline notifications is on queue and will be send');
             });
     }

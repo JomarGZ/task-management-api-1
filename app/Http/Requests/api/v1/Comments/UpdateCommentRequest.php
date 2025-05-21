@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\api\v1\Assignments;
+namespace App\Http\Requests\api\v1\Comments;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DestroyAssignmentRequest extends FormRequest
+class UpdateCommentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,7 @@ class DestroyAssignmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'assigneeId' => ['required', 'exists:users,id']
+              'content' => 'required|string|max:500',
         ];
     }
 }

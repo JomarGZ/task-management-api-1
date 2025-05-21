@@ -2,47 +2,69 @@
 namespace App\Services\v1;
 
 use App\Models\Task;
+use App\Models\User;
 use App\Notifications\TaskAssignedNotification;
 use Illuminate\Support\Facades\Notification;
 
 class TaskAssignmentService {
     protected $task;
-    protected $assigneeIds;
+    protected $newAssigneeIds = [];
     
-    public function __construct(?Task $task = null, array $assigneeIds)
+    protected $maxAssignees;
+    
+    public function __construct(?Task $task = null)
     {
         $this->task = $task;
-        $this->assigneeIds = $assigneeIds;
-    }
-    private function ensureAssigneesNotEmpty()
-    {
-        throw_if(empty($this->assigneeIds), \InvalidArgumentException::class, 'Assignees cannot be empty.');
+        $this->maxAssignees = config('limits.per_item.max_user_per_task');
     }
 
-    public function prepareAssignees()
-    {
-        $this->ensureAssigneesNotEmpty();
-        return array_fill_keys($this->assigneeIds, ['tenant_id' => auth()->user()->tenant_id]);
-    }
 
-    public function assignToTask()
+    public function assignToTask(array $newAssigneeIds)
     {
-        $this->ensureAssigneesNotEmpty();
-        $assigneesWithTenantId = $this->prepareAssignees();
-        $this->task->assignedUsers()->syncWithoutDetaching($assigneesWithTenantId);
+        if (empty($newAssigneeIds)) {
+             throw new \InvalidArgumentException(
+                "Assignees ids is required to assigned to task"
+            );
+        }
+        $existingAssigneeIds = $this->task->users()->pluck('users.id');
+        $newAssigneeIds = $this->validateAssignees($newAssigneeIds);
+        $currentCount = collect($existingAssigneeIds)->count();
+        $this->newAssigneeIds = collect(($newAssigneeIds)->diff($existingAssigneeIds));
+        $newCounts = count($this->newAssigneeIds);
+        if (($currentCount + $newCounts) > $this->maxAssignees) {
+            throw new \InvalidArgumentException(
+                "Task already has $currentCount assignees. Adding $newCounts would exceed max number of  assignees $this->maxAssignees"
+            );
+        }
+
+        $this->task->users()->syncWithoutDetaching($this->newAssigneeIds);
         return $this;
     }
 
     public function notifyAssignees()
     {
-        $this->task->load(['assignedUsers' => function ($query) {
-            $query->whereIn('users.id', $this->assigneeIds);
-        }, 'project']);
-        $assignees = $this->task->assignedUsers;
-        if (!empty($assignees)) {
-            Notification::send($assignees, new TaskAssignedNotification($this->task));
+        if (!empty($this->newAssigneeIds)) {
+            $recipientIds = collect($this->newAssigneeIds)->diff([request()->user()->id]);
+            $recipients = User::select('id', 'name', 'email')->whereIn('id', $recipientIds)->get();
+            if (!empty($recipients)) {
+                Notification::send($recipients, new TaskAssignedNotification($this->task, request()->user()));
+            }
         }
         return $this;
+    }
+
+    public function removeAssignedMember($userId) 
+    {
+        throw_unless($userId, \InvalidArgumentException::class, 'User ID is required to remove an assignee');
+        $this->task->users()->detach($userId);
+
+    }
+
+    public function validateAssignees(array $newAssigneeIds)
+    {
+        throw_if(empty($newAssigneeIds), \InvalidArgumentException::class, 'Assignee IDs required');
+
+        return $this->task->project->assignedTeamMembers()->whereIn('users.id', $newAssigneeIds)->pluck('users.id');
     }
 
 }

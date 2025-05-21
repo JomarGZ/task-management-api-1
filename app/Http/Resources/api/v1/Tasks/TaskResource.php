@@ -5,7 +5,9 @@ namespace App\Http\Resources\api\v1\Tasks;
 use App\Http\Resources\api\v1\Comments\CommentResource;
 use App\Http\Resources\api\v1\Projects\ProjectResource;
 use App\Http\Resources\api\v1\TaskComment\TaskCommentResource;
+use App\Http\Resources\api\v1\tasks\LinkResource;
 use App\Http\Resources\api\v1\Teams\TeamMemberResource;
+use App\Http\Resources\api\v1\tenants\TenantMemberResource;
 use App\Http\Resources\BaseJsonResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -20,18 +22,20 @@ class TaskResource extends BaseJsonResource
     public function toArray(Request $request): array
     {
         return array_filter([
-            'id'             => $this->whenSet($this->id),
-            'title'          => $this->whenSet($this->title),
-            'priority_level' => $this->whenSet($this->priority_level),
-            'status'         => $this->whenSet($this->status),
-            'deadline_at'    => $this->whenSet($this->deadline_at),
-            'started_at'     => $this->whenSet($this->started_at),
-            'completed_at'   => $this->whenSet($this->completed_at),
-            'created_at'     => $this->whenSet($this->created_at),
-            'description'    => $this->whenSet($this->description,  $this->description),
-            'assigned_users' => TeamMemberResource::collection($this->whenLoaded('assignedUsers')),
+            'id'             => $this->whenNotNull($this->id),
+            'title'          => $this->whenNotNull($this->title),
+            'priority_level' => $this->whenNotNull($this->priority_level),
+            'status'         => $this->whenNotNull($this->status),
+            'deadline_at'    => $this->whenNotNull($this->deadline_at),
+            'started_at'     => $this->whenNotNull($this->started_at),
+            'completed_at'   => $this->whenNotNull($this->completed_at),
+            'created_at'     => $this->whenNotNull($this->created_at),
+            'category'     => $this->whenNotNull($this->category),
+            'description'    => $this->whenNotNull($this->description,  $this->description),
             'project'        => ProjectResource::make($this->whenLoaded('project')),
             'comments'       => CommentResource::collection($this->whenLoaded('comments')),
+            'assigned_users' => TenantMemberResource::collection($this->whenLoaded('users')),
+            'links' => LinkResource::collection($this->whenLoaded('links')),
             'photo_attachments' => $this->whenLoaded('media', function () {
             return $this->getMedia('task_attachments')->map(function ($media) {
                 return [
@@ -43,10 +47,6 @@ class TaskResource extends BaseJsonResource
                 ];
             });
         }),
-        'pr_link' => $this->whenNotNull($this->pr_link),
-        'issue_link' => $this->whenNotNull($this->issue_link),
-        'doc_link' => $this->whenNotNull($this->doc_link),
-        'other_link' => $this->whenNotNull($this->other_link),
         ], fn($value) => !is_null($value));
     }
 }
