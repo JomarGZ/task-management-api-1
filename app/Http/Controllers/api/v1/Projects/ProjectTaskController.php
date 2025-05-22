@@ -133,7 +133,7 @@ class ProjectTaskController extends ApiController
 
         return new TaskResource($task->load([
             'project:id,name,description,created_at',
-            'users:id,name' ,
+            'users:id,name,position' ,
             'links'
         ]));
     }

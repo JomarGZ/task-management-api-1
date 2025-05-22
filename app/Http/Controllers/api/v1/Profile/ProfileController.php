@@ -5,26 +5,24 @@ namespace App\Http\Controllers\api\v1\Profile;
 use App\Http\Controllers\api\v1\ApiController;
 use App\Http\Requests\api\v1\Profile\UpdateProfileRequest;
 use App\Http\Resources\api\v1\tenants\TenantMemberResource;
-use App\Models\User;
 
 class ProfileController extends ApiController
 {
     public function store(UpdateProfileRequest $request)
-    {   
-       
-        $data = $request->only(['name', 'email', 'position_id']);
-        $data = array_filter($data);
+    {
+        $user = $request->user();
+        $validatedData = $request->validated();
 
-        if (empty($data)) {
-            return $this->error(
-                'No data provided for update.',
-                null,
-                400
-            );
+        if (empty($validatedData)) {
+            return response()->json(['message' => 'No data provided.'], 400);
         }
-        $user = User::select('id', 'name', 'email')->findOrFail($request->user()->id);
-        $user->update($data);
-       
-        return new TenantMemberResource($user);
+
+        try {
+            $user->update($validatedData);
+            return new TenantMemberResource($user->refresh());
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Update failed.'], 500);
+        }
     }
+
 }

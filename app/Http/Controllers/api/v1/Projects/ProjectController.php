@@ -101,8 +101,7 @@ class ProjectController extends ApiController
     {
         Gate::authorize('view', $project);
         $project->load([
-            'assignedTeamMembers:id,name,role,position_id', 
-            'assignedTeamMembers.position:id,name', 
+            'assignedTeamMembers:id,name,role,position', 
             'assignedTeamMembers.media', 
         ]);
         return new ProjectResource($project);
