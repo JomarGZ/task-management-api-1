@@ -6,8 +6,6 @@ use App\Http\Controllers\api\v1\auth\PasswordUpdateController;
 use App\Http\Controllers\api\v1\auth\RegisterController;
 use App\Http\Controllers\api\v1\Comments\CommentController;
 use App\Http\Controllers\api\v1\notifications\NotificationController;
-use App\Http\Controllers\api\v1\Position\PositionController;
-use App\Http\Controllers\api\v1\Positions\PositionFetchUnpaginatedController;
 use App\Http\Controllers\api\v1\Profile\ProfileController;
 use App\Http\Controllers\api\v1\Profile\UpdateProfilePhotoController;
 use App\Http\Controllers\api\v1\Projects\ProjectController;
@@ -38,7 +36,7 @@ use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/user', function (Request $request) {
-    $user = $request->user()->load(['media', 'position']); 
+    $user = $request->user()->load(['media']); 
     return new TenantMemberResource($user);
 })->middleware('auth:sanctum');
 
@@ -96,9 +94,6 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::get('notifications', [NotificationController::class, 'index']);
         Route::patch('notifications/{id}/mark-as-read', [NotificationController::class, 'update']);
     });
-
-    Route::get('positions/unpaginated', PositionFetchUnpaginatedController::class)->name('positions.unpaginated');
-    Route::apiResource('positions', PositionController::class)->shallow();
 });
 
 Route::post('auth/register', RegisterController::class)->name('register');

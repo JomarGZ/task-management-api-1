@@ -24,13 +24,13 @@ class TaskCommentController extends ApiController
             'created_at'
             ])->forModel($task)
             ->with([
-                'user:id,name',
+                'user:id,name,position',
                 'user.media' 
             ])
             ->withReplies()
             ->topLevelOnly()
             ->latest()
-            ->paginate(request('per_page', 2));
+            ->paginate(request('per_page', 5));
 
         return CommentResource::collection($comments)->additional(['message' => 'Retrieved Task Comment Successfully']);
     }

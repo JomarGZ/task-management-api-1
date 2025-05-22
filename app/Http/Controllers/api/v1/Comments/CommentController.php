@@ -14,7 +14,7 @@ class CommentController extends Controller
     {
         $comment = request()->user()->comments()->create($request->validated());
 
-        return  CommentResource::make($comment->load(['user:id,name', 'user.media']))->additional(['message' => 'Comment created Successfully']);
+        return  CommentResource::make($comment->load(['user:id,name,position', 'user.media']))->additional(['message' => 'Comment created Successfully']);
     }
 
     public function update(UpdateCommentRequest $request, Comment $comment)

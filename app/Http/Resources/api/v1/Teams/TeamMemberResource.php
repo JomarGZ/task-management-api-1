@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\api\v1\Teams;
 
-use App\Http\Resources\api\v1\Positions\PositionResource;
 use App\Http\Resources\BaseJsonResource;
 use Illuminate\Http\Request;
 
@@ -18,7 +17,6 @@ class TeamMemberResource extends BaseJsonResource
         return [
             'id' => $this->whenSet($this->id),
             'name' => $this->whenSet($this->name),
-            'position' => PositionResource::make($this->whenLoaded('position')),
             'avatar' => $this->whenLoaded('media', function () {
                 return [
                     'thumb-200' => $this->getFirstMediaUrl('avatar', 'thumb-200'),

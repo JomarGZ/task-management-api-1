@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\api\v1\Profile;
 
+use App\Enums\PositionEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateProfileRequest extends FormRequest
 {
@@ -23,7 +25,7 @@ class UpdateProfileRequest extends FormRequest
     {
         return [
             'name' => 'nullable|string|max:255',
-            'position_id' => 'nullable|exists:positions,id',
+            'position' => ['nullable', Rule::in(PositionEnum::cases())],
             'email' => 'nullable|email|unique:users,email,' . auth()->id(),
         ];
     }

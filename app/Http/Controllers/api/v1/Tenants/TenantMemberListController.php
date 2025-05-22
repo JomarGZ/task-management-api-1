@@ -19,11 +19,6 @@ class TenantMemberListController extends ApiController
         $users = User::query()
             ->select('id', 'name')
             ->with('media')
-            ->when($request->query('position_id'), function (Builder $query, $positionId) {
-                $query->whereHas('position', function (Builder $query) use ($positionId) {
-                    $query->where('id', $positionId);
-                });
-            })
             ->when($request->query('filtered_out_member_ids'),function ($query) use ($request) {
                 $query->whereNotIn('id', $request->query('filtered_out_member_ids'));
             })

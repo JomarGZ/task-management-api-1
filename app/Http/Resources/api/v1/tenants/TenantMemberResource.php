@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\api\v1\tenants;
 
-use App\Http\Resources\api\v1\Positions\PositionResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,7 +19,7 @@ class TenantMemberResource extends JsonResource
             'name'  => $this->whenNotNull($this->name),
             'email' => $this->whenNotNull($this->email),
             'role'  => $this->whenNotNull($this->role),
-            'position'  => PositionResource::make($this->whenLoaded('position')),
+            'position' => $this->whenNotNull($this->position),
             'avatar' => $this->whenLoaded('media', function () {
                 return [
                     'thumb-200' => $this->getFirstMediaUrl('avatar', 'thumb-200'),
