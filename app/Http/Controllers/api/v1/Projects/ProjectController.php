@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers\api\v1\Projects;
 
-use App\Enums\Enums\Statuses;
 use App\Http\Controllers\api\v1\ApiController;
 use App\Http\Requests\api\v1\Projects\StoreProjectRequest;
 use App\Http\Resources\api\v1\Projects\ProjectResource;
 use App\Models\Project;
-use App\Models\Task;
 use App\Services\v1\ProjectService;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -54,7 +51,7 @@ class ProjectController extends ApiController
                 'client_name',
                 'priority'
             ])
-            ->with('teamAssignee:id,name')
+            ->with('assignedTeamMembers:id,name', 'assignedTeamMembers.media')
             ->search($request->query('search'))
             ->filterByPriority($request->priority)
             ->filterByStatus($request->status)
@@ -141,6 +138,6 @@ class ProjectController extends ApiController
         Gate::authorize('delete', $project);
         $project->delete();
 
-        return $this->ok('');
+        return response()->noContent();
     }
 }
