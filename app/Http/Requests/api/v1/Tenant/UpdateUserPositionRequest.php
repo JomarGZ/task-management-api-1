@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\api\v1\Profile;
+namespace App\Http\Requests\api\v1\Tenant;
 
 use App\Enums\PositionEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateProfileRequest extends FormRequest
+class UpdateUserPositionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,7 @@ class UpdateProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'nullable|string|max:255',
-            'email' => 'nullable|email|unique:users,email,' . auth()->id(),
+            'position' => ['required', Rule::in(PositionEnum::cases())]
         ];
     }
 }

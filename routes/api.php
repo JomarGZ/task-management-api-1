@@ -30,6 +30,7 @@ use App\Http\Controllers\api\v1\Tasks\UserTaskStatusController;
 use App\Http\Controllers\api\v1\Tasks\UserUpcomingTaskDeadlineController;
 use App\Http\Controllers\api\v1\Teams\TeamStatisticController;
 use App\Http\Controllers\api\v1\Tenants\TenantMemberListController;
+use App\Http\Controllers\api\v1\Tenants\TenantMemberPositionController;
 use App\Http\Resources\api\v1\tenants\TenantMemberResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Broadcast;
@@ -52,6 +53,7 @@ Route::middleware('auth:sanctum')->group(function() {
         ->except(['update', 'show']);
         
     Route::get('tenant/members/list', TenantMemberListController::class);
+    Route::patch('tenant-member/position/update/{user}', [TenantMemberPositionController::class, 'update']);
     Route::apiResource('tenant/members', TenantMembersController::class)
         ->parameters(['members' => 'user']);
     Route::get('project-statuses', [ProjectStatusController::class, 'index']);
