@@ -46,7 +46,7 @@ class TenantMembersController extends ApiController
             );
         
         $members = User::query()
-            ->select(['id', 'name', 'role', 'email'])
+            ->select(['id', 'name', 'role', 'email', 'position'])
             ->whereNot('id', auth()->user()->id)
             ->with(['media'])
             ->search($request->query('search')) 
