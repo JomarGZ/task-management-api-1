@@ -90,7 +90,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::prefix('user')->group(function () {
         Route::apiResource('task-status-counts', UserTaskStatusController::class)->only('index');
         Route::apiResource('upcoming-tasks-deadlines', UserUpcomingTaskDeadlineController::class)->only('index');
-        Route::apiResource('assigned-tasks', UserTasksController::class)->only('index');
+        Route::get('/{user}/tasks',[ UserTasksController::class, 'index']);
         Route::get('priority-timeline', [PriorityTimelineController::class, 'index']);
 
         Route::get('notifications', [NotificationController::class, 'index']);
