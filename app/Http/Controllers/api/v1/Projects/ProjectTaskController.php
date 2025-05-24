@@ -56,7 +56,7 @@ class ProjectTaskController extends ApiController
             ])
            ->with([
             'users:id,name',
-            'users.media' 
+            'users.media',
            ])
             ->filterBySearch($request->search)
             ->filterByStatus($request->status)

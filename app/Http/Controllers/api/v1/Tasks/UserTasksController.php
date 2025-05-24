@@ -11,22 +11,34 @@ use function Laravel\Prompts\select;
 
 class UserTasksController extends Controller
 {
-    public function index(Request $request)
+    public function index(User $user, Request $request)
     {
-        $userId = $request->user_id;
-        $assigneeId = null;
-        if ($request->has('user_id') && !empty($userId)) {
-            $assigneeId = User::select('id')->findOrFail($userId)->id;
-        }
-        $tasks = Task::query()
-            ->select(['id', 'title', 'status', 'priority_level', 'project_id'])
-            ->with('project:id,name')
-            ->assignedTo($assigneeId)
+
+       $tasks = $user->tasks()
+            ->select([
+                'tasks.id',
+                'tasks.title', 
+                'tasks.description',
+                'tasks.priority_level',
+                'tasks.status',
+                'tasks.deadline_at',
+                'tasks.started_at',
+                'tasks.completed_at',
+                'tasks.category',
+                'tasks.created_at'
+            ])
+           ->with([
+            'users:id,name',
+            'users.media',
+            'project:id' 
+           ])
             ->filterBySearch($request->search)
             ->filterByStatus($request->status)
+            ->filterByAssigneeId($request->assigneeId)
+            ->latest()
             ->filterByPriorityLevel($request->priority_level)
             ->paginate(5);
-
+        
         return TaskResource::collection($tasks);
     }
 }
