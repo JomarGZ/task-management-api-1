@@ -26,6 +26,7 @@ class TenantMemberResource extends JsonResource
                     'thumb-60' => $this->getFirstMediaUrl('avatar', 'thumb-60'),
                 ];
             }),
+            'tasks_count' => $this->whenNotNull($this->tasks_count)
         ];
     }
 }

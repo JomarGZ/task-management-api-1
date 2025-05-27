@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\api\v1\Projects;
 
+use App\Enums\Enums\Statuses;
 use App\Http\Controllers\api\v1\ApiController;
 use App\Http\Requests\api\v1\Projects\StoreProjectRequest;
 use App\Http\Resources\api\v1\Projects\ProjectResource;
@@ -98,9 +99,19 @@ class ProjectController extends ApiController
     {
         Gate::authorize('view', $project);
         $project->load([
-            'assignedTeamMembers:id,name,role,position', 
-            'assignedTeamMembers.media', 
+            'assignedTeamMembers' => function($query) {
+                $query->select('users.id', 'users.name', 'users.role', 'users.position')
+                    ->with('media') 
+                    ->withCount(['tasks' => fn ($query) => $query->where('status', '!=', Statuses::COMPLETED->value)]);
+            }
+        ])->loadCount([
+            'tasks',
+            'tasks as completed_tasks_count' => fn ($query) => $query->where('status', Statuses::COMPLETED->value)
         ]);
+
+        $project->progress = $project->tasks_count > 0
+            ? round(($project->completed_tasks_count / $project->tasks_count) * 100, 2)
+            : 0;
         return new ProjectResource($project);
     }
 
