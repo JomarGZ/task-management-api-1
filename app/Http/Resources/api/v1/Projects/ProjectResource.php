@@ -27,6 +27,7 @@ class ProjectResource extends BaseJsonResource
             'priority'      => $this->whenNotNull($this->priority),
             'client_name'   => $this->whenNotNull($this->client_name),
             'created_at'    => $this->whenNotNull($this->created_at),
+            'progress'      => $this->whenNotNull($this->progress),
             'assigned_members' => TenantMemberResource::collection($this->whenLoaded('assignedTeamMembers')),
         ];
     }
