@@ -7,7 +7,9 @@ use App\Http\Controllers\api\v1\auth\RegisterController;
 use App\Http\Controllers\api\v1\Comments\CommentController;
 use App\Http\Controllers\api\v1\Dashboard\TaskCompletionTrendController;
 use App\Http\Controllers\api\v1\Dashboard\TaskStatisticsController;
+use App\Http\Controllers\api\v1\notifications\NotificationBulkController;
 use App\Http\Controllers\api\v1\notifications\NotificationController;
+use App\Http\Controllers\api\v1\Notifications\NotificationDropDownController;
 use App\Http\Controllers\api\v1\Profile\ProfileController;
 use App\Http\Controllers\api\v1\Profile\UpdateProfilePhotoController;
 use App\Http\Controllers\api\v1\Projects\ProjectController;
@@ -95,8 +97,10 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::get('/{user}/tasks',[ UserTasksController::class, 'index']);
         Route::get('priority-timeline', [PriorityTimelineController::class, 'index']);
 
-        Route::get('notifications', [NotificationController::class, 'index']);
-        Route::patch('notifications/{id}/mark-as-read', [NotificationController::class, 'update']);
+        Route::apiResource('notifications', NotificationController::class)->only(['index', 'update', 'destroy']);
+        Route::get('notifications/dropdown', [NotificationDropDownController::class, 'index']);
+        Route::post('notifications/mark-all-as-read', [NotificationBulkController::class, 'update']);
+        Route::post('notifications/delete-all', [NotificationBulkController::class, 'destroy']);
     });
 
     Route::prefix('dashboard')->group(function () {

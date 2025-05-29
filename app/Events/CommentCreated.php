@@ -35,7 +35,7 @@ class CommentCreated implements ShouldBroadcast
 
     public function broadcastWith()
     {
-        $comment = $this->comment->load(['author:id,name', 'replies:id,content,created_at']);
+        $comment = $this->comment->load(['user:id,name', 'replies:id,content,created_at']);
         return [
             'data' => [
                 'id' => $comment->id,
@@ -43,8 +43,8 @@ class CommentCreated implements ShouldBroadcast
                 'created_at' => $comment->created_at,
                 'updated_at' => $comment->updated_at,
                 'author' => [
-                    'id' => $comment->author->id,
-                    'name' => $comment->author->name,
+                    'id' => $comment->user->id,
+                    'name' => $comment->user->name,
                 ],
                 'replies' => []
             ]
