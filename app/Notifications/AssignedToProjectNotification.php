@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Enums\NotificationType;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
@@ -68,22 +69,17 @@ class AssignedToProjectNotification extends Notification implements ShouldQueue
         $assignerName = $this->assigner->name ?? 'System';
        
         return [
-            'message' => "You have been assigned to {$projectName} by {$assignerName}",
             'link' => [
                 'name' => 'projects.show',
                 'params' => ['projectId' => $this->project->id],
                 'query' => []
             ],
-            'is_external' => false,
             'assigner' => [
                 'name' => $assignerName,
                 'avatar' => $this->assigner?->getFirstMediaUrl('avatar', 'thumb-60')
             ],
-            'project' => [
-                'name' => $projectName,
-                'id' => $this->project->id
-            ],
-            'type' => 'project_assignment'
+            'projectName' => $projectName,
+            'type' => NotificationType::PROJECT_ASSIGNMENT->value
         ];
     }
 }

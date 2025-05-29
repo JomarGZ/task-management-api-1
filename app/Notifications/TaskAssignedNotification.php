@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Enums\NotificationType;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
@@ -75,26 +76,22 @@ class TaskAssignedNotification extends Notification implements ShouldQueue
      */
     public function toArray(object $notifiable): array
     {
-        $taskName = $this->task->name ?? 'a project';
+        $taskTitle = $this->task->title ?? 'a task';
         $assignerName = $this->assigner->name ?? 'System';
-       
+        $this->task->load('project:id');
         return [
-            'message' => "You have been assigned to {$taskName} by {$assignerName}",
             'link' => [
-                'name' => 'projects.show',
-                'params' => ['projectId' => $this->task->id],
-                'query' => []
+                'name' => 'tasks.show',
+                'params' => ['projectId' => $this->task->project->id, 'taskId' => $this->task->id],
             ],
-            'is_external' => false,
             'assigner' => [
                 'name' => $assignerName,
                 'avatar' => $this->assigner?->getFirstMediaUrl('avatar', 'thumb-60')
             ],
-            'project' => [
-                'name' => $taskName,
-                'id' => $this->task->id
-            ],
-            'type' => 'project_assignment'
+            'taskTitle' => $taskTitle,
+            'priority' => $this->task->priority_level,
+            'dueDate' => $this->task->deadline_at,
+            'type' => NotificationType::TASK_ASSIGNMENT->value
         ];
     }
 }

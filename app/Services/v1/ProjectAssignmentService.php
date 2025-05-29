@@ -33,7 +33,7 @@ class ProjectAssignmentService {
     public function notifyAssignedMembers(): self
     {   
         if (!empty($this->newAssigneeIds)) {
-          $recipients = collect(array_diff($this->newAssigneeIds->toArray(),[auth()->id()]));
+          $recipients = collect($this->newAssigneeIds)->diff([auth()->id()]);
             $newMembers = User::whereIn('id', $recipients)->get();
             if (!empty($newMembers)) {
                 Notification::send($newMembers, new AssignedToProjectNotification($this->project, request()->user()));

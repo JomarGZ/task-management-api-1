@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Enums\NotificationType;
 use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Bus\Queueable;
@@ -90,6 +91,7 @@ class UpcomingTaskDeadlineNotification extends Notification implements ShouldQue
         ]
         : '#';
         $result['is_external'] = false;
+        $result['type'] = NotificationType::SYSTEM->value;
         return $result;
     }
    

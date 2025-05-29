@@ -2,12 +2,14 @@
 
 namespace App\Notifications;
 
+use App\Enums\NotificationType;
 use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Str;
 
 class TaskCommentNotification extends Notification implements ShouldQueue
 {
@@ -52,22 +54,18 @@ class TaskCommentNotification extends Notification implements ShouldQueue
     {
         $task = $this->comment->commentable;
         $project = $this->comment->commentable->project;
-        $result = [
-            'message' => 'There is noew comment to the task assigned to you'
-        ];
-        if (isset($this->message)) {
-            $result['message'] = $this->message;
-        }
-        $result['link'] = isset($task->id) && isset($project->id)
-        ? [
+        $result['taskTitle'] = $task->title;
+        $result['link'] = [
             'name' => 'tasks.show',
             'params' => [
                 'projectId' => $project->id,
                 'taskId' => $task->id
             ]
-        ]
-        : '#';
-        $result['is_External'] = false;
+        ];
+        $result['commenter'] = $this->comment->user;
+        $result['commentPreview'] = Str::limit($this->comment->content, 20, '...');
+
+        $result['type'] = NotificationType::TASK_COMMENT->value;
         return $result;
     }
 }

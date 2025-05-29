@@ -35,12 +35,12 @@ return Application::configure(basePath: dirname(__DIR__))
                 request()->wantsJson() && // More robust check
                 ($e instanceof ModelNotFoundException || $e->getPrevious() instanceof ModelNotFoundException)
             ) {
-                return response()->json([
-                    'errors' => [
-                        'title' => 'Not Found',
-                        'status' => Response::HTTP_NOT_FOUND
-                    ]
-                    ], Response::HTTP_NOT_FOUND);
+                // return response()->json([
+                //     'errors' => [
+                //         'title' => 'Not Found',
+                //         'status' => Response::HTTP_NOT_FOUND
+                //     ]
+                //     ], Response::HTTP_NOT_FOUND);
             }
         });
         $exceptions->renderable(function(AccessDeniedHttpException $e) {
