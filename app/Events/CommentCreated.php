@@ -16,14 +16,12 @@ class CommentCreated implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $comment;
-    public $user;
     /**
      * Create a new event instance.
      */
-    public function __construct(Comment $comment, User $user = null)
+    public function __construct(Comment $comment)
     {
-        $this->comment = $comment;
-        $this->user = $user ??= auth()->user();
+        $this->comment = $comment->load(['user:id,name,email,position', 'replies:id,content,created_at', 'user.media']);
     }
 
     public function broadcastOn(): array
@@ -35,19 +33,8 @@ class CommentCreated implements ShouldBroadcast
 
     public function broadcastWith()
     {
-        $comment = $this->comment->load(['user:id,name', 'replies:id,content,created_at']);
         return [
-            'data' => [
-                'id' => $comment->id,
-                'content' => $comment->content,
-                'created_at' => $comment->created_at,
-                'updated_at' => $comment->updated_at,
-                'author' => [
-                    'id' => $comment->user->id,
-                    'name' => $comment->user->name,
-                ],
-                'replies' => []
-            ]
+            'data' => new CommentResource($this->comment)
         ];
     }
 }
