@@ -6,6 +6,7 @@ use App\Http\Controllers\api\v1\auth\PasswordUpdateController;
 use App\Http\Controllers\api\v1\auth\RegisterController;
 use App\Http\Controllers\api\v1\Comments\CommentController;
 use App\Http\Controllers\api\v1\Dashboard\TaskCompletionTrendController;
+use App\Http\Controllers\api\v1\Dashboard\TaskDistributionController;
 use App\Http\Controllers\api\v1\Dashboard\TaskStatisticsController;
 use App\Http\Controllers\api\v1\notifications\NotificationBulkController;
 use App\Http\Controllers\api\v1\notifications\NotificationController;
@@ -106,6 +107,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::prefix('dashboard')->group(function () {
         Route::get('tasks-statistic/counts', [TaskStatisticsController::class, 'index']);
         Route::get('task-completion/statistic', [TaskCompletionTrendController::class, 'index']);
+        Route::get('stask-distribution', [TaskDistributionController::class, 'index']);
     });
 });
 
