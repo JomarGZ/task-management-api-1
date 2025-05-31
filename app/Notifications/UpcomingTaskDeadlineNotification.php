@@ -16,14 +16,12 @@ class UpcomingTaskDeadlineNotification extends Notification implements ShouldQue
 
     public $tries = 5;
     protected $task;
-    protected $project;
     /**
      * Create a new notification instance.
      */
-    public function __construct(Task $task, ?Project $project = null)
+    public function __construct(Task $task)
     {
         $this->task = $task;
-        $this->project = $project;
         $this->onQueue('notifications');
     }
     /**
@@ -33,7 +31,7 @@ class UpcomingTaskDeadlineNotification extends Notification implements ShouldQue
      */
     public function via(object $notifiable): array
     {
-        return ['mail', 'database', 'broadcast'];
+        return ['database', 'broadcast'];
     }
 
     /**
@@ -72,26 +70,19 @@ class UpcomingTaskDeadlineNotification extends Notification implements ShouldQue
      */
     public function toArray(object $notifiable): array
     {
-        $result = [ 
-            "message" => "You have an upcoming task deadline",
-        ];
-        
-        if (isset($this->task)) {
-            if (isset($this->task->title)) {
-                $result['message'] = "You have upcoming task deadline: {$this->task->title}";
-            }
-        }
-        $result['link'] = isset($his->task->id) && isset($this->task->project->id)
-        ? [
+        $result['projectName'] = $this->task->project?->name ?? 'Not specified';
+        $result['taskTitle'] = $this->task->title ?? 'Not specified';
+        $result['priority'] = ucfirst($this->task->priority_level ?? 'Not specified');
+        $result['deadline'] = $this->task->deadline_at;
+        $result['is_external'] = false;
+        $result['link'] = [
             'name' => 'tasks.show',
             'params' => [
-                'projectId' => $this->task->project->id,
+                'projectId' => $this->task->project?->id ?? null,
                 'taskId' => $this->task->id
             ]
-        ]
-        : '#';
-        $result['is_external'] = false;
-        $result['type'] = NotificationType::SYSTEM->value;
+        ];
+        $result['type'] = NotificationType::TASK_DEADLINE_ALERT->value;
         return $result;
     }
    
