@@ -24,7 +24,7 @@ class NotificationController extends ApiController
                 };
             })
             ->latest()
-            ->paginate(3);
+            ->paginate(10);
         return NotificationResource::collection($notifications)->additional(['message' => 'Notification retrieved successfully']);
     }
 
