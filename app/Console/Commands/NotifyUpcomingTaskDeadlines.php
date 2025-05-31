@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\Enums\Statuses;
 use App\Models\Task;
 use App\Notifications\UpcomingTaskDeadlineNotification;
 use Illuminate\Console\Command;
@@ -28,12 +29,21 @@ class NotifyUpcomingTaskDeadlines extends Command
      */
     public function handle()
     {
-        Task::withoutGlobalScopes()->whereDate('deadline_at', now()->addDay()->toDateString())
+        Task::withoutGlobalScopes()
             ->select('id', 'project_id', 'title', 'deadline_at', 'priority_level', 'status')
+            ->with(['users:id,name,email', 'project:id,name'])
+            ->where('status', '!=', Statuses::COMPLETED)
+            ->whereNotNull('deadline_at')
+            ->whereDate('deadline_at', now()->addDay()->toDateString())
            
             ->chunk(500, function ($tasks) {
-             
-                info('Task deadline notifications is on queue and will be send');
+                $tasks->each(function ($task) {
+                    if ($task->users->isNotEmpty()) {
+                        info('task', ['users' => $task->users, 'task' => $task]);
+                        Notification::send($task->users,   (new UpcomingTaskDeadlineNotification($task))
+                        ->delay(now()->addSeconds(5)));
+                    }
+                });
             });
     }
 }
