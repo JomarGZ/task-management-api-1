@@ -16,25 +16,28 @@ class CommentCreated implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $comment;
+    protected $authId;
     /**
      * Create a new event instance.
      */
     public function __construct(Comment $comment)
     {
         $this->comment = $comment->load(['user:id,name,email,position', 'replies:id,content,created_at', 'user.media']);
+        $this->authId = auth()->id();
     }
 
     public function broadcastOn(): array
     {
         return [
-            new Channel('task.comment.created'),
+             new Channel('task.'.$this->comment->commentable_id.'.comments'),
         ];
     }
 
     public function broadcastWith()
     {
         return [
-            'data' => new CommentResource($this->comment)
+            'data' => new CommentResource($this->comment),
+            'task_id' => $this->comment->commentable_id,
         ];
     }
 }
