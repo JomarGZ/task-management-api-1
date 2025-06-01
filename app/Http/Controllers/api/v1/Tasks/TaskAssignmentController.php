@@ -20,7 +20,8 @@ class TaskAssignmentController extends ApiController
         }
         return new TaskResource($task->fresh()->load([
             'project:id,name,description,created_at',
-            'users:id,name' 
+            'users:id,name,position',
+            'users.media' 
         ]))->additional(['message' => 'Assigned task successfully']);
     }
 
@@ -30,7 +31,8 @@ class TaskAssignmentController extends ApiController
 
          return new TaskResource($task->fresh()->load([
             'project:id,name,description,created_at',
-            'users:id,name' 
+            'users:id,name,position',
+            'users.media' 
         ]))->additional(['message' => 'Remove assignee of task successfully']);
     }
 }
