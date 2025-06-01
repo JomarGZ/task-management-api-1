@@ -97,7 +97,6 @@ class ProjectController extends ApiController
      */
     public function show(Project $project)
     {
-        Gate::authorize('view', $project);
         $project->load([
             'assignedTeamMembers' => function($query) {
                 $query->select('users.id', 'users.name', 'users.role', 'users.position')

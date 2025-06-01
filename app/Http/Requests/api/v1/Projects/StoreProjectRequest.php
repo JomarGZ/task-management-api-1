@@ -12,10 +12,7 @@ class StoreProjectRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if (in_array(request()->method(), ['PUT', 'PATCH'])) {
-            return request()->user()->can('update', request()->route('project'));
-        }
-        return request()->user()->can('create', Project::class);
+        return request()->user()->isAdmin();
     }
 
     /**
@@ -34,15 +31,6 @@ class StoreProjectRequest extends FormRequest
             'budget'        => ['nullable', 'numeric', 'max_digits:10'],
             'status'        => ['nullable'],
             'priority'      => ['nullable'],
-            'team_id'       => ['sometimes', 'exists:teams,id'],
-            'manager'       => ['nullable', 'exists:users,id'],
-        ];
-    }
-
-    public function messages(): array
-    {
-        return [
-            'team_id.exists' => 'The selected team does not exist in the organization',
         ];
     }
 
@@ -61,10 +49,6 @@ class StoreProjectRequest extends FormRequest
             'description' => [
                 'description' => 'A brief description of the project.',
                 'example' => 'Redesigning the company website to improve user experience.',
-            ],
-            'team_id' => [
-                'description' => 'The ID of the team assigned to the project. This field is optional.',
-                'example' => 3,
             ],
         ];
     }

@@ -28,7 +28,7 @@ class ProjectPolicy
      */
     public function create(User $user): bool
     {
-        return true;    
+        return $user->isAdmin();    
     }
 
     /**
@@ -36,7 +36,7 @@ class ProjectPolicy
      */
     public function update(User $user, Project $project): bool
     {
-        return true;
+        return $user->isAdmin() && $user->belongsToTenant($project);
     }
 
     /**
