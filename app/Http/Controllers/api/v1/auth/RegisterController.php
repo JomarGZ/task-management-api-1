@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\api\v1\auth;
 
+use App\Enums\ChatTypeEnum;
 use App\Http\Requests\api\v1\auth\RegistrationRequest;
 use App\Models\Tenant;
 use App\Models\User;
 use App\Enums\Role;
 use App\Http\Controllers\api\v1\ApiController;
+use App\Models\Channel;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class RegisterController extends ApiController
 {
@@ -31,33 +35,55 @@ class RegisterController extends ApiController
      */
     public function __invoke(RegistrationRequest $request)
     {
-       
-        $user = User::withoutGlobalScopes()->create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+       try {
+            DB::beginTransaction();
 
-        $tenant = Tenant::create([
-            'name' => "$user->name tenant"
-        ]);
-        $user->tenant_id = $tenant->id;
-        $user->role = Role::ADMIN->value;
-        $user->save();
+            $user = User::withoutGlobalScopes()->create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
 
-        $device = substr($request->userAgent() ?? '', 0, 255);
+            $tenant = Tenant::create(['name' => "$user->name tenant"]);
 
-        return $this->success(
-            'Registered Successfully',
-            [
-                'user' => [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->email,
+            $generalChannel = Channel::create([
+                'tenant_id' => $tenant->id,
+                'user_id' => $user->id,
+                'type' => ChatTypeEnum::GENERAL->value,
+                'name' => 'General', 
+                'description' => "Default general channel for {$tenant->name}",
+                'is_default' => true, 
+            ]);
+
+            $generalChannel->participants()->attach($user->id, [
+                'tenant_id' => $tenant->id,
+            ]);
+
+            $user->update([
+                'tenant_id' => $tenant->id,
+                'role' => Role::ADMIN->value,
+            ]);
+
+            DB::commit();
+
+           $device = substr($request->userAgent() ?? '', 0, 255);
+            return $this->success(
+                'Registered Successfully',
+                [
+                    'user' => [
+                        'id' => $user->id,
+                        'name' => $user->name,
+                        'email' => $user->email,
+                    ],
+                    'access_token' => $user->createToken($device)->plainTextToken,
                 ],
-                'access_token' => $user->createToken($device)->plainTextToken,
-            ],
-            Response::HTTP_CREATED
-        );
+                Response::HTTP_CREATED
+            );
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error("Registration failed: {$e->getMessage()}", ['exception' => $e]);
+            return $this->error('Registration failed', ['error' => $e->getMessage()], 500);
+        }
+       
     }
 }

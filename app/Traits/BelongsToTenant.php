@@ -21,6 +21,7 @@ trait BelongsToTenant
                 return;
             }
             if (auth()->check()) {
+                info('trigger', ['tenant_id' => auth()->user()->tenant_id]);
                 $model->tenant_id = auth()->user()->tenant_id;
             }
         });

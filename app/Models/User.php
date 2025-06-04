@@ -105,6 +105,23 @@ class User extends Authenticatable implements HasMedia
          ->withTimestamps();
     }
 
+    public function channels()
+    {
+        return $this->belongsToMany(Channel::class, 'channel_participants')
+            ->withPivot('last_read_at')
+            ->withTimestamps();
+    }
+
+    public function channelCreatedBy()
+    {
+        return $this->hasMany(Channel::class, 'user_id');
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
+   
     public function assignedProjectAsManager()
     {
         return $this->hasMany(Project::class, 'manager');
