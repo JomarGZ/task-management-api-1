@@ -19,6 +19,11 @@ class Channel extends Model
             ->withTimestamps(); 
     }
 
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
+
     public function creatorOfChannel()
     {
         return $this->belongsTo(User::class, 'user_id');
@@ -45,6 +50,14 @@ class Channel extends Model
     public function scopeWithRepliesCount($query)
     {
         return $query->withCount('replies');
+    }
+
+    public static function general(): Channel
+    {
+        return static::firstOrCreate(
+            ['type' => 'general'],
+            ['name' => 'General', 'description' => 'General discussion channel']
+        );
     }
 
 }

@@ -5,6 +5,7 @@ use App\Http\Controllers\api\v1\auth\LogoutController;
 use App\Http\Controllers\api\v1\auth\PasswordUpdateController;
 use App\Http\Controllers\api\v1\auth\RegisterController;
 use App\Http\Controllers\api\v1\Chats\ChannelController;
+use App\Http\Controllers\api\v1\Chats\MessageController;
 use App\Http\Controllers\api\v1\Comments\CommentController;
 use App\Http\Controllers\api\v1\Dashboard\TaskCompletionTrendController;
 use App\Http\Controllers\api\v1\Dashboard\TaskDistributionController;
@@ -113,6 +114,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::prefix('chat')->group(function () {
         Route::apiResource('channels', ChannelController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
+        Route::apiResource('messages', MessageController::class)->only(['store']);
     });
 });
 

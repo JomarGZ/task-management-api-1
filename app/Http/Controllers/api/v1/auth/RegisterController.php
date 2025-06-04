@@ -52,7 +52,6 @@ class RegisterController extends ApiController
                 'type' => ChatTypeEnum::GENERAL->value,
                 'name' => 'General', 
                 'description' => "Default general channel for {$tenant->name}",
-                'is_default' => true, 
             ]);
 
             $generalChannel->participants()->attach($user->id, [
