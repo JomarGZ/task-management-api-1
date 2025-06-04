@@ -54,10 +54,7 @@ class Channel extends Model
 
     public static function general(): Channel
     {
-        return static::firstOrCreate(
-            ['type' => 'general'],
-            ['name' => 'General', 'description' => 'General discussion channel']
-        );
+        return static::where('type', 'general')->firstOrFail();
     }
 
 }

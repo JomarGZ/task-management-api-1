@@ -4,7 +4,6 @@ namespace App\Http\Controllers\api\v1\Chats;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\api\v1\Chats\TypeMessageRequest;
-use App\Http\Resources\api\v1\Chats\ChannelResource;
 use App\Http\Resources\api\v1\Chats\MessageResource;
 use App\Models\Channel;
 use App\Services\v1\MessageHandlerFactory;
@@ -29,7 +28,7 @@ class MessageController extends Controller
     {
         switch ($request->message_type) {
             case 'general':
-                return Channel::general(); // Singleton general channel
+                return Channel::general(); 
             case 'direct': 
                 // DM channel resolution logic
             case 'group':

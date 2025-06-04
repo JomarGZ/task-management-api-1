@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api\v1\Tenants;
 
 use App\Enums\ChatTypeEnum;
+use App\Enums\Role;
 use App\Http\Controllers\api\v1\ApiController;
 use App\Http\Requests\api\v1\TenantMembers\AddMemberRequest;
 use App\Http\Requests\api\v1\TenantMembers\UpdateMemeberRequest;
@@ -79,23 +80,11 @@ class TenantMembersController extends ApiController
         $data = [
             'name' => $request->name,
             'email' => $request->email,
-            'role' => $request->role,
+            'role' => Role::MEMBER->value,
         ];
-        try {
-            DB::beginTransaction();
-            $newMember = $this->tenantMemberService->addMember($data);
-            $generalChannel = Channel::where('type', ChatTypeEnum::GENERAL->value)->first();
-            $generalChannel->participants()->attach($newMember->id, ['tenant_id' => $newMember->tenant_id]);
-            DB::commit();
-            return new TenantMemberResource($newMember);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return $this->error(
-                'Failed to create tenant member',
-                ['error' => $e->getMessage()],
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
-        }
+        $newMember = $this->tenantMemberService->addMember($data);
+    
+        return new TenantMemberResource($newMember);
     }
 
     /**

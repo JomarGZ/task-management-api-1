@@ -37,32 +37,13 @@ class RegisterController extends ApiController
     {
        try {
             DB::beginTransaction();
-
             $user = User::withoutGlobalScopes()->create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-            ]);
-
-            $tenant = Tenant::create(['name' => "$user->name tenant"]);
-
-            $generalChannel = Channel::create([
-                'tenant_id' => $tenant->id,
-                'user_id' => $user->id,
-                'type' => ChatTypeEnum::GENERAL->value,
-                'name' => 'General', 
-                'description' => "Default general channel for {$tenant->name}",
-            ]);
-
-            $generalChannel->participants()->attach($user->id, [
-                'tenant_id' => $tenant->id,
-            ]);
-
-            $user->update([
-                'tenant_id' => $tenant->id,
+                'tenant_id' => Tenant::create(['name' => "$request->name tenant"])->id,
                 'role' => Role::ADMIN->value,
             ]);
-
             DB::commit();
 
            $device = substr($request->userAgent() ?? '', 0, 255);

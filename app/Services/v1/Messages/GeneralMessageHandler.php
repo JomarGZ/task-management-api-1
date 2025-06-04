@@ -5,7 +5,10 @@ use App\Http\Requests\api\v1\Chats\GeneralMessageRequest;
 use App\Interfaces\MessageHandlerInterface;
 use App\Models\Channel;
 use App\Models\Message;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Redirect;
 
 class GeneralMessageHandler implements MessageHandlerInterface 
 {
@@ -18,8 +21,15 @@ class GeneralMessageHandler implements MessageHandlerInterface
         ]);
     }
     
-    public function validate(GeneralMessageRequest $request): array
+    public function validate(FormRequest $request): array
     {
-        return $request->validated();
+        $generalRequest = GeneralMessageRequest::createFrom($request)
+            ->setContainer(app())
+            ->setRedirector(app(Redirector::class));
+        
+        $generalRequest->validateResolved();
+        
+        return $generalRequest->validated();
+
     }
 }
