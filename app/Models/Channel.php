@@ -57,4 +57,8 @@ class Channel extends Model
         return static::where('type', 'general')->firstOrFail();
     }
 
+    public static function isGeneralChannelMember()
+    {
+        return static::general()->participants()->where('user_id', auth()->id())->exists();
+    }
 }

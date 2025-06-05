@@ -114,7 +114,8 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::prefix('chat')->group(function () {
         Route::apiResource('channels', ChannelController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
-        Route::apiResource('messages', MessageController::class)->only(['store']);
+        Route::apiResource('messages', MessageController::class)->only(['store', 'update', 'destroy']);
+        Route::get('channels/{channel}/messages', [MessageController::class, 'index']);
     });
 });
 

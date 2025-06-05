@@ -4,37 +4,55 @@ namespace App\Http\Controllers\api\v1\Chats;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\api\v1\Chats\TypeMessageRequest;
+use App\Http\Requests\api\v1\Chats\UpdateGeneralMessageRequest;
 use App\Http\Resources\api\v1\Chats\MessageResource;
 use App\Models\Channel;
+use App\Models\Message;
 use App\Services\v1\MessageHandlerFactory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class MessageController extends Controller
 {
-    
+    public function index(Channel $channel ,Request $request)
+    {
+        $messages = $channel->messages()
+            ->with('user')
+            ->forChannel($channel)
+            ->cursorPaginate(3);
+
+        return MessageResource::collection($messages)->additional([
+            'message' => 'Messages retrieved successfully'
+        ]);
+    }
+ 
     public function store(TypeMessageRequest $request, MessageHandlerFactory $factory)
     {
         $handler = $factory->make($request->message_type);
         $data = $handler->validate($request);
-        $channel = $this->resolveChannel($request);
+        $channel = $handler->resolveChannel($request);
         $message = $handler->handle($channel, $data);
         
         return new MessageResource($message)->additional([
             'message' => 'Message sent successfully',
         ]);
     }
-    
-    protected function resolveChannel(Request $request): Channel
+
+    public function update(Message $message, UpdateGeneralMessageRequest $request)
     {
-        switch ($request->message_type) {
-            case 'general':
-                return Channel::general(); 
-            case 'direct': 
-                // DM channel resolution logic
-            case 'group':
-                // Group channel resolution
-            default:
-                throw new \InvalidArgumentException("Unknown message type");
-        }
+        $message->update($request->validated());
+
+        return MessageResource::make($message)->additional([
+            'message' => 'Message updated successfully',
+        ]);
     }
+
+    public function destroy(Message $message)
+    {
+        Gate::authorize('delete', $message);
+        $message->delete();
+
+        return response()->noContent();
+    }
+
 }

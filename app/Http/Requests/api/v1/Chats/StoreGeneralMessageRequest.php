@@ -5,17 +5,14 @@ namespace App\Http\Requests\api\v1\Chats;
 use App\Models\Channel;
 use Illuminate\Foundation\Http\FormRequest;
 
-class GeneralMessageRequest extends FormRequest
+class StoreGeneralMessageRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return Channel::general()
-            ->participants()
-            ->where('user_id', auth()->id())
-            ->exists();
+        return Channel::isGeneralChannelMember();
     }
 
     /**

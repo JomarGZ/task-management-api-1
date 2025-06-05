@@ -1,7 +1,7 @@
 <?php
 namespace App\Services\v1\Messages;
 
-use App\Http\Requests\api\v1\Chats\GeneralMessageRequest;
+use App\Http\Requests\api\v1\Chats\StoreGeneralMessageRequest;
 use App\Interfaces\MessageHandlerInterface;
 use App\Models\Channel;
 use App\Models\Message;
@@ -23,7 +23,7 @@ class GeneralMessageHandler implements MessageHandlerInterface
     
     public function validate(FormRequest $request): array
     {
-        $generalRequest = GeneralMessageRequest::createFrom($request)
+        $generalRequest = StoreGeneralMessageRequest::createFrom($request)
             ->setContainer(app())
             ->setRedirector(app(Redirector::class));
         
@@ -32,4 +32,10 @@ class GeneralMessageHandler implements MessageHandlerInterface
         return $generalRequest->validated();
 
     }
+
+    public function resolveChannel(Request $request): Channel
+    {
+        return Channel::general();
+    }
+
 }

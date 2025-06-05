@@ -35,4 +35,11 @@ class Message extends Model
     {
         return $this->hasMany(Message::class, 'parent_id')->latest();
     }
+
+    public function scopeForChannel($query, Channel $channel)
+    {
+        return $query->where('channel_id', $channel->id)
+            ->with('user')
+            ->latest();
+    }
 }
