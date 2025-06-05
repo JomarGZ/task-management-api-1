@@ -31,7 +31,7 @@ class ChannelController extends Controller
             'type' => $request->type,
             'user_id' => $request->user()->id,
         ]);
-        $channel->participants()->attach($request->participants->first()->id);
+        $channel->participants()->attach($request->user()->id, ['tenant_id' => $request->user()->tenant_id]);
 
         return new ChannelResource($channel);
     }

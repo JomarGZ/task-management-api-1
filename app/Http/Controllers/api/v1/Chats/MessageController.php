@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\Gate;
 
 class MessageController extends Controller
 {
+    protected MessageHandlerFactory $handlerFactory;
+    public function __construct(MessageHandlerFactory $handlerFactory)
+    {
+        $this->handlerFactory = $handlerFactory;
+    }
+
     public function index(Channel $channel ,Request $request)
     {
         $messages = $channel->messages()
@@ -26,10 +32,10 @@ class MessageController extends Controller
         ]);
     }
  
-    public function store(TypeMessageRequest $request, MessageHandlerFactory $factory)
+    public function store(TypeMessageRequest $request)
     {
-        $handler = $factory->make($request->message_type);
-        $data = $handler->validate($request);
+        $handler = $this->handlerFactory->make($request->message_type);
+        $data = $handler->validateStore($request);
         $channel = $handler->resolveChannel($request);
         $message = $handler->handle($channel, $data);
         
@@ -38,9 +44,12 @@ class MessageController extends Controller
         ]);
     }
 
-    public function update(Message $message, UpdateGeneralMessageRequest $request)
+    public function update(Message $message, TypeMessageRequest $request)
     {
-        $message->update($request->validated());
+
+        $handler = $this->handlerFactory->make($request->message_type);
+        $data = $handler->validateUpdate($request);
+        $message->update($data);
 
         return MessageResource::make($message)->additional([
             'message' => 'Message updated successfully',

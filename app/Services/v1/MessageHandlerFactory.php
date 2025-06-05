@@ -1,13 +1,15 @@
 <?php
 namespace App\Services\v1;
 
+use App\Enums\ChatTypeEnum;
 use App\Interfaces\MessageHandlerInterface;
 use App\Services\v1\Messages\GeneralMessageHandler;
-
+use App\Services\v1\Messages\GroupMessageHandler;
 class MessageHandlerFactory
 {
     protected $handlers = [
-        'general' => GeneralMessageHandler::class
+        ChatTypeEnum::GENERAL->value => GeneralMessageHandler::class,
+        ChatTypeEnum::GROUP->value => GroupMessageHandler::class,
     ];
     
     public function make(string $type): MessageHandlerInterface

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 interface MessageHandlerInterface
 {
     public function handle(Channel $channel, array $data): Message;
-    public function validate(FormRequest $request): array;
+    public function validateStore(FormRequest $request): array;
+    public function validateUpdate(FormRequest $request): array;
     public function resolveChannel(Request $request): Channel;
 }

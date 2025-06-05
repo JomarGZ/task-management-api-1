@@ -5,6 +5,6 @@ namespace App\Enums;
 enum ChatTypeEnum: string
 {
     case DIRECT = 'direct';
-    case group = 'group';
+    case GROUP = 'group';
     case GENERAL = 'general';
 }
