@@ -35,8 +35,8 @@ class MessageController extends Controller
     public function store(TypeMessageRequest $request)
     {
         $handler = $this->handlerFactory->make($request->message_type);
-        $channel = $handler->resolveChannel($request);
         $data = $handler->validateStore($request);
+        $channel = $handler->resolveChannel($request);
         
         $message = $handler->handle($channel, $data);
         

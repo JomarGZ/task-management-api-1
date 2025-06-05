@@ -2,7 +2,6 @@
 namespace App\Services\v1\Messages;
 
 use App\Http\Requests\api\v1\Chats\StoreDirectMessageRequest;
-use App\Http\Requests\api\v1\Chats\StoreGeneralMessageRequest;
 use App\Http\Requests\api\v1\Chats\UpdateDirectMessageRequest;
 use App\Interfaces\MessageHandlerInterface;
 use App\Models\Channel;
@@ -46,7 +45,7 @@ class DirectMessageHandler implements MessageHandlerInterface
 
     public function resolveChannel(Request $request): Channel
     {
-        return Channel::general();
+        return Channel::direct($request->sender_id, $request->recipient_id);
     }
 
 }

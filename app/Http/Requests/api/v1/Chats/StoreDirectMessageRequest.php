@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\api\v1\Chats;
 
+use App\Rules\NotEqualSender;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreDirectMessageRequest extends FormRequest
@@ -11,7 +12,7 @@ class StoreDirectMessageRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +23,13 @@ class StoreDirectMessageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'content' => 'required|string|max:1000',
+            'sender_id' => 'required|exists:users,id',
+            'recipient_id' => [
+                'required',
+                'exists:users,id',
+                new NotEqualSender($this->input('sender_id'))
+                ]
         ];
     }
 }

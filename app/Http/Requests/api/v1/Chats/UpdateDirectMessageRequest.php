@@ -11,7 +11,7 @@ class UpdateDirectMessageRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return $this->user()->can('update', $this->route('message'));
     }
 
     /**
@@ -22,7 +22,7 @@ class UpdateDirectMessageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+             'content' => 'required|string|max:1000',
         ];
     }
 }
