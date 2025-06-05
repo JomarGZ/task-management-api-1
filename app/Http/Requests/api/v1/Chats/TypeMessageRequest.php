@@ -25,6 +25,7 @@ class TypeMessageRequest extends FormRequest
     {
         return [
             'message_type' => ['required', Rule::in(ChatTypeEnum::cases())],
+            'channel_id' => ['required', 'exists:channels,id']
         ];
     }
 }

@@ -12,8 +12,7 @@ class UpdateGeneralMessageRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Channel::isGeneralChannelMember()
-            && $this->user()->can('update', $this->route('message'));
+        return $this->user()->can('update', $this->route('message'));
     }
 
     /**

@@ -62,9 +62,9 @@ class Channel extends Model
         return self::where('type', ChatTypeEnum::GROUP->value)->findOrFail($channelId);
     }
 
-    public static function isGroupChannelMember(Channel $channel): bool
+    public static function isGroupChannelMember(int $channelId): bool
     {
-        return static::group($channel->id)->participants()->where('user_id', auth()->id())->exists();
+        return static::group($channelId)->participants()->where('user_id', auth()->id())->exists();
     }
 
     public static function isGeneralChannelMember()

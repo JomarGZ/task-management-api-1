@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\api\v1\Chats;
 
+use App\Models\Channel;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateGroupMessageRequest extends FormRequest
@@ -11,7 +12,7 @@ class UpdateGroupMessageRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return $this->user()->can('update', $this->route('message'));
     }
 
     /**

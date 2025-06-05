@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\api\v1\Chats;
 
+use App\Models\Channel;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreGroupMessageRequest extends FormRequest
@@ -11,7 +12,7 @@ class StoreGroupMessageRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return Channel::isGroupChannelMember($this->channel_id);
     }
 
     /**
