@@ -119,7 +119,7 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::apiResource('channels', ChannelController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
         Route::apiResource('messages', MessageController::class)->only(['store', 'update', 'destroy']);
         Route::get('channels/{channel}/messages', [MessageController::class, 'index']);
-        Route::apiResource('channels.participants', ChannelParticipantsController::class)->shallow()->only(['store']);
+        Route::apiResource('channels.participants', ChannelParticipantsController::class)->shallow()->only(['store', 'index']);
         Route::get('channel/messages/{message}/replies', [MessageRepliesController::class, 'index']);
         Route::post('channel/messages/{message}/like', [MessageLikesController::class , 'store']);
     });

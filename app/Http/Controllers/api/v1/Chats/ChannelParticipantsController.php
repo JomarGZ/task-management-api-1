@@ -10,6 +10,15 @@ use Illuminate\Http\Request;
 
 class ChannelParticipantsController extends Controller
 {
+
+    public function index(Channel $channel, Request $request)
+    {
+        $participants = $channel->participants()
+            ->orderBy('name')
+            ->search($request->input('query'))
+            ->cursorPaginate(10);
+        return ChannelParticipantResource::collection($participants);
+    }
     public function store(StoreParticipantRequest $request, Channel $channel)
     {
         $channel->participants()->attach($request->participant_ids, [

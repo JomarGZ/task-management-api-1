@@ -19,4 +19,11 @@ class ChannelParticipant extends Model
     {
         return $this->belongsTo(Channel::class);
     }
+
+    public function scopeSearch($query, ?string $search = null)
+    {
+        return $query->when($search, function($q) use ($search) {
+            $q->where('name', 'LIKE', "%{$search}%");
+        });
+    }
 }

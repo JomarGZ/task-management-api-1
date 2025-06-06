@@ -37,7 +37,7 @@ class ChannelController extends Controller
     }
 
     public function show(Channel $channel) {
-        return new ChannelResource($channel->load('participants'));
+        return new ChannelResource($channel);
     }
 
     public function update(StoreChannelRequest $request, Channel $channel)
