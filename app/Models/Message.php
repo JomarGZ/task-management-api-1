@@ -51,6 +51,15 @@ class Message extends Model
         return $this->hasMany(Message::class, 'parent_id')->latest();
     }
 
+    public function likes()
+    {
+        return $this->belongsToMany(User::class, 'message_likes');
+    }
+
+    public function isLikeBy(User $user)
+    {
+        return $this->likes()->where('user_id', $user->id)->exists();
+    }
     public function scopeForChannel($query, Channel $channel)
     {
         return $query->where('channel_id', $channel->id)
