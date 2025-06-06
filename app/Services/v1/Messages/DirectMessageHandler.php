@@ -16,6 +16,7 @@ class DirectMessageHandler implements MessageHandlerInterface
     {
         return $channel->messages()->create([
             'user_id' => auth()->id(),
+            'parent_id' => isset($data['parent_id']) && !empty($data['parent_id']) ? $data['parent_id'] : null,
             'content' => $data['content'],
         ]);
     }

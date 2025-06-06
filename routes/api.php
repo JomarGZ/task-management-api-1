@@ -7,6 +7,7 @@ use App\Http\Controllers\api\v1\auth\RegisterController;
 use App\Http\Controllers\api\v1\Chats\ChannelController;
 use App\Http\Controllers\api\v1\Chats\ChannelParticipantsController;
 use App\Http\Controllers\api\v1\Chats\MessageController;
+use App\Http\Controllers\api\v1\Chats\MessageRepliesController;
 use App\Http\Controllers\api\v1\Comments\CommentController;
 use App\Http\Controllers\api\v1\Dashboard\TaskCompletionTrendController;
 use App\Http\Controllers\api\v1\Dashboard\TaskDistributionController;
@@ -118,6 +119,7 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::apiResource('messages', MessageController::class)->only(['store', 'update', 'destroy']);
         Route::get('channels/{channel}/messages', [MessageController::class, 'index']);
         Route::apiResource('channels.participants', ChannelParticipantsController::class)->shallow()->only(['store']);
+        Route::get('channel/messages/{message}/replies', [MessageRepliesController::class, 'index']);
     });
 });
 

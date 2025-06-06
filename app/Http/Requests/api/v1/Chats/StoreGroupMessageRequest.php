@@ -24,8 +24,8 @@ class StoreGroupMessageRequest extends FormRequest
     {
         return [
             'content' => 'required|string|max:1000',
-            'channel_id' => ['required', 'exists:channels,id']
-
+            'channel_id' => ['required', 'exists:channels,id'],
+            'parent_id' => 'nullable|exists:messages,id'
         ];
     }
 }

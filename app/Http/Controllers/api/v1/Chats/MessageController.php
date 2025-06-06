@@ -25,7 +25,7 @@ class MessageController extends Controller
         $messages = $channel->messages()
             ->with('user')
             ->forChannel($channel)
-            ->cursorPaginate(3);
+            ->cursorPaginate(5);
 
         return MessageResource::collection($messages)->additional([
             'message' => 'Messages retrieved successfully'

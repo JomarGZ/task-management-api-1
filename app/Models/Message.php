@@ -11,6 +11,21 @@ class Message extends Model
     use BelongsToTenant, SoftDeletes;
 
     protected $fillable = ['tenant_id', 'channel_id', 'user_id', 'content', 'parent_id', 'metadata', 'reaction_count', 'reply_count'];
+    
+    protected static function booted()
+    {
+        static::created(function(Message $message) {
+            if ($message->parent_id) {
+                $message->parent->increment('reply_count');
+            }
+        });
+
+        static::deleted(function(Message $message) {
+            if($message->parent_id) {
+                $message->parent->decrement('reply_count');
+            }
+        });
+    }
     protected $casts = [
         'metadata' => 'array',
         'reaction_count' => 'integer',

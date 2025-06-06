@@ -23,7 +23,9 @@ class Channel extends Model
 
     public function messages()
     {
-        return $this->hasMany(Message::class);
+        return $this->hasMany(Message::class)
+            ->whereNull('parent_id')
+            ->with('user');
     }
 
     public function creatorOfChannel()
