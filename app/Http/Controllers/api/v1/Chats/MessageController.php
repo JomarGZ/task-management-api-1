@@ -28,6 +28,7 @@ class MessageController extends Controller
         $messages = $channel->messages()
             ->with('user')
             ->forChannel($channel)
+            ->orderBy('created_at', 'desc')
             ->cursorPaginate(5);
 
         return MessageResource::collection($messages)->additional([
