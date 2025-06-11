@@ -12,8 +12,10 @@ class MessageRepliesController extends Controller
     public function index(Message $message)
     {
         $replies = $message->replies()
-            ->with('user')
-            ->cursorPaginate(5);
+            ->select(['id', 'content', 'user_id', 'created_at', 'reaction_count', 'reply_count'])
+            ->orderBy('created_at', 'desc')
+            ->with(['user:id,name,position', 'user.media'])
+            ->get();
 
         return MessageResource::collection($replies); 
     }

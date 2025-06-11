@@ -6,6 +6,7 @@ use App\Http\Controllers\api\v1\auth\PasswordUpdateController;
 use App\Http\Controllers\api\v1\auth\RegisterController;
 use App\Http\Controllers\api\v1\Chats\ChannelController;
 use App\Http\Controllers\api\v1\Chats\ChannelParticipantsController;
+use App\Http\Controllers\api\v1\Chats\GeneralChannelController;
 use App\Http\Controllers\api\v1\Chats\MessageController;
 use App\Http\Controllers\api\v1\Chats\MessageLikesController;
 use App\Http\Controllers\api\v1\Chats\MessageRepliesController;
@@ -122,6 +123,7 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::apiResource('channels.participants', ChannelParticipantsController::class)->shallow()->only(['store', 'index']);
         Route::get('channel/messages/{message}/replies', [MessageRepliesController::class, 'index']);
         Route::post('channel/messages/{message}/like', [MessageLikesController::class , 'store']);
+        Route::get('channel/general', [GeneralChannelController::class, 'show']);
     });
 });
 

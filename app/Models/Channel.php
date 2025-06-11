@@ -66,13 +66,14 @@ class Channel extends Model
         return self::where('type', ChatTypeEnum::GROUP->value)->findOrFail($channelId);
     }
 
-    public static function direct(int $senderId, int $recipientId)
+    public static function direct(int $recipientId)
     {
-        if ($senderId === $recipientId) {
+        $authId = auth()->id();
+        if ($authId === $recipientId) {
             throw new \InvalidArgumentException('Cannot start a DM with yourself.');
         }
 
-        return self::firstOrCreateDirectChannel($senderId, $recipientId);
+        return self::firstOrCreateDirectChannel($authId, $recipientId);
     }
 
     private static function firstOrCreateDirectChannel(int $user1Id, int $user2Id): Channel

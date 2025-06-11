@@ -16,6 +16,7 @@ class GeneralMessageHandler implements MessageHandlerInterface
     {
         return $channel->messages()->create([
             'user_id' => auth()->id(),
+            'parent_id' => $data['parent_id'],
             'content' => $data['content'],
         ]);
     }

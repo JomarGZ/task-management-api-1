@@ -46,7 +46,7 @@ class DirectMessageHandler implements MessageHandlerInterface
 
     public function resolveChannel(Request $request): Channel
     {
-        return Channel::direct($request->sender_id, $request->recipient_id);
+        return Channel::direct($request->recipient_id);
     }
 
 }

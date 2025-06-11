@@ -24,12 +24,11 @@ class StoreDirectMessageRequest extends FormRequest
     {
         return [
             'content' => 'required|string|max:1000',
-            'sender_id' => 'required|exists:users,id',
             'parent_id' => 'nullable|exists:messages,id',
             'recipient_id' => [
                 'required',
                 'exists:users,id',
-                new NotEqualSender($this->input('sender_id'))
+                new NotEqualSender(auth()->id())
                 ]
         ];
     }

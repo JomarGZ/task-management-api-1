@@ -26,10 +26,11 @@ class MessageController extends Controller
     public function index(Channel $channel ,Request $request)
     {
         $messages = $channel->messages()
-            ->with('user')
+            ->select(['id', 'content', 'user_id', 'created_at', 'reaction_count', 'reply_count'])
+            ->with(['user:id,name,position', 'user.media'])
             ->forChannel($channel)
             ->orderBy('created_at', 'desc')
-            ->cursorPaginate(5);
+            ->cursorPaginate(10);
 
         return MessageResource::collection($messages)->additional([
             'message' => 'Messages retrieved successfully'
@@ -45,7 +46,7 @@ class MessageController extends Controller
             
             $message = $handler->handle($channel, $data);
             
-            return new MessageResource($message)->additional([
+            return new MessageResource($message->load(['user:id,name,position', 'user.media']))->additional([
                 'message' => 'Message sent successfully',
             ]);
         } catch (\InvalidArgumentException $e) {
