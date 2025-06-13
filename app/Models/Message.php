@@ -56,9 +56,13 @@ class Message extends Model
         return $this->belongsToMany(User::class, 'message_likes');
     }
 
-    public function isLikeBy(User $user)
+    public function isLikeBy(?int $userId)
     {
-        return $this->likes()->where('user_id', $user->id)->exists();
+        if (!$userId) return false;
+        if ($this->relationLoaded('likes')) {
+            return $this->likes->contains('id', $userId);
+        }
+        return $this->likes()->where('user_id', $userId)->exists();
     }
     public function scopeForChannel($query, Channel $channel)
     {

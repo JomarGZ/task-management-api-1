@@ -27,10 +27,8 @@ class MessageLikesController extends Controller
                 }
                 return ['liked' => !$alreadyLiked, 'count' => $message->reaction_count];
             });
-            return MessageResource::make($message)->additional([
+            return MessageResource::make($message->fresh()->load('likes:id,name', 'likes.media', 'user:id,name,position', 'user.media'))->additional([
                 'message' => $result['liked'] ? 'Liked message successfully' : 'Unliked message successfully',
-                'liked' => $result['liked'],
-                'reaction_count' => $message->fresh()->reaction_count
             ]);
 
             

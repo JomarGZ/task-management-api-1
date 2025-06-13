@@ -14,7 +14,7 @@ class MessageRepliesController extends Controller
         $replies = $message->replies()
             ->select(['id', 'content', 'user_id', 'created_at', 'reaction_count', 'reply_count'])
             ->orderBy('created_at', 'desc')
-            ->with(['user:id,name,position', 'user.media'])
+            ->with(['user:id,name,position', 'user.media', 'likes'])    
             ->get();
 
         return MessageResource::collection($replies); 

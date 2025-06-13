@@ -12,8 +12,14 @@ class Channel extends Model
     //
     use BelongsToTenant;
 
-    protected $fillable = ['tenant_id', 'name', 'description', 'user_id', 'type'];
+    protected $fillable = ['tenant_id', 'name', 'description', 'user_id', 'type', 'active'];
 
+    protected static function booted()
+    {
+        static::creating(function($channel) {
+            $channel->active = $channel->type !== ChatTypeEnum::GENERAL->value ? true : false;
+        });
+    }
     public function participants()
     {
         return $this->belongsToMany(User::class, 'channel_participants')
@@ -33,16 +39,6 @@ class Channel extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
    
-    // public function user1()
-    // {
-    //     return $this->participants()->orderBy('id')->first();
-    // }
-
-    // public function user2()
-    // {
-    //     return $this->participants()->orderBy('id')->skip(1)->first();
-    // }
-
     public function scopeDirectMessages($query, $userId)
     {
         return $query->where('type', ChatTypeEnum::DIRECT)
@@ -85,7 +81,10 @@ class Channel extends Model
             })->first();
 
         if ($channel) {
-            return $channel;
+            if(!$channel->active) {
+                $channel->update(['active' => true]);
+            }
+            return $channel->fresh();
         }
         try {
             DB::beginTransaction();

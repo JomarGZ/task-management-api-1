@@ -21,7 +21,11 @@ class MessageResource extends BaseJsonResource
             'content' => $this->whenNotNull($this->content),
             'created_at' => $this->whenNotNull($this->created_at),
             'reply_count' => $this->whenNotNull($this->reply_count),
-            'reaction_count' => $this->whenNotNull($this->reaction_count),
+            'likes_by' => TenantMemberResource::collection($this->whenLoaded('likes')),
+            'reaction_count' => $this->reaction_count,
+            'is_liked' => $this->whenLoaded('likes', function () use ($request) {
+                return $this->isLikeBy($request->user()?->id);
+            }),
             'user' => TenantMemberResource::make(($this->whenLoaded('user'))),
         ];
     }

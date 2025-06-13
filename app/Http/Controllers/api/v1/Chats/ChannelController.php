@@ -15,8 +15,14 @@ class ChannelController extends Controller
     public function index()
     {
         $channels = Channel::select('id', 'name', 'description', 'type')
+            ->with('participants:id,name,position', 'participants.media')
+            ->whereHas('participants', function ($q) {
+                $q->where('users.id', auth()->id());
+            })
             ->withCount('participants')
-            ->groupBy('type')
+            ->where('active', true)
+            ->where('type', '!=', ChatTypeEnum::GENERAL->value)
+            ->orderBy('created_at', 'asc')
             ->cursorPaginate(10);
 
         return ChannelResource::collection($channels);

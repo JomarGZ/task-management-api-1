@@ -27,7 +27,7 @@ class MessageController extends Controller
     {
         $messages = $channel->messages()
             ->select(['id', 'content', 'user_id', 'created_at', 'reaction_count', 'reply_count'])
-            ->with(['user:id,name,position', 'user.media'])
+            ->with(['user:id,name,position', 'user.media', 'likes:id,name', 'likes.media'])
             ->forChannel($channel)
             ->orderBy('created_at', 'desc')
             ->cursorPaginate(10);
@@ -43,10 +43,10 @@ class MessageController extends Controller
             $handler = $this->handlerFactory->make($request->message_type);
             $data = $handler->validateStore($request);
             $channel = $handler->resolveChannel($request);
-            
+        
             $message = $handler->handle($channel, $data);
             
-            return new MessageResource($message->load(['user:id,name,position', 'user.media']))->additional([
+            return new MessageResource($message->load(['user:id,name,position', 'user.media', 'likes']))->additional([
                 'message' => 'Message sent successfully',
             ]);
         } catch (\InvalidArgumentException $e) {
