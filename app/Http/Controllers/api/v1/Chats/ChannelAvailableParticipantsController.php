@@ -12,7 +12,7 @@ class ChannelAvailableParticipantsController extends Controller
     public function index(Request $request)
     {
         $query = $request?->query('query');
-        $participantsIds = (array)$request?->query('participant_ids') || [];
+        $participantsIds = json_decode($request?->query('participant_ids', '[]'), true) ?? [];
         if (empty($query)) return TenantMemberResource::collection([]);
         $participantIds = is_array($participantsIds) && !empty($participantsIds) 
             ? array_values(array_unique($participantsIds))
