@@ -21,7 +21,7 @@ class ChannelController extends Controller
             })
             ->withCount('participants')
             ->where('active', true)
-            ->where('type', '!=', ChatTypeEnum::GENERAL->value)
+            ->where('type', ChatTypeEnum::GROUP->value)
             ->orderBy('created_at', 'asc')
             ->cursorPaginate(10);
 
