@@ -11,17 +11,21 @@ class ChannelAvailableParticipantsController extends Controller
 {
     public function index(Request $request)
     {
+        $participantIds = $request->query('participant_ids');
         $query = $request?->query('query');
-        $participantsIds = json_decode($request?->query('participant_ids', '[]'), true) ?? [];
         if (empty($query)) return TenantMemberResource::collection([]);
-        $participantIds = is_array($participantsIds) && !empty($participantsIds) 
-            ? array_values(array_unique($participantsIds))
+
+        $participantIds = $participantIds ? array_map("intval", explode(',', $participantIds)) : [];
+        $participantIds = is_array($participantIds) && !empty($participantIds) 
+            ? array_values(array_unique($participantIds))
             : [];
+            
         $participants = Channel::general()
             ->participants()
             ->with('media')
+            ->whereNot('users.id', auth()->id())
             ->select(['users.id', 'users.name', 'users.position'])
-            ->when($participantIds, fn ($q) => $q->whereNotIn('users.id', [...$participantIds, auth()->id()]))
+            ->when($participantIds, fn ($q) => $q->whereNotIn('users.id', $participantIds))
             ->where('users.name', 'LIKE', "%{$query}%")
             ->get();
         return TenantMemberResource::collection($participants);

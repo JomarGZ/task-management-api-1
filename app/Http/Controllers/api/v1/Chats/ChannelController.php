@@ -39,7 +39,7 @@ class ChannelController extends Controller
             $channel = Channel::create([
                 'name' => $request->name,
                 'description' => $request->description,
-                'type' => $request->type,
+                'type' => ChatTypeEnum::GROUP->value,
                 'user_id' => $request->user()->id,
             ]);
             $participantIds = isset($request->participant_ids) && !empty($request->participant_ids) ? array_values(array_unique($request->participant_ids)) : [];

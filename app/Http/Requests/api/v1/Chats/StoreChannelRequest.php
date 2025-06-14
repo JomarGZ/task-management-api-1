@@ -24,9 +24,8 @@ class StoreChannelRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string|max:1000',
-            'type' => ['required', Rule::in(ChatTypeEnum::GROUP->value, ChatTypeEnum::DIRECT->value)],
+            'name' => 'required|string|max:100',
+            'description' => 'nullable|string|max:300',
             'participant_ids' => [
                 'nullable', 
                 'array'
