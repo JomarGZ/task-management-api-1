@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers\api\v1\Tenants;
 
+use App\Enums\ChatTypeEnum;
+use App\Enums\Role;
 use App\Http\Controllers\api\v1\ApiController;
 use App\Http\Requests\api\v1\TenantMembers\AddMemberRequest;
 use App\Http\Requests\api\v1\TenantMembers\UpdateMemeberRequest;
 use App\Http\Resources\api\v1\tenants\TenantMemberResource;
+use App\Models\Channel;
 use App\Models\User;
 use App\Services\v1\TenantMemberService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 
@@ -76,10 +80,11 @@ class TenantMembersController extends ApiController
         $data = [
             'name' => $request->name,
             'email' => $request->email,
-            'role' => $request->role,
+            'role' => Role::MEMBER->value,
         ];
-       $newMember = $this->tenantMemberService->addMember($data);
-       return new TenantMemberResource($newMember);
+        $newMember = $this->tenantMemberService->addMember($data);
+    
+        return new TenantMemberResource($newMember);
     }
 
     /**
