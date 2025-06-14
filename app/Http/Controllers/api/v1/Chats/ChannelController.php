@@ -63,7 +63,8 @@ class ChannelController extends Controller
     }
 
     public function show(Channel $channel) {
-        return new ChannelResource($channel->load('participants:id,position,name', 'participants.media'));
+        return ChannelResource::make($channel->load('participants:id,position,name', 'participants.media'));
+           
     }
 
     public function update(UpdateChannelRequest $request, Channel $channel)

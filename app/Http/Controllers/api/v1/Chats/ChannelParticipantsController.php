@@ -7,6 +7,8 @@ use App\Http\Requests\api\v1\Chats\StoreParticipantRequest;
 use App\Http\Resources\api\v1\Chats\ChannelParticipantResource;
 use App\Http\Resources\api\v1\tenants\TenantMemberResource;
 use App\Models\Channel;
+use App\Models\ChannelParticipant;
+use Exception;
 use Illuminate\Http\Request;
 
 class ChannelParticipantsController extends Controller
@@ -28,5 +30,17 @@ class ChannelParticipantsController extends Controller
         return ChannelParticipantResource::make($channel->load( 'participants'))->additional([
             'message' => 'Participants added successfully'
         ]);
+    }
+
+    public function destroy(Channel $channel, $userId)
+    {
+        abort_if(!$userId, 400,'User ID is required to remove from channel participants');
+        abort_if(
+            !$channel->participants()->where('users.id', $userId)->exists(),
+             404,
+             'User is not a participant in this channel'
+        );
+        $channel->participants()->detach($userId);
+        return response()->noContent(); 
     }
 }

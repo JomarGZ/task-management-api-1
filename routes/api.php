@@ -123,7 +123,9 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::get('participants/available-list',[ ChannelAvailableParticipantsController::class, 'index']);
         Route::apiResource('messages', MessageController::class)->only(['store', 'update', 'destroy']);
         Route::get('channels/{channel}/messages', [MessageController::class, 'index']);
+        Route::delete('channels/{channel}/participants/{userId}', [ChannelParticipantsController::class, 'destroy']);
         Route::apiResource('channels.participants', ChannelParticipantsController::class)->shallow()->only(['store', 'index']);
+
         Route::get('channel/messages/{message}/replies', [MessageRepliesController::class, 'index']);
         Route::post('channel/messages/{message}/like', [MessageLikesController::class , 'store']);
         Route::get('channel/general', [GeneralChannelController::class, 'show']);
