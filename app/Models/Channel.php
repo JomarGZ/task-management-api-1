@@ -26,7 +26,33 @@ class Channel extends Model
             ->withPivot('last_read_at')
             ->withTimestamps(); 
     }
-
+    public function unreadMessages()
+    {
+        $userId = auth()->id();
+        
+        return $this->hasMany(Message::class)
+            ->whereDoesntHave('readers', fn($q) => $q->where('user_id', $userId))
+            ->where(function($query) use ($userId) {
+                $query->where(function($q) use ($userId) {
+                    $q->where('created_at', '>', function($subQuery) use ($userId) {
+                        $subQuery->select('last_read_at')
+                            ->from('channel_participants')
+                            ->where('user_id', $userId)
+                            ->whereColumn('channel_id', 'channels.id');
+                    });
+                })
+                ->orWhere(function($q) use ($userId) {
+                    $q->whereNotExists(function($subQuery) use ($userId) {
+                        $subQuery->select(DB::raw(1))
+                            ->from('channel_participants')
+                            ->where('user_id', $userId)
+                            ->whereColumn('channel_id', 'channels.id')
+                            ->whereNotNull('last_read_at');
+                    });
+                });
+            })
+            ->where('user_id', '!=', $userId);
+    }
     public function messages()
     {
         return $this->hasMany(Message::class)

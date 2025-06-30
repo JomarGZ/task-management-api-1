@@ -28,6 +28,7 @@ class ChannelResource extends BaseJsonResource
                 $this->type === ChatTypeEnum::DIRECT->value,
                 fn() => TenantMemberResource::make($this->getRecipient())
             ),
+            'unread_count' => $this->unread_messages_count ?? 0,
             'active' => $this->whenNotNull($this->active),
             'participants' => TenantMemberResource::collection($this->whenLoaded('participants'))
         ];

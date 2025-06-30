@@ -112,6 +112,13 @@ class User extends Authenticatable implements HasMedia
             ->withTimestamps();
     }
 
+    public function readMessages()
+    {
+        return $this->belongsToMany(Message::class, 'message_reads')
+                    ->withPivot('read_at')
+                    ->withTimestamps();
+    }
+
     public function channelCreatedBy()
     {
         return $this->hasMany(Channel::class, 'user_id');

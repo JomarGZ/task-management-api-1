@@ -18,18 +18,19 @@ class ChannelController extends Controller
 {
     public function index()
     {
+        $userId = auth()->id();
+        
         $channels = Channel::select('id', 'name', 'description', 'type')
             ->with('participants:id,name,position', 'participants.media')
-            ->whereHas('participants', function ($q) {
-                $q->where('users.id', auth()->id());
-            })
+            ->whereHas('participants', fn($q) => $q->where('users.id', $userId))
             ->withCount('participants')
+            ->withCount(['unreadMessages as unread_messages_count'])
             ->where('active', true)
             ->where('type', ChatTypeEnum::GROUP->value)
-            ->orderBy('created_at', 'asc')
+            ->orderBy('created_at')
             ->cursorPaginate(10);
-
         return ChannelResource::collection($channels);
+
     }
 
     public function store(StoreChannelRequest $request)

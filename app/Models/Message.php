@@ -10,7 +10,7 @@ class Message extends Model
     //
     use BelongsToTenant, SoftDeletes;
 
-    protected $fillable = ['tenant_id', 'channel_id', 'user_id', 'content', 'parent_id', 'metadata', 'reaction_count', 'reply_count'];
+    protected $fillable = ['tenant_id', 'channel_id', 'user_id', 'content', 'parent_id', 'metadata', 'reaction_count', 'reply_count', 'read', 'read_at'];
     
     protected static function booted()
     {
@@ -35,6 +35,13 @@ class Message extends Model
     public function channel()
     {
         return $this->belongsTo(Channel::class);
+    }
+
+    public function readers()
+    {
+        return $this->belongsToMany(User::class, 'message_reads')
+                    ->withPivot('read_at')
+                    ->withTimestamps();
     }
 
     public function user()
@@ -70,4 +77,5 @@ class Message extends Model
             ->with('user')
             ->latest();
     }
+
 }
