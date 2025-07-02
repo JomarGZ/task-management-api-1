@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\api\v1\Chats;
 
+use App\Enums\ChatTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\api\v1\Chats\StoreParticipantRequest;
 use App\Http\Resources\api\v1\Chats\ChannelParticipantResource;
 use App\Http\Resources\api\v1\tenants\TenantMemberResource;
 use App\Models\Channel;
-use App\Models\ChannelParticipant;
-use Exception;
 use Illuminate\Http\Request;
 
 class ChannelParticipantsController extends Controller
@@ -18,8 +17,14 @@ class ChannelParticipantsController extends Controller
     {
         $participants = $channel->participants()
             ->with('media')
+            ->with(['media', 'directChannel' => function($q) {
+                $q->select('channels.id')
+                    ->withCount(['unreadMessages as unread_count']);
+            }])
+            ->where('users.id', '!=', auth()->id())
             ->search($request->input('query'))
             ->cursorPaginate(10);
+
         return TenantMemberResource::collection($participants);
     }
     public function store(StoreParticipantRequest $request, Channel $channel)

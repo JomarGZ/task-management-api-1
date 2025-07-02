@@ -100,11 +100,7 @@ class Channel extends Model
 
     private static function firstOrCreateDirectChannel(int $user1Id, int $user2Id): Channel
     {
-        $channel = self::where('type', ChatTypeEnum::DIRECT->value)
-            ->where(function ($query) use ($user1Id, $user2Id): void{
-                $query->whereHas('participants', fn($q) => $q->where('user_id', $user1Id))
-                    ->whereHas('participants', fn($q) => $q->where('user_id', $user2Id));
-            })->first();
+        $channel = self::findExistingDirectChannel($user1Id, $user2Id);
 
         if ($channel) {
             if(!$channel->active) {
@@ -129,7 +125,15 @@ class Channel extends Model
             throw new \RuntimeException("Failed to create direct message channel.");
         }
     }
-   
+    
+    private static function findExistingDirectChannel(int $user1Id, int $user2Id): ?Channel
+    {
+        return self::where('type', ChatTypeEnum::DIRECT->value)
+            ->where(function ($query) use ($user1Id, $user2Id): void {
+                $query->whereHas('participants', fn($q) => $q->where('user_id', $user1Id))
+                    ->whereHas('participants', fn($q) => $q->where('user_id', $user2Id));
+            })->first();
+    }
     public static function isGroupChannelMember(int $channelId): bool
     {
         return static::group($channelId)->participants()->where('user_id', auth()->id())->exists();
