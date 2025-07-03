@@ -4,6 +4,14 @@ use App\Http\Controllers\api\v1\auth\LoginController;
 use App\Http\Controllers\api\v1\auth\LogoutController;
 use App\Http\Controllers\api\v1\auth\PasswordUpdateController;
 use App\Http\Controllers\api\v1\auth\RegisterController;
+use App\Http\Controllers\api\v1\Chats\ChannelAvailableParticipantsController;
+use App\Http\Controllers\api\v1\Chats\ChannelController;
+use App\Http\Controllers\api\v1\Chats\ChannelParticipantsController;
+use App\Http\Controllers\api\v1\Chats\DirectChannelController;
+use App\Http\Controllers\api\v1\Chats\GeneralChannelController;
+use App\Http\Controllers\api\v1\Chats\MessageController;
+use App\Http\Controllers\api\v1\Chats\MessageLikesController;
+use App\Http\Controllers\api\v1\Chats\MessageRepliesController;
 use App\Http\Controllers\api\v1\Comments\CommentController;
 use App\Http\Controllers\api\v1\Dashboard\TaskCompletionTrendController;
 use App\Http\Controllers\api\v1\Dashboard\TaskDistributionController;
@@ -108,6 +116,20 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::get('tasks-statistic/counts', [TaskStatisticsController::class, 'index']);
         Route::get('task-completion/statistic', [TaskCompletionTrendController::class, 'index']);
         Route::get('stask-distribution', [TaskDistributionController::class, 'index']);
+    });
+
+    Route::prefix('chat')->group(function () {
+        Route::apiResource('channels', ChannelController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
+        Route::get('participants/available-list',[ ChannelAvailableParticipantsController::class, 'index']);
+        Route::apiResource('messages', MessageController::class)->only(['store', 'update', 'destroy']);
+        Route::get('channels/{channel}/messages', [MessageController::class, 'index']);
+        Route::delete('channels/{channel}/participants/{userId}', [ChannelParticipantsController::class, 'destroy']);
+        Route::apiResource('channels.participants', ChannelParticipantsController::class)->shallow()->only(['store', 'index']);
+
+        Route::get('channel/messages/{message}/replies', [MessageRepliesController::class, 'index']);
+        Route::post('channel/messages/{message}/like', [MessageLikesController::class , 'store']);
+        Route::get('channel/general', [GeneralChannelController::class, 'show']);
+        Route::post('channel/direct', [DirectChannelController::class, 'store']);
     });
 });
 

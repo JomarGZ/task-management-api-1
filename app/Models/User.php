@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Enums\ChatTypeEnum;
 use App\Enums\Enums\Statuses;
 use App\Traits\BelongsToTenant;
 use App\Enums\Role;
@@ -105,6 +106,39 @@ class User extends Authenticatable implements HasMedia
          ->withTimestamps();
     }
 
+    public function channels()
+    {
+        return $this->belongsToMany(Channel::class, 'channel_participants')
+            ->withPivot('last_read_at')
+            ->withTimestamps();
+    }
+
+    public function directChannel()
+    {
+        return $this->belongsToMany(Channel::class, 'channel_participants')
+            ->where('type', ChatTypeEnum::DIRECT->value)
+            ->whereHas('participants', fn($q) => $q->where('user_id', auth()->id()))
+            ->withPivot('last_read_at')
+            ->limit(1);
+    }
+
+    public function readMessages()
+    {
+        return $this->belongsToMany(Message::class, 'message_reads')
+                    ->withPivot('read_at')
+                    ->withTimestamps();
+    }
+
+    public function channelCreatedBy()
+    {
+        return $this->hasMany(Channel::class, 'user_id');
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
+   
     public function assignedProjectAsManager()
     {
         return $this->hasMany(Project::class, 'manager');

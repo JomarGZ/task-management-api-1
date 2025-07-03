@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\api\v1\auth;
 
+use App\Enums\ChatTypeEnum;
 use App\Http\Requests\api\v1\auth\RegistrationRequest;
 use App\Models\Tenant;
 use App\Models\User;
 use App\Enums\Role;
 use App\Http\Controllers\api\v1\ApiController;
+use App\Models\Channel;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class RegisterController extends ApiController
 {
@@ -31,33 +35,35 @@ class RegisterController extends ApiController
      */
     public function __invoke(RegistrationRequest $request)
     {
-       
-        $user = User::withoutGlobalScopes()->create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+       try {
+            DB::beginTransaction();
+            $user = User::withoutGlobalScopes()->create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'tenant_id' => Tenant::create(['name' => "$request->name tenant"])->id,
+                'role' => Role::ADMIN->value,
+            ]);
+            DB::commit();
 
-        $tenant = Tenant::create([
-            'name' => "$user->name tenant"
-        ]);
-        $user->tenant_id = $tenant->id;
-        $user->role = Role::ADMIN->value;
-        $user->save();
-
-        $device = substr($request->userAgent() ?? '', 0, 255);
-
-        return $this->success(
-            'Registered Successfully',
-            [
-                'user' => [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->email,
+           $device = substr($request->userAgent() ?? '', 0, 255);
+            return $this->success(
+                'Registered Successfully',
+                [
+                    'user' => [
+                        'id' => $user->id,
+                        'name' => $user->name,
+                        'email' => $user->email,
+                    ],
+                    'access_token' => $user->createToken($device)->plainTextToken,
                 ],
-                'access_token' => $user->createToken($device)->plainTextToken,
-            ],
-            Response::HTTP_CREATED
-        );
+                Response::HTTP_CREATED
+            );
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error("Registration failed: {$e->getMessage()}", ['exception' => $e]);
+            return $this->error('Registration failed', ['error' => $e->getMessage()], 500);
+        }
+       
     }
 }
