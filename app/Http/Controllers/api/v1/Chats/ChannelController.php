@@ -33,7 +33,7 @@ class ChannelController extends Controller
         $generalChannel = Channel::withCount(['unreadMessages as unread_messages_count'])
             ->where('type', ChatTypeEnum::GENERAL->value)
             ->firstOrFail();   
-            
+
         return ChannelResource::collection($channels)->additional([
             'general_channel' => [
                 'id' => $generalChannel->id,
@@ -72,7 +72,12 @@ class ChannelController extends Controller
       
     }
 
-    public function show(Channel $channel) {
+    public function show(Channel $channel) 
+    {
+        $updated = DB::table('channel_participants')
+            ->where('channel_id', $channel->id)
+            ->where('user_id', request()->user()->id)
+            ->update(['last_read_at' => now()]);
         return ChannelResource::make($channel->load('participants:id,position,name', 'participants.media'));
            
     }
