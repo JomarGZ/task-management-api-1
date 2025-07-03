@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\api\v1\Chats;
 
+use App\Events\MessageSent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\api\v1\Chats\TypeMessageRequest;
 use App\Http\Requests\api\v1\Chats\UpdateGeneralMessageRequest;
@@ -44,11 +45,24 @@ class MessageController extends Controller
             $data = $handler->validateStore($request);
             $channel = $handler->resolveChannel($request);
         
+            // Verify current user is a channel participant
+            if (!$channel->participants->contains(auth()->id())) {
+                throw new \Exception('Not a participant of this channel');
+            }
+            
             $message = $handler->handle($channel, $data);
             
-            return new MessageResource($message->load(['user:id,name,position', 'user.media', 'likes']))->additional([
+            // Load all necessary relationships for broadcasting
+            $message->load(['channel.participants', 'user:id,name,position', 'user.media', 'likes']);
+            
+            // Broadcast the message to appropriate recipients
+            broadcast(new MessageSent($message))->toOthers();
+            
+            // Return the response with the message
+            return new MessageResource($message)->additional([
                 'message' => 'Message sent successfully',
             ]);
+            
         } catch (\InvalidArgumentException $e) {
             return response()->json([
                 'success' => false,
@@ -56,22 +70,22 @@ class MessageController extends Controller
                 'error' => $e->getMessage(),
             ], Response::HTTP_BAD_REQUEST);
 
-        } catch (QueryException  $e) {
+        } catch (QueryException $e) {
             Log::error("Message creation failed: " . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'Message could not be saved',
                 'error' => 'Database error',
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
-        } catch (\Exception  $e) {
+            
+        } catch (\Exception $e) {
             Log::error("Unexpected error in message creation: " . $e->getMessage());
             return response()->json([
                 'success' => false,
-                'message' => 'Unexpected error occured',
+                'message' => 'Unexpected error occurred',
                 'error' => $e->getMessage(),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-      
     }
 
     public function update(Message $message, TypeMessageRequest $request)
