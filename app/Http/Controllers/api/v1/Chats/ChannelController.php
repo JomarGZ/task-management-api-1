@@ -29,8 +29,17 @@ class ChannelController extends Controller
             ->where('type', ChatTypeEnum::GROUP->value)
             ->orderBy('created_at')
             ->cursorPaginate(10);
-        return ChannelResource::collection($channels);
 
+        $generalChannel = Channel::withCount(['unreadMessages as unread_messages_count'])
+            ->where('type', ChatTypeEnum::GENERAL->value)
+            ->firstOrFail();   
+            
+        return ChannelResource::collection($channels)->additional([
+            'general_channel' => [
+                'id' => $generalChannel->id,
+                'unread_messages_count' => $generalChannel->unread_messages_count
+            ]
+        ]);
     }
 
     public function store(StoreChannelRequest $request)
