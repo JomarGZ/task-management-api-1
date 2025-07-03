@@ -27,7 +27,8 @@ class ChannelController extends Controller
             ->withCount(['unreadMessages as unread_messages_count'])
             ->where('active', true)
             ->where('type', ChatTypeEnum::GROUP->value)
-            ->orderBy('created_at')
+            ->orderByDesc('unread_messages_count')
+            ->orderBy('created_at') 
             ->cursorPaginate(10);
 
         $generalChannel = Channel::withCount(['unreadMessages as unread_messages_count'])
