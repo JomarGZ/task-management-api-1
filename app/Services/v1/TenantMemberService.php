@@ -28,8 +28,7 @@ class TenantMemberService {
 
     public function addMember(array $data)
     {
-        // $password = $this->generatePassword() ?? 'password';
-        $password = 'password';
+        $password = $this->generatePassword() ?? 'password';
         $newMember =  User::create([
             'name' => $data['name'],
             'email' => $data['email'],
